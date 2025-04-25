@@ -1,6 +1,6 @@
-import { signIn } from "next-auth/react";
+"use client";
 import type React from "react";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, ShieldCheck } from "lucide-react";
 import {
   Button,
   Card,
@@ -14,6 +14,9 @@ import {
 } from "@/components/ui";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 // Custom icon components
 function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -63,10 +66,28 @@ function MicrosoftIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export default function LoginPage() {
-  const handleSignIn = (provider: string) => {
-    signIn(provider);
-  };
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (res?.error) {
+      console.log("🚀 ~ handleLogin ~ res?.error:", res?.error);
+      setError(res.error || "Invalid credentials");
+    } else {
+      router.push("/dashboard/assignments"); // or wherever you want to redirect after login
+    }
+  };
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Left side - Benefits and testimonials (hidden on mobile) */}
@@ -156,34 +177,58 @@ export default function LoginPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => handleSignIn("google")}
-              >
+              <Button variant="outline" className="w-full">
                 <GoogleIcon className="mr-2 h-5 w-5 text-[#4285F4]" />
                 Google
               </Button>
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => handleSignIn("microsoft")}
-              >
+              <Button variant="outline" className="w-full">
                 <MicrosoftIcon className="mr-2 h-5 w-5 text-[#00A4EF]" />
                 Microsoft
               </Button>
             </div>
-            {/* Optionally, add email/password form */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t"></span>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" placeholder="m@example.com" type="email" />
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Password</Label>
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-primary underline-offset-4 hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+              <Input id="password" type="password" />
+            </div>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            <Button className="w-full" size="lg" onClick={handleLogin}>
+              Log in
+            </Button>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 border-t pt-4">
-            <div className="text-sm text-center text-gray-500 dark:text-gray-400">
-              Don't have an account?{" "}
+            <div className="text-center text-sm">
+              Don&apos;t have an account?{" "}
               <Link
                 href="/signup"
-                className="font-medium text-primary-500 hover:text-primary-700"
+                className="font-medium text-primary underline-offset-4 hover:underline"
               >
-                Sign up here
+                Sign up for free
               </Link>
+            </div>
+            <div className="flex items-center justify-center text-xs text-gray-500">
+              <ShieldCheck className="mr-1 h-3 w-3" /> Secure login
             </div>
           </CardFooter>
         </Card>
