@@ -23,8 +23,8 @@ export const handler = NextAuth({
           });
 
           if (response.status === 200) {
-            const { accessToken, user } = response.data;
-            return { ...user, accessToken }; // Include accessToken in the returned user object
+            const { token, ...user } = response.data;
+            return { ...user, token }; // Include accessToken in the returned user object
           }
 
           return null;

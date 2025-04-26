@@ -1,15 +1,28 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Checkbox } from "@/components/ui/checkbox"
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Download,
   Loader2,
@@ -26,12 +39,12 @@ import {
   Users,
   ArrowRight,
   ChevronRight,
-} from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
-import { Badge } from "@/components/ui/badge"
-import { PDFPreviewDialog } from "@/components/pdf-preview-dialog"
-import { EmailPreviewDialog } from "@/components/email-preview-dialog"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
+import { PDFPreviewDialog } from "@/components/pdf-preview-dialog";
+import { EmailPreviewDialog } from "@/components/email-preview-dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 // Assignment type definitions
 const ASSIGNMENT_TYPES = {
@@ -45,7 +58,7 @@ const ASSIGNMENT_TYPES = {
   LAB_REPORT: "lab_report",
   PORTFOLIO: "portfolio",
   CASE_STUDY: "case_study",
-}
+};
 
 // Assignment type metadata
 const ASSIGNMENT_TYPE_INFO = {
@@ -109,64 +122,66 @@ const ASSIGNMENT_TYPE_INFO = {
     icon: FileText,
     outputs: ["instructions", "rubric"],
   },
-}
+};
 
 export default function CreateAssignmentPage() {
-  const { toast } = useToast()
-  const searchParams = useSearchParams()
-  const router = useRouter()
+  const { toast } = useToast();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   // Step tracking
-  const [currentStep, setCurrentStep] = useState<"type" | "details" | "generate">("type")
+  const [currentStep, setCurrentStep] = useState<
+    "type" | "details" | "generate"
+  >("type");
 
   // Assignment type selection
-  const [selectedType, setSelectedType] = useState<string>("")
+  const [selectedType, setSelectedType] = useState<string>("");
 
   // Basic assignment info
-  const [assignmentTitle, setAssignmentTitle] = useState("")
-  const [selectedCourse, setSelectedCourse] = useState("")
-  const [dueDate, setDueDate] = useState("")
-  const [description, setDescription] = useState("")
-  const [learningObjectives, setLearningObjectives] = useState("")
+  const [assignmentTitle, setAssignmentTitle] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [description, setDescription] = useState("");
+  const [learningObjectives, setLearningObjectives] = useState("");
 
   // Generation states
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [isSaving, setIsSaving] = useState(false)
-  const [publishToLMS, setPublishToLMS] = useState<string[]>([])
-  const [connectedLMS, setConnectedLMS] = useState<string[]>(["Canvas"])
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [publishToLMS, setPublishToLMS] = useState<string[]>([]);
+  const [connectedLMS, setConnectedLMS] = useState<string[]>(["Canvas"]);
 
   // Generated content
   const [generatedContent, setGeneratedContent] = useState<{
-    instructions?: string
-    rubric?: string
-    questions?: string
-    answer_key?: string
-    checklist?: string
-    participation_criteria?: string
-    peer_evaluation?: string
-  }>({})
+    instructions?: string;
+    rubric?: string;
+    questions?: string;
+    answer_key?: string;
+    checklist?: string;
+    participation_criteria?: string;
+    peer_evaluation?: string;
+  }>({});
 
   // Preview dialogs
-  const [pdfPreviewOpen, setPdfPreviewOpen] = useState(false)
-  const [emailPreviewOpen, setEmailPreviewOpen] = useState(false)
+  const [pdfPreviewOpen, setPdfPreviewOpen] = useState(false);
+  const [emailPreviewOpen, setEmailPreviewOpen] = useState(false);
 
   // Copy state
-  const [copied, setCopied] = useState<string | null>(null)
+  const [copied, setCopied] = useState<string | null>(null);
 
   // Handle query params for quick creation
   useEffect(() => {
-    const type = searchParams.get("type")
-    const topic = searchParams.get("topic")
+    const type = searchParams.get("type");
+    const topic = searchParams.get("topic");
 
     if (type && Object.values(ASSIGNMENT_TYPES).includes(type)) {
-      setSelectedType(type)
-      setCurrentStep("details")
+      setSelectedType(type);
+      setCurrentStep("details");
     }
 
     if (topic) {
-      setDescription(topic)
+      setDescription(topic);
     }
-  }, [searchParams])
+  }, [searchParams]);
 
   // Handle type selection and move to next step
   const handleTypeSelection = () => {
@@ -175,12 +190,12 @@ export default function CreateAssignmentPage() {
         title: "Please select an assignment type",
         description: "You must select an assignment type to continue",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
-    setCurrentStep("details")
-  }
+    setCurrentStep("details");
+  };
 
   // Handle details submission and move to generation
   const handleDetailsSubmission = () => {
@@ -189,8 +204,8 @@ export default function CreateAssignmentPage() {
         title: "Missing information",
         description: "Please enter an assignment title",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
     if (!selectedCourse) {
@@ -198,81 +213,110 @@ export default function CreateAssignmentPage() {
         title: "Missing information",
         description: "Please select a course",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
-    setCurrentStep("generate")
+    setCurrentStep("generate");
     // Auto-generate content
-    handleGenerateContent()
-  }
+    handleGenerateContent();
+  };
 
   // Generate content based on assignment type
-  const handleGenerateContent = () => {
-    setIsGenerating(true)
+  const handleGenerateContent = async () => {
+    setIsGenerating(true);
 
-    // Get the outputs needed for this assignment type
-    const outputs = ASSIGNMENT_TYPE_INFO[selectedType]?.outputs || []
+    try {
+      const outputs = ASSIGNMENT_TYPE_INFO[selectedType]?.outputs || [];
 
-    // Simulate AI generating content
-    setTimeout(() => {
-      const newContent = {}
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/ai/generate`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // "authorization": `Bearer ${process.env.}`,
+          },
+          body: JSON.stringify({
+            assignmentType:
+              ASSIGNMENT_TYPE_INFO[selectedType]?.title || selectedType,
+            subType: outputs,
+            title: assignmentTitle,
+            course: selectedCourse,
+            dueDate: dueDate,
+            description: description,
+            learningObjectives: learningObjectives,
+          }),
+        }
+      );
 
-      // Generate different content based on assignment type
-      if (outputs.includes("instructions")) {
-        newContent["instructions"] = generateInstructions()
+      const data = await response.json();
+
+      if (data.success) {
+        setGeneratedContent(data.data); // 🎯 AI-generated content
+        toast({
+          title: "Content Generated",
+          description:
+            "Your assignment content has been generated successfully!",
+        });
+      } else {
+        toast({
+          title: "Failed to generate content",
+          description: data.error || "Something went wrong",
+          variant: "destructive",
+        });
       }
-
-      if (outputs.includes("rubric")) {
-        newContent["rubric"] = generateRubric()
-      }
-
-      if (outputs.includes("questions")) {
-        newContent["questions"] = generateQuestions()
-      }
-
-      if (outputs.includes("answer_key")) {
-        newContent["answer_key"] = generateAnswerKey()
-      }
-
-      if (outputs.includes("checklist")) {
-        newContent["checklist"] = generateChecklist()
-      }
-
-      if (outputs.includes("participation_criteria")) {
-        newContent["participation_criteria"] = generateParticipationCriteria()
-      }
-
-      if (outputs.includes("peer_evaluation")) {
-        newContent["peer_evaluation"] = generatePeerEvaluation()
-      }
-
-      setGeneratedContent(newContent)
-      setIsGenerating(false)
-
+    } catch (error) {
+      console.error(error);
       toast({
-        title: "Content Generated",
-        description: "Your assignment content has been generated successfully",
-      })
-    }, 2000)
-  }
+        title: "Error",
+        description: "Could not generate content. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   // Content generation functions for different assignment types
   const generateInstructions = () => {
-    const typeTitle = ASSIGNMENT_TYPE_INFO[selectedType]?.title || "Assignment"
+    const typeTitle = ASSIGNMENT_TYPE_INFO[selectedType]?.title || "Assignment";
 
     return `# ${typeTitle}: ${assignmentTitle}
 ## ${selectedCourse}
 
 ### Overview
-This ${typeTitle.toLowerCase()} will assess your understanding of the subject matter and demonstrate your ability to ${selectedType === ASSIGNMENT_TYPES.ESSAY ? "analyze and articulate complex ideas" : selectedType === ASSIGNMENT_TYPES.RESEARCH_PAPER ? "conduct research and synthesize information" : selectedType === ASSIGNMENT_TYPES.PRESENTATION ? "organize and present information clearly" : "apply concepts to real-world scenarios"}.
+This ${typeTitle.toLowerCase()} will assess your understanding of the subject matter and demonstrate your ability to ${
+      selectedType === ASSIGNMENT_TYPES.ESSAY
+        ? "analyze and articulate complex ideas"
+        : selectedType === ASSIGNMENT_TYPES.RESEARCH_PAPER
+        ? "conduct research and synthesize information"
+        : selectedType === ASSIGNMENT_TYPES.PRESENTATION
+        ? "organize and present information clearly"
+        : "apply concepts to real-world scenarios"
+    }.
 
 ### Learning Objectives
-${learningObjectives || "- Demonstrate understanding of key concepts\n- Apply theoretical knowledge to practical situations\n- Develop critical thinking and analytical skills"}
+${
+  learningObjectives ||
+  "- Demonstrate understanding of key concepts\n- Apply theoretical knowledge to practical situations\n- Develop critical thinking and analytical skills"
+}
 
 ### Requirements
-- ${selectedType === ASSIGNMENT_TYPES.ESSAY ? "Length: 1000-1500 words" : selectedType === ASSIGNMENT_TYPES.RESEARCH_PAPER ? "Length: 2000-2500 words with at least 8 scholarly sources" : selectedType === ASSIGNMENT_TYPES.PRESENTATION ? "Duration: 10-15 minutes with visual aids" : "Follow all instructions carefully"}
-- Format: ${selectedType === ASSIGNMENT_TYPES.RESEARCH_PAPER ? "APA style with proper citations" : "Clear, organized structure with proper grammar and spelling"}
+- ${
+      selectedType === ASSIGNMENT_TYPES.ESSAY
+        ? "Length: 1000-1500 words"
+        : selectedType === ASSIGNMENT_TYPES.RESEARCH_PAPER
+        ? "Length: 2000-2500 words with at least 8 scholarly sources"
+        : selectedType === ASSIGNMENT_TYPES.PRESENTATION
+        ? "Duration: 10-15 minutes with visual aids"
+        : "Follow all instructions carefully"
+    }
+- Format: ${
+      selectedType === ASSIGNMENT_TYPES.RESEARCH_PAPER
+        ? "APA style with proper citations"
+        : "Clear, organized structure with proper grammar and spelling"
+    }
 - Due Date: ${dueDate || "To be announced"}
 
 ### Components
@@ -294,11 +338,11 @@ Your ${typeTitle.toLowerCase()} should include the following:
    - Suggestions for further consideration
 
 ### Submission Guidelines
-Submit your ${typeTitle.toLowerCase()} through the course website by the due date. Late submissions will be penalized according to the course policy.`
-  }
+Submit your ${typeTitle.toLowerCase()} through the course website by the due date. Late submissions will be penalized according to the course policy.`;
+  };
 
   const generateRubric = () => {
-    const typeTitle = ASSIGNMENT_TYPE_INFO[selectedType]?.title || "Assignment"
+    const typeTitle = ASSIGNMENT_TYPE_INFO[selectedType]?.title || "Assignment";
 
     return `# ${typeTitle} Rubric: ${assignmentTitle}
 ## ${selectedCourse}
@@ -318,8 +362,8 @@ Submit your ${typeTitle.toLowerCase()} through the course website by the due dat
 - F: Below 60%
 
 **Additional Notes:**
-This rubric evaluates both the content and presentation of your ${typeTitle.toLowerCase()}. Pay particular attention to developing well-supported arguments and maintaining a clear organizational structure.`
-  }
+This rubric evaluates both the content and presentation of your ${typeTitle.toLowerCase()}. Pay particular attention to developing well-supported arguments and maintaining a clear organizational structure.`;
+  };
 
   const generateQuestions = () => {
     return `# Multiple Choice Questions: ${assignmentTitle}
@@ -383,8 +427,8 @@ This rubric evaluates both the content and presentation of your ${typeTitle.toLo
     a) Provide energy for the reaction
     b) Lower the activation energy required
     c) Change the equilibrium of the reaction
-    d) Increase the temperature of the reaction`
-  }
+    d) Increase the temperature of the reaction`;
+  };
 
   const generateAnswerKey = () => {
     return `# Answer Key: ${assignmentTitle}
@@ -423,8 +467,8 @@ This rubric evaluates both the content and presentation of your ${typeTitle.toLo
 **Grading Guidelines:**
 - Each question is worth 10 points
 - No partial credit for multiple choice questions
-- Total possible score: 100 points`
-  }
+- Total possible score: 100 points`;
+  };
 
   const generateChecklist = () => {
     return `# Lab Report Checklist: ${assignmentTitle}
@@ -467,8 +511,8 @@ This rubric evaluates both the content and presentation of your ${typeTitle.toLo
 **Grading Notes:**
 - Each item on this checklist contributes to your overall grade
 - Major deficiencies in critical areas (hypothesis, data analysis, conclusion) will significantly impact your grade
-- Exceptional work in any area will be noted and may positively influence your grade`
-  }
+- Exceptional work in any area will be noted and may positively influence your grade`;
+  };
 
   const generateParticipationCriteria = () => {
     return `# Discussion Participation Criteria: ${assignmentTitle}
@@ -512,8 +556,8 @@ This rubric evaluates both the content and presentation of your ${typeTitle.toLo
 - Participation will be assessed throughout the entire discussion period
 - Quality is valued over quantity—a few thoughtful contributions are better than many superficial ones
 - Both verbal and non-verbal participation (active listening, note-taking) will be considered
-- Students with documented accommodations for participation will be assessed according to their individual plans`
-  }
+- Students with documented accommodations for participation will be assessed according to their individual plans`;
+  };
 
   const generatePeerEvaluation = () => {
     return `# Peer Evaluation Form: ${assignmentTitle}
@@ -571,41 +615,41 @@ What percentage of the total group effort do you feel this person contributed?
 
 **Note: The percentages for all team members should total 100%**
 
-This peer evaluation will be used as part of the individual grade calculation for the group project. Your honest and fair assessment is important for equitable grading.`
-  }
+This peer evaluation will be used as part of the individual grade calculation for the group project. Your honest and fair assessment is important for equitable grading.`;
+  };
 
   // Handle saving the assignment
   const handleSaveAssignment = () => {
-    setIsSaving(true)
+    setIsSaving(true);
 
     // Simulate saving assignment
     setTimeout(() => {
-      setIsSaving(false)
+      setIsSaving(false);
 
       toast({
         title: "Assignment Saved",
         description: "Your assignment has been saved successfully",
-      })
+      });
 
       // In a real app, this would save to a database and redirect
-      router.push("/dashboard/assignments")
-    }, 2000)
-  }
+      router.push("/dashboard/assignments");
+    }, 2000);
+  };
 
   // Handle copying content to clipboard
   const handleCopyToClipboard = (text: string, type: string) => {
-    navigator.clipboard.writeText(text)
-    setCopied(type)
+    navigator.clipboard.writeText(text);
+    setCopied(type);
 
     setTimeout(() => {
-      setCopied(null)
-    }, 2000)
+      setCopied(null);
+    }, 2000);
 
     toast({
       title: "Copied to clipboard",
       description: `${type} has been copied to your clipboard.`,
-    })
-  }
+    });
+  };
 
   // Render the assignment type selection step
   const renderTypeSelection = () => {
@@ -613,16 +657,20 @@ This peer evaluation will be used as part of the individual grade calculation fo
       <div className="space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold">Create New Assessment</h1>
-          <p className="text-muted-foreground">Select the type of assessment you want to create</p>
+          <p className="text-muted-foreground">
+            Select the type of assessment you want to create
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Object.entries(ASSIGNMENT_TYPE_INFO).map(([type, info]) => {
-            const Icon = info.icon
+            const Icon = info.icon;
             return (
               <Card
                 key={type}
-                className={`cursor-pointer transition-all hover:border-primary hover:shadow-md ${selectedType === type ? "border-primary bg-primary/5" : ""}`}
+                className={`cursor-pointer transition-all hover:border-primary hover:shadow-md ${
+                  selectedType === type ? "border-primary bg-primary/5" : ""
+                }`}
                 onClick={() => setSelectedType(type)}
               >
                 <CardHeader className="pb-2">
@@ -634,7 +682,9 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">{info.description}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {info.description}
+                  </p>
                 </CardContent>
                 <CardFooter className="pt-0">
                   <div className="flex flex-wrap gap-2">
@@ -646,7 +696,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   </div>
                 </CardFooter>
               </Card>
-            )
+            );
           })}
         </div>
 
@@ -656,28 +706,37 @@ This peer evaluation will be used as part of the individual grade calculation fo
           </Button>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   // Render the assignment details step
   const renderDetailsForm = () => {
-    const typeInfo = ASSIGNMENT_TYPE_INFO[selectedType]
+    const typeInfo = ASSIGNMENT_TYPE_INFO[selectedType];
 
     return (
       <div className="space-y-6">
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" onClick={() => setCurrentStep("type")} className="p-0 h-auto">
+          <Button
+            variant="ghost"
+            onClick={() => setCurrentStep("type")}
+            className="p-0 h-auto"
+          >
             <ChevronRight className="h-4 w-4 rotate-180" />
             Back
           </Button>
           <div className="h-1 w-1 rounded-full bg-muted-foreground" />
-          <span className="text-muted-foreground">{typeInfo?.title || "Assignment"} Details</span>
+          <span className="text-muted-foreground">
+            {typeInfo?.title || "Assignment"} Details
+          </span>
         </div>
 
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">Create {typeInfo?.title || "Assignment"}</h1>
+          <h1 className="text-3xl font-bold">
+            Create {typeInfo?.title || "Assignment"}
+          </h1>
           <p className="text-muted-foreground">
-            Enter the details for your {typeInfo?.title.toLowerCase() || "assignment"}
+            Enter the details for your{" "}
+            {typeInfo?.title.toLowerCase() || "assignment"}
           </p>
         </div>
 
@@ -685,7 +744,8 @@ This peer evaluation will be used as part of the individual grade calculation fo
           <CardHeader>
             <CardTitle>Basic Information</CardTitle>
             <CardDescription>
-              Enter the essential details about your {typeInfo?.title.toLowerCase() || "assignment"}
+              Enter the essential details about your{" "}
+              {typeInfo?.title.toLowerCase() || "assignment"}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -709,9 +769,15 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   <SelectItem value="Introduction to Psychology (PSY 101)">
                     Introduction to Psychology (PSY 101)
                   </SelectItem>
-                  <SelectItem value="Advanced Statistics (STAT 301)">Advanced Statistics (STAT 301)</SelectItem>
-                  <SelectItem value="Environmental Science (ENV 201)">Environmental Science (ENV 201)</SelectItem>
-                  <SelectItem value="Creative Writing (ENG 215)">Creative Writing (ENG 215)</SelectItem>
+                  <SelectItem value="Advanced Statistics (STAT 301)">
+                    Advanced Statistics (STAT 301)
+                  </SelectItem>
+                  <SelectItem value="Environmental Science (ENV 201)">
+                    Environmental Science (ENV 201)
+                  </SelectItem>
+                  <SelectItem value="Creative Writing (ENG 215)">
+                    Creative Writing (ENG 215)
+                  </SelectItem>
                   <SelectItem value="Biology 101">Biology 101</SelectItem>
                 </SelectContent>
               </Select>
@@ -719,14 +785,21 @@ This peer evaluation will be used as part of the individual grade calculation fo
 
             <div className="space-y-2">
               <Label htmlFor="due-date">Due Date</Label>
-              <Input id="due-date" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+              <Input
+                id="due-date"
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+              />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
-                placeholder={`Brief description of what students will do in this ${typeInfo?.title.toLowerCase() || "assignment"}...`}
+                placeholder={`Brief description of what students will do in this ${
+                  typeInfo?.title.toLowerCase() || "assignment"
+                }...`}
                 rows={3}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -765,7 +838,10 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox id="show-answers" />
-                    <Label htmlFor="show-answers" className="text-sm font-normal">
+                    <Label
+                      htmlFor="show-answers"
+                      className="text-sm font-normal"
+                    >
                       Show correct answers after submission
                     </Label>
                   </div>
@@ -786,13 +862,19 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     <RadioGroup defaultValue="instructor">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="instructor" id="instructor" />
-                        <Label htmlFor="instructor" className="text-sm font-normal">
+                        <Label
+                          htmlFor="instructor"
+                          className="text-sm font-normal"
+                        >
                           Instructor-assigned groups
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="student" id="student" />
-                        <Label htmlFor="student" className="text-sm font-normal">
+                        <Label
+                          htmlFor="student"
+                          className="text-sm font-normal"
+                        >
                           Student-selected groups
                         </Label>
                       </div>
@@ -825,9 +907,11 @@ This peer evaluation will be used as part of the individual grade calculation fo
                       checked={publishToLMS.includes("Canvas")}
                       onCheckedChange={(checked) => {
                         if (checked) {
-                          setPublishToLMS([...publishToLMS, "Canvas"])
+                          setPublishToLMS([...publishToLMS, "Canvas"]);
                         } else {
-                          setPublishToLMS(publishToLMS.filter((lms) => lms !== "Canvas"))
+                          setPublishToLMS(
+                            publishToLMS.filter((lms) => lms !== "Canvas")
+                          );
                         }
                       }}
                     />
@@ -835,7 +919,10 @@ This peer evaluation will be used as part of the individual grade calculation fo
                       Publish to Canvas
                     </Label>
                   </div>
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  <Badge
+                    variant="outline"
+                    className="bg-green-50 text-green-700 border-green-200"
+                  >
                     Connected
                   </Badge>
                 </div>
@@ -848,15 +935,23 @@ This peer evaluation will be used as part of the individual grade calculation fo
                       onCheckedChange={(checked) => {
                         if (connectedLMS.includes("Google Classroom")) {
                           if (checked) {
-                            setPublishToLMS([...publishToLMS, "Google Classroom"])
+                            setPublishToLMS([
+                              ...publishToLMS,
+                              "Google Classroom",
+                            ]);
                           } else {
-                            setPublishToLMS(publishToLMS.filter((lms) => lms !== "Google Classroom"))
+                            setPublishToLMS(
+                              publishToLMS.filter(
+                                (lms) => lms !== "Google Classroom"
+                              )
+                            );
                           }
                         } else {
                           toast({
                             title: "Google Classroom Not Connected",
-                            description: "Please connect to Google Classroom first",
-                          })
+                            description:
+                              "Please connect to Google Classroom first",
+                          });
                         }
                       }}
                       disabled={!connectedLMS.includes("Google Classroom")}
@@ -864,7 +959,9 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     <Label
                       htmlFor="google-classroom"
                       className={`text-sm font-normal ${
-                        !connectedLMS.includes("Google Classroom") ? "text-muted-foreground" : ""
+                        !connectedLMS.includes("Google Classroom")
+                          ? "text-muted-foreground"
+                          : ""
                       }`}
                     >
                       Publish to Google Classroom
@@ -874,7 +971,9 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     variant="outline"
                     size="sm"
                     className="h-7 text-xs"
-                    onClick={() => (window.location.href = "/dashboard/integrations")}
+                    onClick={() =>
+                      (window.location.href = "/dashboard/integrations")
+                    }
                   >
                     Connect
                   </Button>
@@ -889,18 +988,22 @@ This peer evaluation will be used as part of the individual grade calculation fo
           </CardFooter>
         </Card>
       </div>
-    )
-  }
+    );
+  };
 
   // Render the content generation and review step
   const renderGenerationStep = () => {
-    const typeInfo = ASSIGNMENT_TYPE_INFO[selectedType]
-    const outputs = typeInfo?.outputs || []
+    const typeInfo = ASSIGNMENT_TYPE_INFO[selectedType];
+    const outputs = typeInfo?.outputs || [];
 
     return (
       <div className="space-y-6">
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" onClick={() => setCurrentStep("details")} className="p-0 h-auto">
+          <Button
+            variant="ghost"
+            onClick={() => setCurrentStep("details")}
+            className="p-0 h-auto"
+          >
             <ChevronRight className="h-4 w-4 rotate-180" />
             Back
           </Button>
@@ -919,7 +1022,8 @@ This peer evaluation will be used as part of the individual grade calculation fo
               <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
               <h3 className="text-xl font-medium">Generating Content</h3>
               <p className="text-muted-foreground mt-2">
-                Our AI is creating your {typeInfo?.title.toLowerCase() || "assignment"} content...
+                Our AI is creating your{" "}
+                {typeInfo?.title.toLowerCase() || "assignment"} content...
               </p>
             </CardContent>
           </Card>
@@ -927,16 +1031,30 @@ This peer evaluation will be used as part of the individual grade calculation fo
           <div className="space-y-6">
             <Tabs defaultValue={outputs[0]} className="space-y-4">
               <TabsList>
-                {outputs.includes("instructions") && <TabsTrigger value="instructions">Instructions</TabsTrigger>}
-                {outputs.includes("rubric") && <TabsTrigger value="rubric">Rubric</TabsTrigger>}
-                {outputs.includes("questions") && <TabsTrigger value="questions">Questions</TabsTrigger>}
-                {outputs.includes("answer_key") && <TabsTrigger value="answer_key">Answer Key</TabsTrigger>}
-                {outputs.includes("checklist") && <TabsTrigger value="checklist">Checklist</TabsTrigger>}
+                {outputs.includes("instructions") && (
+                  <TabsTrigger value="instructions">Instructions</TabsTrigger>
+                )}
+                {outputs.includes("rubric") && (
+                  <TabsTrigger value="rubric">Rubric</TabsTrigger>
+                )}
+                {outputs.includes("questions") && (
+                  <TabsTrigger value="questions">Questions</TabsTrigger>
+                )}
+                {outputs.includes("answer_key") && (
+                  <TabsTrigger value="answer_key">Answer Key</TabsTrigger>
+                )}
+                {outputs.includes("checklist") && (
+                  <TabsTrigger value="checklist">Checklist</TabsTrigger>
+                )}
                 {outputs.includes("participation_criteria") && (
-                  <TabsTrigger value="participation_criteria">Participation Criteria</TabsTrigger>
+                  <TabsTrigger value="participation_criteria">
+                    Participation Criteria
+                  </TabsTrigger>
                 )}
                 {outputs.includes("peer_evaluation") && (
-                  <TabsTrigger value="peer_evaluation">Peer Evaluation</TabsTrigger>
+                  <TabsTrigger value="peer_evaluation">
+                    Peer Evaluation
+                  </TabsTrigger>
                 )}
               </TabsList>
 
@@ -946,7 +1064,12 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleCopyToClipboard(generatedContent.instructions || "", "Instructions")}
+                      onClick={() =>
+                        handleCopyToClipboard(
+                          generatedContent.instructions || "",
+                          "Instructions"
+                        )
+                      }
                       className="h-8"
                     >
                       {copied === "Instructions" ? (
@@ -968,7 +1091,12 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   </div>
                   <Textarea
                     value={generatedContent.instructions || ""}
-                    onChange={(e) => setGeneratedContent({ ...generatedContent, instructions: e.target.value })}
+                    onChange={(e) =>
+                      setGeneratedContent({
+                        ...generatedContent,
+                        instructions: e.target.value,
+                      })
+                    }
                     className="min-h-[500px] font-mono"
                   />
                 </TabsContent>
@@ -980,7 +1108,12 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleCopyToClipboard(generatedContent.rubric || "", "Rubric")}
+                      onClick={() =>
+                        handleCopyToClipboard(
+                          generatedContent.rubric || "",
+                          "Rubric"
+                        )
+                      }
                       className="h-8"
                     >
                       {copied === "Rubric" ? (
@@ -1002,7 +1135,12 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   </div>
                   <Textarea
                     value={generatedContent.rubric || ""}
-                    onChange={(e) => setGeneratedContent({ ...generatedContent, rubric: e.target.value })}
+                    onChange={(e) =>
+                      setGeneratedContent({
+                        ...generatedContent,
+                        rubric: e.target.value,
+                      })
+                    }
                     className="min-h-[500px] font-mono"
                   />
                 </TabsContent>
@@ -1014,7 +1152,12 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleCopyToClipboard(generatedContent.questions || "", "Questions")}
+                      onClick={() =>
+                        handleCopyToClipboard(
+                          generatedContent.questions || "",
+                          "Questions"
+                        )
+                      }
                       className="h-8"
                     >
                       {copied === "Questions" ? (
@@ -1036,7 +1179,12 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   </div>
                   <Textarea
                     value={generatedContent.questions || ""}
-                    onChange={(e) => setGeneratedContent({ ...generatedContent, questions: e.target.value })}
+                    onChange={(e) =>
+                      setGeneratedContent({
+                        ...generatedContent,
+                        questions: e.target.value,
+                      })
+                    }
                     className="min-h-[500px] font-mono"
                   />
                 </TabsContent>
@@ -1048,7 +1196,12 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleCopyToClipboard(generatedContent.answer_key || "", "Answer Key")}
+                      onClick={() =>
+                        handleCopyToClipboard(
+                          generatedContent.answer_key || "",
+                          "Answer Key"
+                        )
+                      }
                       className="h-8"
                     >
                       {copied === "Answer Key" ? (
@@ -1070,7 +1223,12 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   </div>
                   <Textarea
                     value={generatedContent.answer_key || ""}
-                    onChange={(e) => setGeneratedContent({ ...generatedContent, answer_key: e.target.value })}
+                    onChange={(e) =>
+                      setGeneratedContent({
+                        ...generatedContent,
+                        answer_key: e.target.value,
+                      })
+                    }
                     className="min-h-[500px] font-mono"
                   />
                 </TabsContent>
@@ -1082,7 +1240,12 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleCopyToClipboard(generatedContent.checklist || "", "Checklist")}
+                      onClick={() =>
+                        handleCopyToClipboard(
+                          generatedContent.checklist || "",
+                          "Checklist"
+                        )
+                      }
                       className="h-8"
                     >
                       {copied === "Checklist" ? (
@@ -1104,20 +1267,31 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   </div>
                   <Textarea
                     value={generatedContent.checklist || ""}
-                    onChange={(e) => setGeneratedContent({ ...generatedContent, checklist: e.target.value })}
+                    onChange={(e) =>
+                      setGeneratedContent({
+                        ...generatedContent,
+                        checklist: e.target.value,
+                      })
+                    }
                     className="min-h-[500px] font-mono"
                   />
                 </TabsContent>
               )}
 
               {outputs.includes("participation_criteria") && (
-                <TabsContent value="participation_criteria" className="space-y-4">
+                <TabsContent
+                  value="participation_criteria"
+                  className="space-y-4"
+                >
                   <div className="flex justify-end space-x-2 mb-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() =>
-                        handleCopyToClipboard(generatedContent.participation_criteria || "", "Participation Criteria")
+                        handleCopyToClipboard(
+                          generatedContent.participation_criteria || "",
+                          "Participation Criteria"
+                        )
                       }
                       className="h-8"
                     >
@@ -1141,7 +1315,10 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   <Textarea
                     value={generatedContent.participation_criteria || ""}
                     onChange={(e) =>
-                      setGeneratedContent({ ...generatedContent, participation_criteria: e.target.value })
+                      setGeneratedContent({
+                        ...generatedContent,
+                        participation_criteria: e.target.value,
+                      })
                     }
                     className="min-h-[500px] font-mono"
                   />
@@ -1154,7 +1331,12 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleCopyToClipboard(generatedContent.peer_evaluation || "", "Peer Evaluation")}
+                      onClick={() =>
+                        handleCopyToClipboard(
+                          generatedContent.peer_evaluation || "",
+                          "Peer Evaluation"
+                        )
+                      }
                       className="h-8"
                     >
                       {copied === "Peer Evaluation" ? (
@@ -1176,7 +1358,12 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   </div>
                   <Textarea
                     value={generatedContent.peer_evaluation || ""}
-                    onChange={(e) => setGeneratedContent({ ...generatedContent, peer_evaluation: e.target.value })}
+                    onChange={(e) =>
+                      setGeneratedContent({
+                        ...generatedContent,
+                        peer_evaluation: e.target.value,
+                      })
+                    }
                     className="min-h-[500px] font-mono"
                   />
                 </TabsContent>
@@ -1185,11 +1372,17 @@ This peer evaluation will be used as part of the individual grade calculation fo
 
             <div className="flex justify-between">
               <div className="flex space-x-2">
-                <Button variant="outline" onClick={() => setPdfPreviewOpen(true)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setPdfPreviewOpen(true)}
+                >
                   <Download className="mr-2 h-4 w-4" />
                   Download PDF
                 </Button>
-                <Button variant="outline" onClick={() => setEmailPreviewOpen(true)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setEmailPreviewOpen(true)}
+                >
                   <Mail className="mr-2 h-4 w-4" />
                   Email to Students
                 </Button>
@@ -1211,8 +1404,8 @@ This peer evaluation will be used as part of the individual grade calculation fo
           </div>
         )}
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -1240,5 +1433,5 @@ This peer evaluation will be used as part of the individual grade calculation fo
         course={selectedCourse}
       />
     </div>
-  )
+  );
 }
