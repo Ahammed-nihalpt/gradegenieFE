@@ -82,8 +82,7 @@ export default function LoginPage() {
     });
 
     if (res?.error) {
-      console.log("🚀 ~ handleLogin ~ res?.error:", res?.error);
-      setError(res.error || "Invalid credentials");
+      setError("Invalid credentials");
     } else {
       router.push("/dashboard/assignments"); // or wherever you want to redirect after login
     }
