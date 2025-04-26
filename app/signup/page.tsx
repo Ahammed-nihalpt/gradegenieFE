@@ -1,14 +1,21 @@
-"use client"
-import Link from "next/link"
-import type React from "react"
+"use client";
+import Link from "next/link";
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Switch } from "@/components/ui/switch"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
 import {
   CheckIcon,
   CreditCard,
@@ -20,13 +27,20 @@ import {
   Zap,
   BookOpen,
   ShieldCheck,
-} from "lucide-react"
-import { Logo } from "@/components/logo"
+} from "lucide-react";
+import { Logo } from "@/components/logo";
+import axios from "axios";
 
 // Custom icon components
 function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="24"
+      height="24"
+      {...props}
+    >
       <path
         fill="#4285F4"
         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -44,35 +58,67 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
         d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
       />
     </svg>
-  )
+  );
 }
 
 function MicrosoftIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23" width="23" height="23" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 23 23"
+      width="23"
+      height="23"
+      {...props}
+    >
       <path fill="#f1511b" d="M1 1h10v10H1z" />
       <path fill="#80cc28" d="M12 1h10v10H12z" />
       <path fill="#00adef" d="M1 12h10v10H1z" />
       <path fill="#fbbc09" d="M12 12h10v10H12z" />
     </svg>
-  )
+  );
 }
 
 export default function SignupPage() {
-  const [step, setStep] = useState(1)
-  const [email, setEmail] = useState("")
-  const [name, setName] = useState("")
-  const [billingCycle, setBillingCycle] = useState("yearly")
-  const [selectedPlan, setSelectedPlan] = useState("department")
+  const [step, setStep] = useState(1);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [billingCycle, setBillingCycle] = useState("yearly");
+  const [selectedPlan, setSelectedPlan] = useState("department");
 
-  const handleContinue = (e: React.FormEvent) => {
-    e.preventDefault()
-    setStep(step + 1)
-  }
+  const handleContinue = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (step === 1) {
+      const baseURL = process.env.NEXT_PUBLIC_API_URL;
+      console.log("🚀 ~ handleContinue ~ baseURL:", baseURL);
+      if (!baseURL) {
+        console.error("NEXT_PUBLIC_API_URL is not set!");
+        return;
+      }
+
+      try {
+        const response = await axios.post(`${baseURL}/auth/signup`, {
+          email: email,
+          password: password,
+          fullName: name,
+        });
+        setError(null);
+      } catch (error) {
+        console.log("🚀 ~ handleContinue ~ error:", error);
+        setError("An error occurred during signup. Please try again.");
+      }
+    }
+
+    if (!error) {
+      setStep(step + 1);
+    }
+  };
 
   const handleBack = () => {
-    setStep(step - 1)
-  }
+    setStep(step - 1);
+  };
 
   const plans = {
     monthly: {
@@ -168,7 +214,7 @@ export default function SignupPage() {
         ],
       },
     },
-  }
+  };
 
   return (
     <div className="flex min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-12">
@@ -176,9 +222,12 @@ export default function SignupPage() {
         {/* Left side - Benefits */}
         <div className="md:col-span-2 hidden md:flex flex-col justify-center space-y-8">
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold">Unlock Effortless Teaching with Your AI Assistant</h2>
+            <h2 className="text-2xl font-bold">
+              Unlock Effortless Teaching with Your AI Assistant
+            </h2>
             <p className="text-muted-foreground">
-              Join a community of educators who are transforming their classrooms with the power of AI.
+              Join a community of educators who are transforming their
+              classrooms with the power of AI.
             </p>
           </div>
 
@@ -190,7 +239,8 @@ export default function SignupPage() {
               <div>
                 <h3 className="font-medium">Reclaim Your Time</h3>
                 <p className="text-sm text-muted-foreground">
-                  Automate tedious tasks and focus on what you love: connecting with students.
+                  Automate tedious tasks and focus on what you love: connecting
+                  with students.
                 </p>
               </div>
             </div>
@@ -202,7 +252,8 @@ export default function SignupPage() {
               <div>
                 <h3 className="font-medium">Elevate Student Success</h3>
                 <p className="text-sm text-muted-foreground">
-                  Provide personalized feedback that fosters growth and understanding.
+                  Provide personalized feedback that fosters growth and
+                  understanding.
                 </p>
               </div>
             </div>
@@ -214,7 +265,8 @@ export default function SignupPage() {
               <div>
                 <h3 className="font-medium">Maintain Academic Integrity</h3>
                 <p className="text-sm text-muted-foreground">
-                  Confidently uphold standards with advanced AI and plagiarism detection.
+                  Confidently uphold standards with advanced AI and plagiarism
+                  detection.
                 </p>
               </div>
             </div>
@@ -222,9 +274,12 @@ export default function SignupPage() {
 
           <div className="bg-muted p-4 rounded-lg">
             <blockquote className="text-sm italic">
-              "GradeGenie has given me back my evenings and weekends! I'm more present for my students and my family."
+              "GradeGenie has given me back my evenings and weekends! I'm more
+              present for my students and my family."
             </blockquote>
-            <div className="mt-2 text-sm font-medium">— Sarah Johnson, High School English Teacher</div>
+            <div className="mt-2 text-sm font-medium">
+              — Sarah Johnson, High School English Teacher
+            </div>
           </div>
         </div>
 
@@ -240,9 +295,12 @@ export default function SignupPage() {
               {step === 3 && "Complete Your Registration"}
             </CardTitle>
             <CardDescription className="text-center">
-              {step === 1 && "Get 30 AI grading credits to experience the GradeGenie difference"}
-              {step === 2 && "Select the support level that fits your teaching needs — no charges during trial"}
-              {step === 3 && "Your trial begins today — no charges until it ends"}
+              {step === 1 &&
+                "Get 30 AI grading credits to experience the GradeGenie difference"}
+              {step === 2 &&
+                "Select the support level that fits your teaching needs — no charges during trial"}
+              {step === 3 &&
+                "Your trial begins today — no charges until it ends"}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -264,7 +322,9 @@ export default function SignupPage() {
                     <span className="w-full border-t"></span>
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                    <span className="bg-card px-2 text-muted-foreground">
+                      Or continue with
+                    </span>
                   </div>
                 </div>
 
@@ -296,9 +356,19 @@ export default function SignupPage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
-                    <Input id="password" name="password" type="password" placeholder="••••••••" required />
-                    <p className="text-xs text-muted-foreground">Password must be at least 8 characters</p>
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      placeholder="••••••••"
+                      required
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Password must be at least 8 characters
+                    </p>
                   </div>
+                  {error && <p className="text-red-500 text-sm">{error}</p>}
                 </div>
 
                 <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
@@ -310,12 +380,15 @@ export default function SignupPage() {
                     <li className="flex items-center">
                       <CheckIcon className="mr-2 h-4 w-4 text-green-500" />
                       <span>
-                        <strong>30 grading credits</strong> to streamline your assessment workflow
+                        <strong>30 grading credits</strong> to streamline your
+                        assessment workflow
                       </span>
                     </li>
                     <li className="flex items-center">
                       <CheckIcon className="mr-2 h-4 w-4 text-green-500" />
-                      <span>Complete access to all teaching enhancement tools</span>
+                      <span>
+                        Complete access to all teaching enhancement tools
+                      </span>
                     </li>
                     <li className="flex items-center">
                       <CheckIcon className="mr-2 h-4 w-4 text-green-500" />
@@ -334,7 +407,10 @@ export default function SignupPage() {
                     Terms of Service
                   </Link>{" "}
                   and{" "}
-                  <Link href="/privacy" className="underline underline-offset-2">
+                  <Link
+                    href="/privacy"
+                    className="underline underline-offset-2"
+                  >
                     Privacy Policy
                   </Link>
                 </p>
@@ -344,18 +420,28 @@ export default function SignupPage() {
                 <div className="text-center mb-4">
                   <div className="inline-flex items-center rounded-full bg-mint px-3 py-1 text-sm text-gray-800 mb-2">
                     <BadgeCheck className="mr-1 h-4 w-4" />
-                    <span>Your account is secure — no charges during your trial</span>
+                    <span>
+                      Your account is secure — no charges during your trial
+                    </span>
                   </div>
                 </div>
 
                 <div className="flex justify-center items-center space-x-4 mb-2">
-                  <span className={`text-base ${billingCycle === "monthly" ? "font-medium" : "text-muted-foreground"}`}>
+                  <span
+                    className={`text-base ${
+                      billingCycle === "monthly"
+                        ? "font-medium"
+                        : "text-muted-foreground"
+                    }`}
+                  >
                     Monthly
                   </span>
                   <div className="relative">
                     <Switch
                       checked={billingCycle === "yearly"}
-                      onCheckedChange={(checked) => setBillingCycle(checked ? "yearly" : "monthly")}
+                      onCheckedChange={(checked) =>
+                        setBillingCycle(checked ? "yearly" : "monthly")
+                      }
                       className="data-[state=checked]:bg-primary"
                     />
                     {billingCycle === "yearly" && (
@@ -364,13 +450,25 @@ export default function SignupPage() {
                       </span>
                     )}
                   </div>
-                  <span className={`text-base ${billingCycle === "yearly" ? "font-medium" : "text-muted-foreground"}`}>
+                  <span
+                    className={`text-base ${
+                      billingCycle === "yearly"
+                        ? "font-medium"
+                        : "text-muted-foreground"
+                    }`}
+                  >
                     Yearly
                   </span>
                 </div>
 
-                <RadioGroup value={selectedPlan} onValueChange={setSelectedPlan} className="grid gap-4 md:grid-cols-3">
-                  {Object.entries(plans[billingCycle as keyof typeof plans]).map(([planId, plan]) => (
+                <RadioGroup
+                  value={selectedPlan}
+                  onValueChange={setSelectedPlan}
+                  className="grid gap-4 md:grid-cols-3"
+                >
+                  {Object.entries(
+                    plans[billingCycle as keyof typeof plans]
+                  ).map(([planId, plan]) => (
                     <div key={planId} className="relative">
                       {plan.popular && (
                         <div className="absolute -top-3 left-0 right-0 mx-auto w-max rounded-full bg-primary px-3 py-1 text-xs text-primary-foreground">
@@ -385,28 +483,42 @@ export default function SignupPage() {
                             : "border-muted bg-background hover:bg-accent/50"
                         }`}
                       >
-                        <RadioGroupItem value={planId} id={planId} className="sr-only" />
+                        <RadioGroupItem
+                          value={planId}
+                          id={planId}
+                          className="sr-only"
+                        />
                         <div className="mb-2">
                           <h3 className="font-medium">{plan.name}</h3>
                         </div>
                         <div className="mb-2">
-                          <span className="text-2xl font-bold">{plan.price}</span>
-                          <span className="text-muted-foreground">{plan.period}</span>
+                          <span className="text-2xl font-bold">
+                            {plan.price}
+                          </span>
+                          <span className="text-muted-foreground">
+                            {plan.period}
+                          </span>
                           {billingCycle === "yearly" && (
-                            <div className="text-sm text-muted-foreground">{plan.monthlyEquivalent}</div>
+                            <div className="text-sm text-muted-foreground">
+                              {plan.monthlyEquivalent}
+                            </div>
                           )}
                         </div>
                         <ul className="mb-2 space-y-1 text-sm">
-                          {plan.features.map((feature, index) => (
-                            <li key={index} className="flex items-center">
-                              <Check className="mr-2 h-4 w-4 text-green-500" />
-                              <span>{feature}</span>
-                            </li>
-                          ))}
+                          {plan.features.map(
+                            (feature: string, index: number) => (
+                              <li key={index} className="flex items-center">
+                                <Check className="mr-2 h-4 w-4 text-green-500" />
+                                <span>{feature}</span>
+                              </li>
+                            )
+                          )}
                         </ul>
                         {selectedPlan === planId && (
                           <div className="mt-auto">
-                            <div className="rounded-md bg-primary/10 p-2 text-xs text-center">Selected</div>
+                            <div className="rounded-md bg-primary/10 p-2 text-xs text-center">
+                              Selected
+                            </div>
                           </div>
                         )}
                       </Label>
@@ -418,17 +530,23 @@ export default function SignupPage() {
                   <div className="flex items-start">
                     <Shield className="h-5 w-5 mr-2 mt-0.5 text-primary" />
                     <div>
-                      <p className="font-medium">Your trial begins with full access</p>
+                      <p className="font-medium">
+                        Your trial begins with full access
+                      </p>
                       <p className="text-sm mt-1">
-                        Experience all features with no charges until your 3-day trial concludes. You maintain complete
-                        control to cancel anytime.
+                        Experience all features with no charges until your 3-day
+                        trial concludes. You maintain complete control to cancel
+                        anytime.
                       </p>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex flex-col space-y-2">
-                  <Button className="w-full py-6 text-base" onClick={handleContinue}>
+                  <Button
+                    className="w-full py-6 text-base"
+                    onClick={handleContinue}
+                  >
                     Continue — Secure Trial Access
                   </Button>
                   <Button variant="ghost" onClick={handleBack} className="mt-2">
@@ -441,12 +559,17 @@ export default function SignupPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="card">Payment Information</Label>
-                  <span className="text-sm font-medium text-primary">Secure — No charges today</span>
+                  <span className="text-sm font-medium text-primary">
+                    Secure — No charges today
+                  </span>
                 </div>
 
                 <div className="border rounded-md p-4 bg-white space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="card-number" className="text-xs text-muted-foreground">
+                    <Label
+                      htmlFor="card-number"
+                      className="text-xs text-muted-foreground"
+                    >
                       Card number
                     </Label>
                     <Input id="card-number" placeholder="4242 4242 4242 4242" />
@@ -454,13 +577,19 @@ export default function SignupPage() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="expiry" className="text-xs text-muted-foreground">
+                      <Label
+                        htmlFor="expiry"
+                        className="text-xs text-muted-foreground"
+                      >
                         Expiry date
                       </Label>
                       <Input id="expiry" placeholder="MM/YY" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="cvc" className="text-xs text-muted-foreground">
+                      <Label
+                        htmlFor="cvc"
+                        className="text-xs text-muted-foreground"
+                      >
                         CVC
                       </Label>
                       <Input id="cvc" placeholder="123" />
@@ -481,35 +610,55 @@ export default function SignupPage() {
                       <Sparkles className="h-4 w-4 mr-2 text-primary" />
                       Your selected teaching support:
                     </h3>
-                    <Button variant="ghost" size="sm" onClick={() => setStep(2)} className="h-7 text-xs">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setStep(2)}
+                      className="h-7 text-xs"
+                    >
                       Adjust
                     </Button>
                   </div>
 
                   <div className="mb-3 pb-3 border-b">
                     <div className="font-medium">
-                      {plans[billingCycle as keyof typeof plans][selectedPlan as keyof typeof plans.monthly].name} Plan
-                      ({billingCycle === "yearly" ? "Annual" : "Monthly"})
+                      {
+                        plans[billingCycle as keyof typeof plans][
+                          selectedPlan as keyof typeof plans.monthly
+                        ].name
+                      }{" "}
+                      Plan ({billingCycle === "yearly" ? "Annual" : "Monthly"})
                     </div>
                     <div className="flex justify-between items-center mt-1">
                       <div className="text-sm text-muted-foreground">
-                        {billingCycle === "yearly" ? "Annual investment" : "Monthly investment"}
+                        {billingCycle === "yearly"
+                          ? "Annual investment"
+                          : "Monthly investment"}
                       </div>
                       <div className="font-medium">
-                        {plans[billingCycle as keyof typeof plans][selectedPlan as keyof typeof plans.monthly].price}
+                        {
+                          plans[billingCycle as keyof typeof plans][
+                            selectedPlan as keyof typeof plans.monthly
+                          ].price
+                        }
                       </div>
                     </div>
                     {billingCycle === "yearly" && (
-                      <div className="text-xs text-primary mt-1">You optimize your budget with 20% annual savings</div>
+                      <div className="text-xs text-primary mt-1">
+                        You optimize your budget with 20% annual savings
+                      </div>
                     )}
                   </div>
 
-                  <h4 className="text-sm font-medium mb-2">Your 3-day trial includes:</h4>
+                  <h4 className="text-sm font-medium mb-2">
+                    Your 3-day trial includes:
+                  </h4>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center">
                       <CheckIcon className="mr-2 h-4 w-4 text-green-500" />
                       <span>
-                        <strong>30 grading credits</strong> to enhance your teaching workflow
+                        <strong>30 grading credits</strong> to enhance your
+                        teaching workflow
                       </span>
                     </li>
                     <li className="flex items-center">
@@ -518,7 +667,10 @@ export default function SignupPage() {
                     </li>
                     <li className="flex items-center">
                       <CheckIcon className="mr-2 h-4 w-4 text-green-500" />
-                      <span>Complete control to cancel before trial ends — no charges</span>
+                      <span>
+                        Complete control to cancel before trial ends — no
+                        charges
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -542,7 +694,10 @@ export default function SignupPage() {
           <CardFooter className="flex flex-col space-y-4 border-t pt-4">
             <div className="text-center text-sm">
               Already have an account?{" "}
-              <Link href="/login" className="font-medium text-primary underline-offset-4 hover:underline">
+              <Link
+                href="/login"
+                className="font-medium text-primary underline-offset-4 hover:underline"
+              >
                 Log in
               </Link>
             </div>
@@ -553,5 +708,5 @@ export default function SignupPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

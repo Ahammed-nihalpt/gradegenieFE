@@ -197,7 +197,12 @@ export default function LoginPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" placeholder="m@example.com" type="email" />
+              <Input
+                id="email"
+                placeholder="m@example.com"
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -209,7 +214,11 @@ export default function LoginPage() {
                   Forgot password?
                 </Link>
               </div>
-              <Input id="password" type="password" />
+              <Input
+                id="password"
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
             <Button className="w-full" size="lg" onClick={handleLogin}>
