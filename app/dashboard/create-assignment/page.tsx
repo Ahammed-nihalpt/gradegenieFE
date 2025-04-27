@@ -45,6 +45,9 @@ import { Badge } from "@/components/ui/badge";
 import { PDFPreviewDialog } from "@/components/pdf-preview-dialog";
 import { EmailPreviewDialog } from "@/components/email-preview-dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import api from "@/lib/axios";
+import { useCourses } from "@/hooks/use-course";
+import { useSession } from "next-auth/react";
 
 // Assignment type definitions
 const ASSIGNMENT_TYPES = {
@@ -127,7 +130,9 @@ const ASSIGNMENT_TYPE_INFO = {
 export default function CreateAssignmentPage() {
   const { toast } = useToast();
   const searchParams = useSearchParams();
+  const { data: courses = [] } = useCourses();
   const router = useRouter();
+  const { data: session } = useSession();
 
   // Step tracking
   const [currentStep, setCurrentStep] = useState<
@@ -229,28 +234,19 @@ export default function CreateAssignmentPage() {
     try {
       const outputs = ASSIGNMENT_TYPE_INFO[selectedType]?.outputs || [];
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/ai/generate`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // "authorization": `Bearer ${process.env.}`,
-          },
-          body: JSON.stringify({
-            assignmentType:
-              ASSIGNMENT_TYPE_INFO[selectedType]?.title || selectedType,
-            subType: outputs,
-            title: assignmentTitle,
-            course: selectedCourse,
-            dueDate: dueDate,
-            description: description,
-            learningObjectives: learningObjectives,
-          }),
-        }
-      );
+      const response = await api.post("/assignment/ai/generate", {
+        assignmentType:
+          ASSIGNMENT_TYPE_INFO[selectedType]?.title || selectedType,
+        subType: outputs,
+        title: assignmentTitle,
+        course: courses.find((course) => course._id === selectedCourse)?.name,
+        dueDate: dueDate,
+        description: description,
+        learningObjectives: learningObjectives,
+        responseInstructions: generatedContent,
+      });
 
-      const data = await response.json();
+      const data = response.data;
 
       if (data.success) {
         setGeneratedContent(data.data); // 🎯 AI-generated content
@@ -619,21 +615,36 @@ This peer evaluation will be used as part of the individual grade calculation fo
   };
 
   // Handle saving the assignment
-  const handleSaveAssignment = () => {
+  const handleSaveAssignment = async () => {
     setIsSaving(true);
-
-    // Simulate saving assignment
-    setTimeout(() => {
+    try {
+      const outputs = ASSIGNMENT_TYPE_INFO[selectedType]?.outputs || [];
+      await api.post("/assignment/add", {
+        assignmentType:
+          ASSIGNMENT_TYPE_INFO[selectedType]?.title || selectedType,
+        subType: outputs,
+        title: assignmentTitle,
+        courseId: selectedCourse,
+        dueDate: dueDate,
+        description: description,
+        learningObjectives: learningObjectives,
+        userId: session?.user.id,
+      });
       setIsSaving(false);
-
       toast({
         title: "Assignment Saved",
         description: "Your assignment has been saved successfully",
       });
-
-      // In a real app, this would save to a database and redirect
       router.push("/dashboard/assignments");
-    }, 2000);
+    } catch (error) {
+      alert("Error saving assignment");
+      setIsSaving(false);
+
+      toast({
+        title: "Error saving assignment",
+        description: "something went wrong while saving your assignment",
+      });
+    }
   };
 
   // Handle copying content to clipboard
@@ -766,19 +777,11 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   <SelectValue placeholder="Select course" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Introduction to Psychology (PSY 101)">
-                    Introduction to Psychology (PSY 101)
-                  </SelectItem>
-                  <SelectItem value="Advanced Statistics (STAT 301)">
-                    Advanced Statistics (STAT 301)
-                  </SelectItem>
-                  <SelectItem value="Environmental Science (ENV 201)">
-                    Environmental Science (ENV 201)
-                  </SelectItem>
-                  <SelectItem value="Creative Writing (ENG 215)">
-                    Creative Writing (ENG 215)
-                  </SelectItem>
-                  <SelectItem value="Biology 101">Biology 101</SelectItem>
+                  {courses.map((course) => (
+                    <SelectItem key={course._id} value={course._id}>
+                      {course.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

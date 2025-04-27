@@ -12,27 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import api from "@/lib/axios";
-import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
-
-async function fetchCourses(userId: string) {
-  const response = await api.get<{ courses: Course[] }>(
-    `/course/by/user/${userId}`
-  );
-  return response.data.courses || [];
-}
+import { useCourses } from "@/hooks/use-course";
 
 export default function CoursesPage() {
-  const { data: session } = useSession();
-  const {
-    data: courses = [],
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["courses", session?.user.id], // Ensure the userId is part of the query key for cache management
-    queryFn: () => fetchCourses(session?.user.id || ""), // Pass the userId to fetchCourses
-  });
+  const { data: courses = [] } = useCourses();
 
   return (
     <div className="container mx-auto py-6">
