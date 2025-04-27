@@ -218,7 +218,7 @@ export default function AssignmentDetailPage() {
         <CardContent>
           <p>{assignment?.description}</p>
           <p className="mt-2">
-            <strong>Total Points:</strong> {assignment?.totalPoints}
+            <strong>Total Points:</strong> 100
           </p>
         </CardContent>
       </Card>

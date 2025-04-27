@@ -52,7 +52,7 @@ export default function CoursesPage() {
                   Students
                 </div>
                 <div>
-                  <span className="font-medium">{course.assignments}</span>{" "}
+                  <span className="font-medium">{course.assignmentCount}</span>{" "}
                   Assignments
                 </div>
               </div>

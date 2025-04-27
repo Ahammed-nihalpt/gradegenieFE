@@ -43,19 +43,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useParams } from "next/navigation";
+import { useCoursesById } from "@/hooks/use-course";
+import { useCourseStore } from "@/lib/stores/courseStore";
 
 export default function CourseDetailPage() {
   const { id }: { id: string } = useParams();
+  const { setCourseId } = useCourseStore();
   const { toast } = useToast();
+  const { data: course, isLoading } = useCoursesById(id);
   const [activeTab, setActiveTab] = useState("assignments");
   const [isDownloadingSyllabus, setIsDownloadingSyllabus] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
-
-  // Find the course by ID
-  const course = courses.find((c) => c.id === id) || courses[0];
 
   const handleGradeAssignment = (assignmentId: string) => {
     toast({
@@ -139,6 +140,18 @@ export default function CourseDetailPage() {
     setIsUploadModalOpen(false);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex-1 flex items-center justify-center p-4 md:p-8 pt-6">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+          <p className="text-muted-foreground">Loading course details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  console.log("🚀 ~ CourseDetailPage ~ course:", course);
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center space-x-2">
@@ -147,8 +160,10 @@ export default function CourseDetailPage() {
             <ArrowLeft className="h-4 w-4" />
           </Link>
         </Button>
-        <h2 className="text-3xl font-bold tracking-tight">{course.title}</h2>
-        <Badge>{course.code}</Badge>
+        <h2 className="text-3xl font-bold tracking-tight">
+          {course?.name || "asdfasf"}
+        </h2>
+        <Badge>37</Badge>
       </div>
       <div className="grid gap-4 md:grid-cols-7">
         <Card className="md:col-span-5">
@@ -156,9 +171,9 @@ export default function CourseDetailPage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>Course Details</CardTitle>
-                <CardDescription>
+                {/* <CardDescription>
                   {course.students} students enrolled • Spring 2025
-                </CardDescription>
+                </CardDescription> */}
               </div>
               <Button asChild>
                 <Link href={`/dashboard/create-assignment?courseId=${id}`}>
@@ -178,7 +193,7 @@ export default function CourseDetailPage() {
                 <TabsTrigger value="assignments">Assignments</TabsTrigger>
                 <TabsTrigger value="students">Students</TabsTrigger>
                 <TabsTrigger value="syllabus">Syllabus</TabsTrigger>
-                <TabsTrigger value="references">Grading References</TabsTrigger>
+                {/* <TabsTrigger value="references">Grading References</TabsTrigger> */}
               </TabsList>
               <TabsContent value="assignments" className="space-y-4">
                 <Card>
@@ -200,39 +215,48 @@ export default function CourseDetailPage() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {courseAssignments.map((assignment) => (
-                          <TableRow key={assignment.id}>
-                            <TableCell className="font-medium">
-                              {assignment.title}
-                            </TableCell>
-                            <TableCell>{assignment.dueDate}</TableCell>
-                            <TableCell>
-                              <Badge
-                                variant={
-                                  assignment.status === "Active"
-                                    ? "default"
-                                    : assignment.status === "Draft"
-                                    ? "outline"
-                                    : "secondary"
-                                }
-                              >
-                                {assignment.status}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>{assignment.submissions}</TableCell>
-                            <TableCell className="text-right">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() =>
-                                  handleGradeAssignment(assignment.id)
-                                }
-                              >
-                                Grade
-                              </Button>
+                        {course?.assignments &&
+                        course?.assignments.length > 0 ? (
+                          course.assignments.map((assignment) => (
+                            <TableRow key={assignment._id}>
+                              <TableCell className="font-medium">
+                                {assignment.title}
+                              </TableCell>
+                              <TableCell>{assignment.dueDate}</TableCell>
+                              <TableCell>
+                                <Badge
+                                  variant={
+                                    assignment.status === "Active"
+                                      ? "default"
+                                      : assignment.status === "Draft"
+                                      ? "outline"
+                                      : "secondary"
+                                  }
+                                >
+                                  {assignment.status}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>{assignment.dueDate}</TableCell>
+                              <TableCell className="text-right">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() =>
+                                    handleGradeAssignment(assignment._id)
+                                  }
+                                >
+                                  Grade
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        ) : (
+                          <TableRow>
+                            <TableCell colSpan={5} className="text-center">
+                              No assignments available
                             </TableCell>
                           </TableRow>
-                        ))}
+                        )}
                       </TableBody>
                     </Table>
                   </CardContent>
@@ -244,9 +268,9 @@ export default function CourseDetailPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <CardTitle>Enrolled Students</CardTitle>
-                        <CardDescription>
+                        {/* <CardDescription>
                           {course.students} students in this course
-                        </CardDescription>
+                        </CardDescription> */}
                       </div>
                       <div className="flex space-x-2">
                         <Button variant="outline" onClick={handleEmailStudents}>
@@ -323,7 +347,10 @@ export default function CourseDetailPage() {
                           )}
                         </Button>
                         <Button asChild>
-                          <Link href="/dashboard/create-syllabus">
+                          <Link
+                            href="/dashboard/create-syllabus"
+                            onClick={() => setCourseId(course || null)}
+                          >
                             <Save className="mr-2 h-4 w-4" />
                             Edit Syllabus
                           </Link>
@@ -333,64 +360,34 @@ export default function CourseDetailPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="prose max-w-none dark:prose-invert">
-                      <h1>
-                        {course.title} ({course.code})
-                      </h1>
+                      <h1>{course?.name}</h1>
                       <h2>Spring 2025</h2>
 
                       <h3>Course Description</h3>
-                      <p>
-                        This course provides a comprehensive introduction to the
-                        scientific study of behavior and mental processes.
-                        Students will explore the major theories, concepts, and
-                        research methods in psychology, including biological
-                        bases of behavior, sensation and perception, learning,
-                        memory, cognition, development, personality, social
-                        psychology, and psychological disorders.
-                      </p>
+                      <p>{course?.description}</p>
 
                       <h3>Learning Objectives</h3>
                       <ul>
-                        <li>
-                          Describe key concepts, principles, and overarching
-                          themes in psychology
-                        </li>
-                        <li>
-                          Develop a working knowledge of psychology's content
-                          domains
-                        </li>
-                        <li>
-                          Apply critical thinking skills to evaluate
-                          psychological research
-                        </li>
-                        <li>
-                          Apply psychological concepts to real-world situations
-                        </li>
-                        <li>
-                          Demonstrate effective written and oral communication
-                          skills
-                        </li>
+                        course
+                        {course?.syllabus?.learningObjectives?.map((value) => (
+                          <li key={value}>{value}</li>
+                        ))}
                       </ul>
 
                       <h3>Required Materials</h3>
                       <ul>
-                        <li>
-                          Myers, D. G., & DeWall, C. N. (2024). Psychology (14th
-                          ed.). Worth Publishers.
-                        </li>
-                        <li>
-                          Additional readings will be provided on the course
-                          website
-                        </li>
+                        {course?.syllabus?.requiredMaterials?.map((value) => (
+                          <li key={value.title}>{value.title}</li>
+                        ))}
                       </ul>
 
                       <h3>Assignments and Grading</h3>
                       <ul>
-                        <li>Midterm Exam: 25%</li>
-                        <li>Final Exam: 30%</li>
-                        <li>Research Paper: 20%</li>
-                        <li>Weekly Quizzes: 15%</li>
-                        <li>Class Participation: 10%</li>
+                        {course?.syllabus?.gradingPolicy?.map((value) => (
+                          <li key={value?.description}>
+                            {value?.description}: {value?.percentage}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </CardContent>
@@ -655,7 +652,11 @@ export default function CourseDetailPage() {
                 Create Assignment
               </Link>
             </Button>
-            <Button className="w-full justify-start" asChild>
+            <Button
+              className="w-full justify-start"
+              asChild
+              onClick={() => setCourseId(course || null)}
+            >
               <Link href="/dashboard/create-syllabus">
                 <GraduationCap className="mr-2 h-4 w-4" />
                 Edit Syllabus
@@ -804,8 +805,7 @@ export default function CourseDetailPage() {
           <DialogHeader>
             <DialogTitle>Email All Students</DialogTitle>
             <DialogDescription>
-              Send an email to all {course.students} students enrolled in this
-              course.
+              Send an email to all 31 students enrolled in this course.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
