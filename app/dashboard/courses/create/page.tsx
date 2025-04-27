@@ -1,20 +1,42 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { PageHeader } from "@/components/page-header"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { SyllabusCreator } from "./syllabus-creator"
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { PageHeader } from "@/components/page-header";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { SyllabusCreator } from "./syllabus-creator";
+import api from "@/lib/axios";
+import { useSession } from "next-auth/react";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -29,13 +51,21 @@ const formSchema = z.object({
   gradeLevel: z.string({
     required_error: "Please select a grade level.",
   }),
-})
+});
 
 export default function CreateCoursePage() {
-  const router = useRouter()
-  const [activeTab, setActiveTab] = useState("details")
-  const [isCreating, setIsCreating] = useState(false)
-  const [courseDetails, setCourseDetails] = useState(null)
+  const router = useRouter();
+  const { data: session } = useSession();
+  const [activeTab, setActiveTab] = useState("details");
+  const [isCreating, setIsCreating] = useState(false);
+  const [courseId, setCourseId] = useState<string | null>(null);
+  const [courseDetails, setCourseDetails] = useState<{
+    name: string;
+    description: string;
+    subject: string;
+    gradeLevel: string;
+    sysllabusmd?: string;
+  } | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,20 +75,46 @@ export default function CreateCoursePage() {
       subject: "",
       gradeLevel: "",
     },
-  })
+  });
 
-  function onSubmitDetails(values: z.infer<typeof formSchema>) {
-    setCourseDetails(values)
-    setActiveTab("syllabus")
-  }
+  const onSubmitDetails = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const res = await api.post("/course/save", {
+        userId: session?.user.id,
+        ...values,
+      });
+      setCourseId(res.data.courseId);
+      // Redirect to courses dashboard
+    } catch (error: any) {
+      alert(
+        error.response?.data?.message || "There was an error saving the course."
+      );
+    }
+    setCourseDetails(values);
+    setActiveTab("syllabus");
+  };
 
-  function onCreateCourse() {
-    setIsCreating(true)
-    // Simulate API call
-    setTimeout(() => {
-      setIsCreating(false)
-      router.push("/dashboard/courses")
-    }, 1500)
+  async function onCreateCourse() {
+    if (!courseDetails) return;
+
+    try {
+      setIsCreating(true);
+
+      await api.post("/course/save", {
+        courseId,
+        userId: session?.user.id,
+        ...courseDetails,
+      });
+
+      // Redirect to courses dashboard
+      router.push("/dashboard/courses");
+    } catch (error: any) {
+      alert(
+        error.response?.data?.message || "There was an error saving the course."
+      );
+    } finally {
+      setIsCreating(false);
+    }
   }
 
   return (
@@ -81,12 +137,16 @@ export default function CreateCoursePage() {
             <CardHeader>
               <CardTitle>Course Information</CardTitle>
               <CardDescription>
-                Enter the basic details about your course. You'll create your syllabus in the next step.
+                Enter the basic details about your course. You'll create your
+                syllabus in the next step.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmitDetails)} className="space-y-6">
+                <form
+                  onSubmit={form.handleSubmit(onSubmitDetails)}
+                  className="space-y-6"
+                >
                   <FormField
                     control={form.control}
                     name="name"
@@ -94,9 +154,14 @@ export default function CreateCoursePage() {
                       <FormItem>
                         <FormLabel>Course Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Introduction to Literature" {...field} />
+                          <Input
+                            placeholder="Introduction to Literature"
+                            {...field}
+                          />
                         </FormControl>
-                        <FormDescription>The name of your course as it will appear to students.</FormDescription>
+                        <FormDescription>
+                          The name of your course as it will appear to students.
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -109,7 +174,10 @@ export default function CreateCoursePage() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Subject</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select a subject" />
@@ -122,9 +190,15 @@ export default function CreateCoursePage() {
                               <SelectItem value="history">History</SelectItem>
                               <SelectItem value="art">Art</SelectItem>
                               <SelectItem value="music">Music</SelectItem>
-                              <SelectItem value="computerScience">Computer Science</SelectItem>
-                              <SelectItem value="foreignLanguage">Foreign Language</SelectItem>
-                              <SelectItem value="physicalEducation">Physical Education</SelectItem>
+                              <SelectItem value="computerScience">
+                                Computer Science
+                              </SelectItem>
+                              <SelectItem value="foreignLanguage">
+                                Foreign Language
+                              </SelectItem>
+                              <SelectItem value="physicalEducation">
+                                Physical Education
+                              </SelectItem>
                               <SelectItem value="other">Other</SelectItem>
                             </SelectContent>
                           </Select>
@@ -139,19 +213,32 @@ export default function CreateCoursePage() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Grade Level</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select a grade level" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="elementary">Elementary School</SelectItem>
-                              <SelectItem value="middleSchool">Middle School</SelectItem>
-                              <SelectItem value="highSchool">High School</SelectItem>
-                              <SelectItem value="undergraduate">Undergraduate</SelectItem>
+                              <SelectItem value="elementary">
+                                Elementary School
+                              </SelectItem>
+                              <SelectItem value="middleSchool">
+                                Middle School
+                              </SelectItem>
+                              <SelectItem value="highSchool">
+                                High School
+                              </SelectItem>
+                              <SelectItem value="undergraduate">
+                                Undergraduate
+                              </SelectItem>
                               <SelectItem value="graduate">Graduate</SelectItem>
-                              <SelectItem value="professional">Professional</SelectItem>
+                              <SelectItem value="professional">
+                                Professional
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -173,7 +260,10 @@ export default function CreateCoursePage() {
                             {...field}
                           />
                         </FormControl>
-                        <FormDescription>This will help our AI generate a more relevant syllabus.</FormDescription>
+                        <FormDescription>
+                          This will help our AI generate a more relevant
+                          syllabus.
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -190,10 +280,15 @@ export default function CreateCoursePage() {
 
         <TabsContent value="syllabus" className="mt-6">
           {courseDetails && (
-            <SyllabusCreator courseDetails={courseDetails} onComplete={onCreateCourse} isCreating={isCreating} />
+            <SyllabusCreator
+              courseDetails={courseDetails}
+              onComplete={onCreateCourse}
+              isCreating={isCreating}
+              courseId={courseId}
+            />
           )}
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
