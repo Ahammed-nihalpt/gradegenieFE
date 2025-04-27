@@ -1,14 +1,37 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Download, FileText, GraduationCap, Loader2, Plus, Save, Users, Link2 } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import {
+  ArrowLeft,
+  Download,
+  FileText,
+  GraduationCap,
+  Loader2,
+  Plus,
+  Save,
+  Users,
+  Link2,
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -16,103 +39,105 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useParams } from "next/navigation";
 
-export default function CourseDetailPage({ params }: { params: { id: string } }) {
-  const { toast } = useToast()
-  const [activeTab, setActiveTab] = useState("assignments")
-  const [isDownloadingSyllabus, setIsDownloadingSyllabus] = useState(false)
-  const [isSyncing, setIsSyncing] = useState(false)
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
-  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false)
-  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false)
+export default function CourseDetailPage() {
+  const { id }: { id: string } = useParams();
+  const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState("assignments");
+  const [isDownloadingSyllabus, setIsDownloadingSyllabus] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
   // Find the course by ID
-  const course = courses.find((c) => c.id === params.id) || courses[0]
+  const course = courses.find((c) => c.id === id) || courses[0];
 
   const handleGradeAssignment = (assignmentId: string) => {
     toast({
       title: "Opening grading interface",
       description: "Loading assignment submissions",
-    })
+    });
     // In a real app, this would navigate to the grading page for this assignment
-    window.location.href = `/dashboard/assignments/${assignmentId}`
-  }
+    window.location.href = `/dashboard/assignments/${assignmentId}`;
+  };
 
   const handleEmailStudents = () => {
-    setIsEmailModalOpen(true)
-  }
+    setIsEmailModalOpen(true);
+  };
 
   const handleSendEmail = () => {
     toast({
       title: "Email Sent",
       description: "Your email has been sent to all students in this course",
-    })
-    setIsEmailModalOpen(false)
-  }
+    });
+    setIsEmailModalOpen(false);
+  };
 
   const handleDownloadRoster = () => {
     toast({
       title: "Downloading roster",
       description: "Student roster CSV is being prepared for download",
-    })
-  }
+    });
+  };
 
   const handleDownloadSyllabusPDF = () => {
-    setIsDownloadingSyllabus(true)
+    setIsDownloadingSyllabus(true);
 
     // Simulate PDF download
     setTimeout(() => {
-      setIsDownloadingSyllabus(false)
+      setIsDownloadingSyllabus(false);
 
       toast({
         title: "Syllabus Downloaded",
         description: "Your syllabus has been downloaded as a PDF",
-      })
+      });
 
       // In a real app, this would trigger a PDF download
-    }, 2000)
-  }
+    }, 2000);
+  };
 
   const handleSyncWithLMS = (lms: string) => {
-    setIsSyncing(true)
+    setIsSyncing(true);
 
     // Simulate syncing with LMS
     setTimeout(() => {
-      setIsSyncing(false)
+      setIsSyncing(false);
 
       toast({
         title: "Sync Complete",
         description: `Course has been synced with ${lms}`,
-      })
-    }, 2000)
-  }
+      });
+    }, 2000);
+  };
 
   const handleUploadReference = () => {
-    setIsUploadModalOpen(true)
-  }
+    setIsUploadModalOpen(true);
+  };
 
   const handleAddLink = () => {
-    setIsLinkModalOpen(true)
-  }
+    setIsLinkModalOpen(true);
+  };
 
   const handleLinkSubmit = () => {
     toast({
       title: "Link Added",
       description: "Your reference link has been added to the course",
-    })
-    setIsLinkModalOpen(false)
-  }
+    });
+    setIsLinkModalOpen(false);
+  };
 
   const handleUploadSubmit = () => {
     toast({
       title: "Reference Uploaded",
       description: "Your reference material has been added to the course",
-    })
-    setIsUploadModalOpen(false)
-  }
+    });
+    setIsUploadModalOpen(false);
+  };
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -131,10 +156,12 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>Course Details</CardTitle>
-                <CardDescription>{course.students} students enrolled • Spring 2025</CardDescription>
+                <CardDescription>
+                  {course.students} students enrolled • Spring 2025
+                </CardDescription>
               </div>
               <Button asChild>
-                <Link href={`/dashboard/create-assignment?courseId=${params.id}`}>
+                <Link href={`/dashboard/create-assignment?courseId=${id}`}>
                   <Plus className="mr-2 h-4 w-4" />
                   Add Assignment
                 </Link>
@@ -142,7 +169,11 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
             </div>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="assignments" className="space-y-4" onValueChange={setActiveTab}>
+            <Tabs
+              defaultValue="assignments"
+              className="space-y-4"
+              onValueChange={setActiveTab}
+            >
               <TabsList>
                 <TabsTrigger value="assignments">Assignments</TabsTrigger>
                 <TabsTrigger value="students">Students</TabsTrigger>
@@ -153,7 +184,9 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                 <Card>
                   <CardHeader>
                     <CardTitle>Course Assignments</CardTitle>
-                    <CardDescription>Manage and grade assignments for this course</CardDescription>
+                    <CardDescription>
+                      Manage and grade assignments for this course
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Table>
@@ -169,7 +202,9 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                       <TableBody>
                         {courseAssignments.map((assignment) => (
                           <TableRow key={assignment.id}>
-                            <TableCell className="font-medium">{assignment.title}</TableCell>
+                            <TableCell className="font-medium">
+                              {assignment.title}
+                            </TableCell>
                             <TableCell>{assignment.dueDate}</TableCell>
                             <TableCell>
                               <Badge
@@ -177,8 +212,8 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                                   assignment.status === "Active"
                                     ? "default"
                                     : assignment.status === "Draft"
-                                      ? "outline"
-                                      : "secondary"
+                                    ? "outline"
+                                    : "secondary"
                                 }
                               >
                                 {assignment.status}
@@ -186,7 +221,13 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                             </TableCell>
                             <TableCell>{assignment.submissions}</TableCell>
                             <TableCell className="text-right">
-                              <Button variant="ghost" size="sm" onClick={() => handleGradeAssignment(assignment.id)}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() =>
+                                  handleGradeAssignment(assignment.id)
+                                }
+                              >
                                 Grade
                               </Button>
                             </TableCell>
@@ -203,13 +244,18 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                     <div className="flex items-center justify-between">
                       <div>
                         <CardTitle>Enrolled Students</CardTitle>
-                        <CardDescription>{course.students} students in this course</CardDescription>
+                        <CardDescription>
+                          {course.students} students in this course
+                        </CardDescription>
                       </div>
                       <div className="flex space-x-2">
                         <Button variant="outline" onClick={handleEmailStudents}>
                           Email All
                         </Button>
-                        <Button variant="outline" onClick={handleDownloadRoster}>
+                        <Button
+                          variant="outline"
+                          onClick={handleDownloadRoster}
+                        >
                           <Download className="mr-2 h-4 w-4" />
                           Download Roster
                         </Button>
@@ -230,7 +276,9 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                       <TableBody>
                         {courseStudents.map((student) => (
                           <TableRow key={student.id}>
-                            <TableCell className="font-medium">{student.name}</TableCell>
+                            <TableCell className="font-medium">
+                              {student.name}
+                            </TableCell>
                             <TableCell>{student.email}</TableCell>
                             <TableCell>{student.completed}</TableCell>
                             <TableCell>{student.grade}</TableCell>
@@ -252,10 +300,16 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                     <div className="flex items-center justify-between">
                       <div>
                         <CardTitle>Course Syllabus</CardTitle>
-                        <CardDescription>Review and edit your course syllabus</CardDescription>
+                        <CardDescription>
+                          Review and edit your course syllabus
+                        </CardDescription>
                       </div>
                       <div className="flex space-x-2">
-                        <Button variant="outline" onClick={handleDownloadSyllabusPDF} disabled={isDownloadingSyllabus}>
+                        <Button
+                          variant="outline"
+                          onClick={handleDownloadSyllabusPDF}
+                          disabled={isDownloadingSyllabus}
+                        >
                           {isDownloadingSyllabus ? (
                             <>
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -286,25 +340,48 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
 
                       <h3>Course Description</h3>
                       <p>
-                        This course provides a comprehensive introduction to the scientific study of behavior and mental
-                        processes. Students will explore the major theories, concepts, and research methods in
-                        psychology, including biological bases of behavior, sensation and perception, learning, memory,
-                        cognition, development, personality, social psychology, and psychological disorders.
+                        This course provides a comprehensive introduction to the
+                        scientific study of behavior and mental processes.
+                        Students will explore the major theories, concepts, and
+                        research methods in psychology, including biological
+                        bases of behavior, sensation and perception, learning,
+                        memory, cognition, development, personality, social
+                        psychology, and psychological disorders.
                       </p>
 
                       <h3>Learning Objectives</h3>
                       <ul>
-                        <li>Describe key concepts, principles, and overarching themes in psychology</li>
-                        <li>Develop a working knowledge of psychology's content domains</li>
-                        <li>Apply critical thinking skills to evaluate psychological research</li>
-                        <li>Apply psychological concepts to real-world situations</li>
-                        <li>Demonstrate effective written and oral communication skills</li>
+                        <li>
+                          Describe key concepts, principles, and overarching
+                          themes in psychology
+                        </li>
+                        <li>
+                          Develop a working knowledge of psychology's content
+                          domains
+                        </li>
+                        <li>
+                          Apply critical thinking skills to evaluate
+                          psychological research
+                        </li>
+                        <li>
+                          Apply psychological concepts to real-world situations
+                        </li>
+                        <li>
+                          Demonstrate effective written and oral communication
+                          skills
+                        </li>
                       </ul>
 
                       <h3>Required Materials</h3>
                       <ul>
-                        <li>Myers, D. G., & DeWall, C. N. (2024). Psychology (14th ed.). Worth Publishers.</li>
-                        <li>Additional readings will be provided on the course website</li>
+                        <li>
+                          Myers, D. G., & DeWall, C. N. (2024). Psychology (14th
+                          ed.). Worth Publishers.
+                        </li>
+                        <li>
+                          Additional readings will be provided on the course
+                          website
+                        </li>
                       </ul>
 
                       <h3>Assignments and Grading</h3>
@@ -327,7 +404,8 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                       <div>
                         <CardTitle>Grading References</CardTitle>
                         <CardDescription>
-                          Upload links, documents, or text to use as references when grading
+                          Upload links, documents, or text to use as references
+                          when grading
                         </CardDescription>
                       </div>
                       <div className="flex space-x-2">
@@ -358,21 +436,25 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                               <TableHead>Type</TableHead>
                               <TableHead>Added</TableHead>
                               <TableHead>Used In</TableHead>
-                              <TableHead className="text-right">Actions</TableHead>
+                              <TableHead className="text-right">
+                                Actions
+                              </TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
                             {gradingReferences.map((reference) => (
                               <TableRow key={reference.id}>
-                                <TableCell className="font-medium">{reference.title}</TableCell>
+                                <TableCell className="font-medium">
+                                  {reference.title}
+                                </TableCell>
                                 <TableCell>
                                   <Badge
                                     variant={
                                       reference.type === "Document"
                                         ? "default"
                                         : reference.type === "Link"
-                                          ? "outline"
-                                          : "secondary"
+                                        ? "outline"
+                                        : "secondary"
                                     }
                                   >
                                     {reference.type}
@@ -403,9 +485,15 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                                       <FileText className="h-5 w-5 text-primary" />
                                     </div>
                                     <div className="flex-1">
-                                      <h3 className="font-medium">{reference.title}</h3>
-                                      <p className="text-sm text-muted-foreground">Added {reference.added}</p>
-                                      <p className="text-sm mt-1">Used in {reference.usedIn}</p>
+                                      <h3 className="font-medium">
+                                        {reference.title}
+                                      </h3>
+                                      <p className="text-sm text-muted-foreground">
+                                        Added {reference.added}
+                                      </p>
+                                      <p className="text-sm mt-1">
+                                        Used in {reference.usedIn}
+                                      </p>
                                     </div>
                                     <Button variant="ghost" size="icon">
                                       <Download className="h-4 w-4" />
@@ -431,13 +519,21 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                                     <Link2 className="h-5 w-5 text-primary" />
                                   </div>
                                   <div>
-                                    <h3 className="font-medium">{reference.title}</h3>
-                                    <p className="text-sm text-muted-foreground">{reference.url}</p>
+                                    <h3 className="font-medium">
+                                      {reference.title}
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground">
+                                      {reference.url}
+                                    </p>
                                   </div>
                                 </div>
                                 <div className="flex space-x-2">
                                   <Button variant="ghost" size="sm" asChild>
-                                    <a href={reference.url} target="_blank" rel="noopener noreferrer">
+                                    <a
+                                      href={reference.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
                                       Open
                                     </a>
                                   </Button>
@@ -458,7 +554,9 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                 <Card>
                   <CardHeader>
                     <CardTitle>LMS Integrations</CardTitle>
-                    <CardDescription>Connect this course with your Learning Management Systems</CardDescription>
+                    <CardDescription>
+                      Connect this course with your Learning Management Systems
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-6">
@@ -502,7 +600,11 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                                     </>
                                   )}
                                 </Button>
-                                <Button variant="outline" size="sm" className="h-8">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-8"
+                                >
                                   View in {lms.name}
                                 </Button>
                               </>
@@ -511,7 +613,10 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                                 variant="default"
                                 size="sm"
                                 className="h-8"
-                                onClick={() => (window.location.href = "/dashboard/integrations")}
+                                onClick={() =>
+                                  (window.location.href =
+                                    "/dashboard/integrations")
+                                }
                               >
                                 <Link2 className="mr-2 h-4 w-4" />
                                 Connect
@@ -526,7 +631,9 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                       <Button
                         variant="outline"
                         className="w-full"
-                        onClick={() => (window.location.href = "/dashboard/integrations")}
+                        onClick={() =>
+                          (window.location.href = "/dashboard/integrations")
+                        }
                       >
                         Manage All Integrations
                       </Button>
@@ -554,11 +661,18 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                 Edit Syllabus
               </Link>
             </Button>
-            <Button className="w-full justify-start" onClick={handleEmailStudents}>
+            <Button
+              className="w-full justify-start"
+              onClick={handleEmailStudents}
+            >
               <Users className="mr-2 h-4 w-4" />
               Email Students
             </Button>
-            <Button className="w-full justify-start" variant="outline" onClick={handleDownloadRoster}>
+            <Button
+              className="w-full justify-start"
+              variant="outline"
+              onClick={handleDownloadRoster}
+            >
               <Download className="mr-2 h-4 w-4" />
               Download Roster
             </Button>
@@ -575,11 +689,15 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
         <Card className="mt-4">
           <CardHeader>
             <CardTitle>Assignment Analytics</CardTitle>
-            <CardDescription>Performance metrics across all assignments</CardDescription>
+            <CardDescription>
+              Performance metrics across all assignments
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-[300px] flex items-center justify-center border rounded-md">
-              <p className="text-muted-foreground">Assignment performance chart will appear here</p>
+              <p className="text-muted-foreground">
+                Assignment performance chart will appear here
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -589,7 +707,8 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
           <DialogHeader>
             <DialogTitle>Upload Reference Material</DialogTitle>
             <DialogDescription>
-              Upload documents or text to use as grading references for this course.
+              Upload documents or text to use as grading references for this
+              course.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -597,7 +716,11 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
               <Label htmlFor="title" className="text-right">
                 Title
               </Label>
-              <Input id="title" placeholder="APA Style Guide" className="col-span-3" />
+              <Input
+                id="title"
+                placeholder="APA Style Guide"
+                className="col-span-3"
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="file" className="text-right">
@@ -609,11 +732,18 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
               <Label htmlFor="description" className="text-right">
                 Description
               </Label>
-              <Input id="description" placeholder="Optional description" className="col-span-3" />
+              <Input
+                id="description"
+                placeholder="Optional description"
+                className="col-span-3"
+              />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsUploadModalOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsUploadModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleUploadSubmit}>Upload</Button>
@@ -624,26 +754,41 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Add Reference Link</DialogTitle>
-            <DialogDescription>Add a web link to use as a grading reference for this course.</DialogDescription>
+            <DialogDescription>
+              Add a web link to use as a grading reference for this course.
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="link-title" className="text-right">
                 Title
               </Label>
-              <Input id="link-title" placeholder="Purdue OWL Writing Resources" className="col-span-3" />
+              <Input
+                id="link-title"
+                placeholder="Purdue OWL Writing Resources"
+                className="col-span-3"
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="link-url" className="text-right">
                 URL
               </Label>
-              <Input id="link-url" type="url" placeholder="https://example.com/resource" className="col-span-3" />
+              <Input
+                id="link-url"
+                type="url"
+                placeholder="https://example.com/resource"
+                className="col-span-3"
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="link-description" className="text-right">
                 Description
               </Label>
-              <Input id="link-description" placeholder="Optional description" className="col-span-3" />
+              <Input
+                id="link-description"
+                placeholder="Optional description"
+                className="col-span-3"
+              />
             </div>
           </div>
           <DialogFooter>
@@ -659,7 +804,8 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
           <DialogHeader>
             <DialogTitle>Email All Students</DialogTitle>
             <DialogDescription>
-              Send an email to all {course.students} students enrolled in this course.
+              Send an email to all {course.students} students enrolled in this
+              course.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -667,7 +813,11 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
               <Label htmlFor="email-subject" className="text-right">
                 Subject
               </Label>
-              <Input id="email-subject" placeholder="Important course announcement" className="col-span-3" />
+              <Input
+                id="email-subject"
+                placeholder="Important course announcement"
+                className="col-span-3"
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="email-body" className="text-right">
@@ -689,7 +839,10 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEmailModalOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsEmailModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleSendEmail}>Send Email</Button>
@@ -697,7 +850,7 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
 
 const courses = [
@@ -733,7 +886,7 @@ const courses = [
     assignments: 10,
     graded: 8,
   },
-]
+];
 
 const courseActivity = [
   {
@@ -756,7 +909,7 @@ const courseActivity = [
     description: "Emma Johnson joined the course",
     time: "1w ago",
   },
-]
+];
 
 const courseAssignments = [
   {
@@ -801,7 +954,7 @@ const courseAssignments = [
     status: "Draft",
     submissions: "0/42",
   },
-]
+];
 
 const courseStudents = [
   {
@@ -846,7 +999,7 @@ const courseStudents = [
     completed: "4/8",
     grade: "C+",
   },
-]
+];
 
 const lmsIntegrations = [
   {
@@ -911,7 +1064,7 @@ const lmsIntegrations = [
       </svg>
     ),
   },
-]
+];
 
 const gradingReferences = [
   {
@@ -954,4 +1107,4 @@ const gradingReferences = [
     usedIn: "4 assignments",
     url: "https://www.citethisforme.com/harvard-referencing",
   },
-]
+];

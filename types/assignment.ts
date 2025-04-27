@@ -12,7 +12,8 @@ interface IAssignment {
   description: string;
   learningObjectives?: string;
   totalPoints: number;
-  responseInstructions: string; // <-- added responseInstructions
+  instructions: string; // <-- added responseInstructions
+  rubric: string; // <-- added responseInstructions
   userId: string;
   status: string;
   _id: string;

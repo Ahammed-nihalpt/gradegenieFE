@@ -39,11 +39,7 @@ import { fetchAssignmentById } from "@/lib/assignmentApi";
 import { useAssignmentById } from "@/hooks/use-assignment";
 import { ISubmission } from "@/types/submission";
 
-export default function AssignmentDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function AssignmentDetailPage() {
   const router = useRouter();
   const { id } = useParams();
   const { data: assignment, refetch } = useAssignmentById(id as string);

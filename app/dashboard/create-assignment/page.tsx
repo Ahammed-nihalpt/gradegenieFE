@@ -629,6 +629,8 @@ This peer evaluation will be used as part of the individual grade calculation fo
         description: description,
         learningObjectives: learningObjectives,
         userId: session?.user.id,
+        instructions: generatedContent.instructions,
+        rubric: generatedContent.rubric,
       });
       setIsSaving(false);
       toast({

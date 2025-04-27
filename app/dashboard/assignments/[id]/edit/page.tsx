@@ -1,24 +1,44 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Loader2, Save, ArrowLeft } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
-import { Badge } from "@/components/ui/badge"
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Loader2, Save, ArrowLeft } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
+import { useAssignmentById } from "@/hooks/use-assignment";
+import api from "@/lib/axios";
 
-export default function EditAssignmentPage({ params }: { params: { id: string } }) {
-  const router = useRouter()
-  const { toast } = useToast()
-  const [isSaving, setIsSaving] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+export default function EditAssignmentPage() {
+  const router = useRouter();
+  const { id }: { id: string } = useParams();
+  const {
+    data: assignmentData,
+    isLoading: assignmentLoading,
+    refetch,
+  } = useAssignmentById(id);
+  const { toast } = useToast();
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [assignment, setAssignment] = useState({
     title: "",
     description: "",
@@ -29,95 +49,58 @@ export default function EditAssignmentPage({ params }: { params: { id: string } 
     rubric: "",
     instructions: "",
     publishToLMS: [] as string[],
-  })
+  });
 
   // Simulate fetching assignment data
   useEffect(() => {
     // In a real app, this would be an API call to fetch the assignment data
     setTimeout(() => {
       setAssignment({
-        title: "Essay on Climate Change",
-        description: "Write a 500-word essay on the impacts of climate change on global ecosystems.",
-        dueDate: "2023-12-15",
+        title: assignmentData?.title || "",
+        description: assignmentData?.description || "",
+        dueDate: assignmentData?.dueDate || "",
         totalPoints: 100,
-        course: "Environmental Science (ENV 201)",
-        type: "essay",
-        rubric: `# Essay Rubric
-## Environmental Science (ENV 201)
-
-| Category | Excellent (A) | Good (B) | Satisfactory (C) | Needs Improvement (D) | Points |
-|----------|---------------|----------|------------------|------------------------|--------|
-| **Content & Understanding** (30 points) | Demonstrates comprehensive understanding of climate change impacts. Includes detailed examples and evidence. | Shows good understanding with adequate examples. | Basic understanding with limited examples. | Minimal understanding with few or no examples. | /30 |
-| **Analysis & Critical Thinking** (30 points) | Insightful analysis of ecosystem impacts. Makes thoughtful connections between climate change and environmental consequences. | Good analysis with some connections made. | Basic analysis with obvious connections. | Limited analysis with few connections. | /30 |
-| **Organization & Structure** (20 points) | Exceptionally well-organized with clear introduction, body, and conclusion. Logical flow throughout. | Well-organized with good flow. | Adequately organized with some structural issues. | Poor organization making arguments difficult to follow. | /20 |
-| **Writing Quality** (20 points) | Excellent clarity and precision in writing. Virtually error-free. | Clear writing with few errors. | Generally clear with several errors. | Unclear writing with numerous errors. | /20 |
-
-**Total Points:** /100
-
-**Grading Scale:**
-- A: 90-100
-- B: 80-89
-- C: 70-79
-- D: 60-69
-- F: Below 60`,
-        instructions: `# Essay on Climate Change
-## Environmental Science (ENV 201)
-
-### Overview
-For this assignment, you will write a 500-word essay on the impacts of climate change on global ecosystems. Your essay should demonstrate your understanding of how climate change affects different ecosystems and the potential long-term consequences for biodiversity and ecosystem services.
-
-### Requirements
-- Length: 500 words (approximately 2 double-spaced pages)
-- Format: 12-point Times New Roman font, 1-inch margins
-- Citations: Minimum of 3 scholarly sources, APA format
-
-### Components
-Your essay must include the following sections:
-
-1. **Introduction**
-   - Brief overview of climate change
-   - Clear thesis statement about its impacts on ecosystems
-
-2. **Body**
-   - Discussion of at least two specific ecosystems affected by climate change
-   - Analysis of specific impacts (e.g., biodiversity loss, habitat changes)
-   - Evidence from scientific research to support your points
-
-3. **Conclusion**
-   - Summary of key points
-   - Reflection on the broader implications for the planet
-   - Potential solutions or mitigation strategies
-
-### Submission Guidelines
-Submit your essay as a Word document (.docx) or PDF file through the course website.`,
+        course: assignmentData?.courseId?.name || "",
+        type: assignmentData?.assignmentType.toLocaleLowerCase() || "",
+        rubric: assignmentData?.rubric || "",
+        instructions: assignmentData?.instructions || "",
         publishToLMS: ["Canvas"],
-      })
-      setIsLoading(false)
-    }, 1000)
-  }, [params.id])
+      });
+      setIsLoading(false);
+    }, 1000);
+  }, [id]);
 
-  const handleSaveAssignment = () => {
-    setIsSaving(true)
+  const handleSaveAssignment = async () => {
+    setIsSaving(true);
+
+    try {
+      await api.put(`/assignment/edit/${id}`, assignment);
+    } catch (error) {
+      toast({
+        title: "Something went wrong",
+        description: "Please try again",
+      });
+    }
 
     // Simulate saving assignment
     setTimeout(() => {
-      setIsSaving(false)
+      setIsSaving(false);
 
       toast({
         title: "Assignment Updated",
         description: "Your assignment has been updated successfully",
-      })
+      });
 
       // Navigate back to the assignment details page
-      router.push(`/dashboard/assignments/${params.id}`)
-    }, 1500)
-  }
+      router.push(`/dashboard/assignments/${id}`);
+    }, 1500);
+  };
 
   const handleCancel = () => {
-    router.push(`/dashboard/assignments/${params.id}`)
-  }
+    router.push(`/dashboard/assignments/${id}`);
+  };
 
-  if (isLoading) {
+  if (isLoading || assignmentLoading) {
     return (
       <div className="flex-1 flex items-center justify-center p-4 md:p-8 pt-6">
         <div className="text-center">
@@ -125,7 +108,7 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
           <p className="text-muted-foreground">Loading assignment details...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -153,7 +136,9 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
           <Card>
             <CardHeader>
               <CardTitle>Basic Information</CardTitle>
-              <CardDescription>Edit the basic details of your assignment</CardDescription>
+              <CardDescription>
+                Edit the basic details of your assignment
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -161,7 +146,9 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
                 <Input
                   id="assignment-title"
                   value={assignment.title}
-                  onChange={(e) => setAssignment({ ...assignment, title: e.target.value })}
+                  onChange={(e) =>
+                    setAssignment({ ...assignment, title: e.target.value })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -169,7 +156,12 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
                 <Textarea
                   id="description"
                   value={assignment.description}
-                  onChange={(e) => setAssignment({ ...assignment, description: e.target.value })}
+                  onChange={(e) =>
+                    setAssignment({
+                      ...assignment,
+                      description: e.target.value,
+                    })
+                  }
                   rows={4}
                 />
               </div>
@@ -181,7 +173,12 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
                       id="due-date"
                       type="date"
                       value={assignment.dueDate}
-                      onChange={(e) => setAssignment({ ...assignment, dueDate: e.target.value })}
+                      onChange={(e) =>
+                        setAssignment({
+                          ...assignment,
+                          dueDate: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -191,7 +188,12 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
                     id="points"
                     type="number"
                     value={assignment.totalPoints}
-                    onChange={(e) => setAssignment({ ...assignment, totalPoints: Number.parseInt(e.target.value) })}
+                    onChange={(e) =>
+                      setAssignment({
+                        ...assignment,
+                        totalPoints: Number.parseInt(e.target.value),
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -199,7 +201,9 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
                 <Label htmlFor="assignment-type">Assignment Type</Label>
                 <Select
                   value={assignment.type}
-                  onValueChange={(value) => setAssignment({ ...assignment, type: value })}
+                  onValueChange={(value) =>
+                    setAssignment({ ...assignment, type: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select assignment type" />
@@ -223,12 +227,16 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
           <Card>
             <CardHeader>
               <CardTitle>Assignment Instructions</CardTitle>
-              <CardDescription>Edit the detailed instructions for this assignment</CardDescription>
+              <CardDescription>
+                Edit the detailed instructions for this assignment
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Textarea
                 value={assignment.instructions}
-                onChange={(e) => setAssignment({ ...assignment, instructions: e.target.value })}
+                onChange={(e) =>
+                  setAssignment({ ...assignment, instructions: e.target.value })
+                }
                 className="min-h-[400px] font-mono"
               />
             </CardContent>
@@ -239,12 +247,16 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
           <Card>
             <CardHeader>
               <CardTitle>Grading Rubric</CardTitle>
-              <CardDescription>Edit the rubric used to grade this assignment</CardDescription>
+              <CardDescription>
+                Edit the rubric used to grade this assignment
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Textarea
                 value={assignment.rubric}
-                onChange={(e) => setAssignment({ ...assignment, rubric: e.target.value })}
+                onChange={(e) =>
+                  setAssignment({ ...assignment, rubric: e.target.value })
+                }
                 className="min-h-[400px] font-mono"
               />
             </CardContent>
@@ -255,7 +267,9 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
           <Card>
             <CardHeader>
               <CardTitle>Assignment Settings</CardTitle>
-              <CardDescription>Configure additional settings for this assignment</CardDescription>
+              <CardDescription>
+                Configure additional settings for this assignment
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -270,13 +284,18 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
                           if (checked) {
                             setAssignment({
                               ...assignment,
-                              publishToLMS: [...assignment.publishToLMS, "Canvas"],
-                            })
+                              publishToLMS: [
+                                ...assignment.publishToLMS,
+                                "Canvas",
+                              ],
+                            });
                           } else {
                             setAssignment({
                               ...assignment,
-                              publishToLMS: assignment.publishToLMS.filter((lms) => lms !== "Canvas"),
-                            })
+                              publishToLMS: assignment.publishToLMS.filter(
+                                (lms) => lms !== "Canvas"
+                              ),
+                            });
                           }
                         }}
                       />
@@ -284,7 +303,10 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
                         Publish to Canvas
                       </Label>
                     </div>
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    <Badge
+                      variant="outline"
+                      className="bg-green-50 text-green-700 border-green-200"
+                    >
                       Connected
                     </Badge>
                   </div>
@@ -293,22 +315,32 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
                     <div className="flex items-center space-x-2">
                       <Checkbox
                         id="google-classroom"
-                        checked={assignment.publishToLMS.includes("Google Classroom")}
+                        checked={assignment.publishToLMS.includes(
+                          "Google Classroom"
+                        )}
                         onCheckedChange={(checked) => {
                           if (checked) {
                             setAssignment({
                               ...assignment,
-                              publishToLMS: [...assignment.publishToLMS, "Google Classroom"],
-                            })
+                              publishToLMS: [
+                                ...assignment.publishToLMS,
+                                "Google Classroom",
+                              ],
+                            });
                           } else {
                             setAssignment({
                               ...assignment,
-                              publishToLMS: assignment.publishToLMS.filter((lms) => lms !== "Google Classroom"),
-                            })
+                              publishToLMS: assignment.publishToLMS.filter(
+                                (lms) => lms !== "Google Classroom"
+                              ),
+                            });
                           }
                         }}
                       />
-                      <Label htmlFor="google-classroom" className="text-sm font-normal">
+                      <Label
+                        htmlFor="google-classroom"
+                        className="text-sm font-normal"
+                      >
                         Publish to Google Classroom
                       </Label>
                     </div>
@@ -329,7 +361,10 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
                 <div className="space-y-3 rounded-md border p-4">
                   <div className="flex items-center space-x-2">
                     <Checkbox id="plagiarism-check" defaultChecked />
-                    <Label htmlFor="plagiarism-check" className="text-sm font-normal">
+                    <Label
+                      htmlFor="plagiarism-check"
+                      className="text-sm font-normal"
+                    >
                       Enable plagiarism detection
                     </Label>
                   </div>
@@ -343,7 +378,10 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
 
                   <div className="flex items-center space-x-2">
                     <Checkbox id="late-submissions" />
-                    <Label htmlFor="late-submissions" className="text-sm font-normal">
+                    <Label
+                      htmlFor="late-submissions"
+                      className="text-sm font-normal"
+                    >
                       Allow late submissions
                     </Label>
                   </div>
@@ -373,5 +411,5 @@ Submit your essay as a Word document (.docx) or PDF file through the course webs
         </Button>
       </div>
     </div>
-  )
+  );
 }
