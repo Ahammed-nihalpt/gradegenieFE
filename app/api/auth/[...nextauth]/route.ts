@@ -23,6 +23,8 @@ export const handler = NextAuth({
           });
 
           if (response.status === 200) {
+            console.log("🚀 ~ authorize ~ response.data:", response.data);
+
             const { token, ...user } = response.data;
             return { ...user, token }; // Include accessToken in the returned user object
           }
@@ -41,7 +43,7 @@ export const handler = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.accessToken = user.accessToken; // Store the access token in the JWT token
+        token.accessToken = user.token; // Store the access token in the JWT token
         token.id = user.id; // Store the user id in the JWT token
         token.email = user.email; // Store the user's email if available
       }

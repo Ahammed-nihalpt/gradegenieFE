@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { MoreHorizontal, Search } from "lucide-react"
+import { useState } from "react";
+import { MoreHorizontal, Search } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,88 +12,44 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-
-// Sample data
-const students = [
-  {
-    id: 1,
-    name: "Alex Johnson",
-    email: "alex.j@example.com",
-    class: "English 101",
-    submissions: 12,
-    lastActive: "2 days ago",
-  },
-  {
-    id: 2,
-    name: "Jamie Smith",
-    email: "jamie.s@example.com",
-    class: "English 101",
-    submissions: 10,
-    lastActive: "1 day ago",
-  },
-  {
-    id: 3,
-    name: "Taylor Brown",
-    email: "taylor.b@example.com",
-    class: "History 202",
-    submissions: 8,
-    lastActive: "Today",
-  },
-  {
-    id: 4,
-    name: "Morgan Davis",
-    email: "morgan.d@example.com",
-    class: "Math 303",
-    submissions: 15,
-    lastActive: "3 days ago",
-  },
-  {
-    id: 5,
-    name: "Casey Wilson",
-    email: "casey.w@example.com",
-    class: "Science 404",
-    submissions: 9,
-    lastActive: "Yesterday",
-  },
-  {
-    id: 6,
-    name: "Riley Garcia",
-    email: "riley.g@example.com",
-    class: "English 101",
-    submissions: 11,
-    lastActive: "Today",
-  },
-  {
-    id: 7,
-    name: "Jordan Lee",
-    email: "jordan.l@example.com",
-    class: "History 202",
-    submissions: 7,
-    lastActive: "4 days ago",
-  },
-  {
-    id: 8,
-    name: "Avery Martinez",
-    email: "avery.m@example.com",
-    class: "Math 303",
-    submissions: 14,
-    lastActive: "Yesterday",
-  },
-]
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useStudentByUserId } from "@/hooks/use-student";
+import { useSession } from "next-auth/react";
 
 export function StudentsList() {
-  const [searchQuery, setSearchQuery] = useState("")
+  const { data: session } = useSession();
+  const { data: students } = useStudentByUserId(session?.user.id || "");
 
-  const filteredStudents = students.filter(
-    (student) =>
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedClass, setSelectedClass] = useState("all");
+
+  const filteredStudents = students?.filter((student) => {
+    const matchesSearch =
       student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       student.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.class.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+      student.class.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesClass =
+      selectedClass === "all" || student.class.toLowerCase() === selectedClass;
+
+    return matchesSearch && matchesClass;
+  });
 
   return (
     <div className="space-y-4">
@@ -108,16 +64,19 @@ export function StudentsList() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Select defaultValue="all">
+        <Select
+          defaultValue="all"
+          onValueChange={(value) => setSelectedClass(value)}
+        >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Filter by class" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Classes</SelectItem>
-            <SelectItem value="english">English 101</SelectItem>
-            <SelectItem value="history">History 202</SelectItem>
-            <SelectItem value="math">Math 303</SelectItem>
-            <SelectItem value="science">Science 404</SelectItem>
+            <SelectItem value="english 101">English 101</SelectItem>
+            <SelectItem value="history 202">History 202</SelectItem>
+            <SelectItem value="math 303">Math 303</SelectItem>
+            <SelectItem value="science 404">Science 404</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -138,16 +97,16 @@ export function StudentsList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredStudents.map((student) => (
-              <TableRow key={student.id}>
+            {filteredStudents?.map((student) => (
+              <TableRow key={student?._id}>
                 <TableCell>
                   <Checkbox />
                 </TableCell>
                 <TableCell className="font-medium">{student.name}</TableCell>
                 <TableCell>{student.email}</TableCell>
                 <TableCell>{student.class}</TableCell>
-                <TableCell>{student.submissions}</TableCell>
-                <TableCell>{student.lastActive}</TableCell>
+                <TableCell>{student?.submissions ?? 0}</TableCell>
+                <TableCell>true</TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -162,7 +121,9 @@ export function StudentsList() {
                       <DropdownMenuItem>View Submissions</DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive">Remove</DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive">
+                        Remove
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
@@ -172,5 +133,5 @@ export function StudentsList() {
         </Table>
       </div>
     </div>
-  )
+  );
 }

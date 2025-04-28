@@ -11,6 +11,6 @@ declare module "next-auth" {
 
   interface User {
     id?: string; // Optional id
-    accessToken?: string; // Optional accessToken
+    token?: string; // Optional accessToken
   }
 }

@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { MoreHorizontal, Search } from "lucide-react"
+import { useState } from "react";
+import { MoreHorizontal, Search } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,39 +11,28 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-
-// Sample data
-const coTeachers = [
-  {
-    id: 1,
-    name: "Dr. Sarah Johnson",
-    email: "sarah.j@example.edu",
-    role: "Co-Teacher",
-    status: "Active",
-    classes: ["English 101", "English 202"],
-  },
-  {
-    id: 2,
-    name: "Prof. Michael Chen",
-    email: "michael.c@example.edu",
-    role: "Co-Teacher",
-    status: "Pending",
-    classes: ["History 202"],
-  },
-]
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { useTeacherByUserId } from "@/hooks/use-teacher";
+import { useSession } from "next-auth/react";
 
 export function CoTeachersList() {
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
+  const { data: session } = useSession();
+  const { data: coTeachers } = useTeacherByUserId(session?.user.id || "");
 
-  const filteredTeachers = coTeachers.filter(
-    (teacher) =>
-      teacher.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      teacher.email.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+  const filteredTeachers = coTeachers?.filter((teacher) =>
+    teacher.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="space-y-4">
@@ -62,30 +51,28 @@ export function CoTeachersList() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Classes</TableHead>
+              <TableHead>Class</TableHead>
               <TableHead className="w-[80px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredTeachers.map((teacher) => (
-              <TableRow key={teacher.id}>
-                <TableCell className="font-medium">{teacher.name}</TableCell>
+            {filteredTeachers?.map((teacher) => (
+              <TableRow key={teacher?._id}>
                 <TableCell>{teacher.email}</TableCell>
-                <TableCell>{teacher.role}</TableCell>
                 <TableCell>
-                  <Badge variant={teacher.status === "Active" ? "success" : "outline"}>{teacher.status}</Badge>
+                  <Badge variant="outline">Active</Badge>
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-wrap gap-1">
-                    {teacher.classes.map((cls) => (
-                      <Badge key={cls} variant="secondary" className="text-xs">
-                        {cls}
-                      </Badge>
-                    ))}
+                    <Badge
+                      key={teacher.class}
+                      variant="secondary"
+                      className="text-xs"
+                    >
+                      {teacher.class}
+                    </Badge>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -101,7 +88,9 @@ export function CoTeachersList() {
                       <DropdownMenuItem>Edit Access</DropdownMenuItem>
                       <DropdownMenuItem>Resend Invitation</DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="text-destructive">Remove</DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive">
+                        Remove
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
@@ -111,5 +100,5 @@ export function CoTeachersList() {
         </Table>
       </div>
     </div>
-  )
+  );
 }

@@ -1,17 +1,6 @@
 "use client";
 
-import { PlusCircle, Upload, Users } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Upload, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,55 +15,35 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StudentsList } from "./students-list";
 import { CoTeachersList } from "./co-teachers-list";
 import { useToast } from "@/components/ui/toast";
-import { useForm } from "react-hook-form";
-import api from "@/lib/axios";
+import { AddStudentForm } from "./_components/add-student-form";
+import { AddCoTeacherForm } from "./_components/add-co-teacher-form";
+import { useStudentByUserId } from "@/hooks/use-student";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
-
-interface AddStudentFormData {
-  name: string;
-  email: string;
-  class: string;
-}
+import { useEffect, useState } from "react";
+import api from "@/lib/axios";
 
 export default function ClassroomPage() {
-  const { toast } = useToast();
-  const { data: session } = useSession(); // Access the session data
-  const [isDialogOpen, setDialogOpen] = useState(false); // Dialog open state
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<AddStudentFormData>({
-    defaultValues: {
-      name: "",
-      email: "",
-      class: "all",
-    },
-  });
-
-  const onSubmit = async (data: AddStudentFormData) => {
-    try {
-      // Simulate API call
-      await api.post(`/student/add`, {
-        userId: session?.user.id,
-        ...data,
-      });
-
-      toast({
-        title: "Student Added",
-        description: "The student has been successfully added.",
-      });
-      setDialogOpen(false);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Something went wrong.",
-        variant: "destructive",
-      });
+  const { data: session } = useSession();
+  const { data: students } = useStudentByUserId(session?.user.id || "");
+  const [submissionsThisMonth, setSubmissionsThisMonth] = useState<
+    number | null
+  >(null);
+  useEffect(() => {
+    const fetchSubmissions = async () => {
+      try {
+        const response = await api.get(
+          `/submission/total/by/month/${session?.user.id}`
+        );
+        console.log("🚀 ~ fetchSubmissions ~ response:", response.data.total);
+        setSubmissionsThisMonth(response.data.total);
+      } catch (error) {
+        console.error("Error fetching submissions this month:", error);
+      }
+    };
+    if (session?.user.id) {
+      fetchSubmissions();
     }
-  };
+  }, [session?.user.id]);
   return (
     <div className="container py-6">
       <div className="flex items-center justify-between">
@@ -86,64 +55,7 @@ export default function ClassroomPage() {
             Manage your students and co-teachers for all your classes
           </p>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Add Co-Teacher
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Add Co-Teacher</DialogTitle>
-              <DialogDescription>
-                Enter the email address of the teacher you want to invite as a
-                co-teacher for this class.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="email" className="text-right">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="teacher@school.edu"
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="class" className="text-right">
-                  Class
-                </Label>
-                <select
-                  id="class"
-                  className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <option value="all">All Classes</option>
-                  <option value="math101">Math 101</option>
-                  <option value="science202">Science 202</option>
-                  <option value="history303">History 303</option>
-                </select>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button
-                type="submit"
-                onClick={() => {
-                  toast({
-                    title: "Invitation sent",
-                    description:
-                      "The co-teacher invitation has been sent successfully.",
-                  });
-                }}
-              >
-                Send Invitation
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <AddCoTeacherForm />
       </div>
 
       <Tabs defaultValue="students" className="mt-6">
@@ -161,7 +73,9 @@ export default function ClassroomPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">127</div>
+                <div className="text-2xl font-bold">
+                  {students?.length || 0}
+                </div>
               </CardContent>
             </Card>
             <Card>
@@ -191,7 +105,9 @@ export default function ClassroomPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">342</div>
+                <div className="text-2xl font-bold">
+                  {submissionsThisMonth || 0}
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -200,98 +116,11 @@ export default function ClassroomPage() {
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold">Students</h2>
               <div className="flex gap-2">
-                <Button variant="outline">
+                {/* <Button variant="outline">
                   <Upload className="mr-2 h-4 w-4" />
                   Import Students
-                </Button>
-                <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button>
-                      <PlusCircle className="mr-2 h-4 w-4" />
-                      Add Student
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                      <DialogTitle>Add New Student</DialogTitle>
-                      <DialogDescription>
-                        Enter the details of the student to add them to the
-                        class.
-                      </DialogDescription>
-                    </DialogHeader>
-
-                    <form
-                      onSubmit={handleSubmit(onSubmit)}
-                      className="grid gap-4 py-4"
-                    >
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="name" className="text-right">
-                          Name
-                        </Label>
-                        <Input
-                          id="name"
-                          placeholder="John Doe"
-                          className="col-span-3"
-                          {...register("name", {
-                            required: "Name is required",
-                          })}
-                        />
-                        {errors.name && (
-                          <span className="text-red-600 text-sm">
-                            {errors.name.message}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="email" className="text-right">
-                          Email
-                        </Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          placeholder="student@school.edu"
-                          className="col-span-3"
-                          {...register("email", {
-                            required: "Email is required",
-                          })}
-                        />
-                        {errors.email && (
-                          <span className="text-red-600 text-sm">
-                            {errors.email.message}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="class" className="text-right">
-                          Class
-                        </Label>
-                        <select
-                          id="class"
-                          className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
-                          {...register("class", {
-                            required: "Class is required",
-                          })}
-                        >
-                          <option value="all">All Classes</option>
-                          <option value="math101">Math 101</option>
-                          <option value="science202">Science 202</option>
-                          <option value="history303">History 303</option>
-                        </select>
-                        {errors.class && (
-                          <span className="text-red-600 text-sm">
-                            {errors.class.message}
-                          </span>
-                        )}
-                      </div>
-
-                      <DialogFooter>
-                        <Button type="submit">Add Student</Button>
-                      </DialogFooter>
-                    </form>
-                  </DialogContent>
-                </Dialog>
+                </Button> */}
+                <AddStudentForm />
               </div>
             </div>
             <StudentsList />
@@ -315,64 +144,7 @@ export default function ClassroomPage() {
                 <Users className="mr-2 inline-block h-4 w-4" />
                 Using 2 of 5 available seats
               </div>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button>
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Add Co-Teacher
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>Add Co-Teacher</DialogTitle>
-                    <DialogDescription>
-                      Enter the email address of the teacher you want to invite
-                      as a co-teacher for this class.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="email" className="text-right">
-                        Email
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="teacher@school.edu"
-                        className="col-span-3"
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="class" className="text-right">
-                        Class
-                      </Label>
-                      <select
-                        id="class"
-                        className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        <option value="all">All Classes</option>
-                        <option value="math101">Math 101</option>
-                        <option value="science202">Science 202</option>
-                        <option value="history303">History 303</option>
-                      </select>
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button
-                      type="submit"
-                      onClick={() => {
-                        toast({
-                          title: "Invitation sent",
-                          description:
-                            "The co-teacher invitation has been sent successfully.",
-                        });
-                      }}
-                    >
-                      Send Invitation
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <AddCoTeacherForm />
             </CardFooter>
           </Card>
         </TabsContent>
