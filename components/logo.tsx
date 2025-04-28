@@ -1,29 +1,29 @@
-import Link from "next/link"
+import Link from 'next/link';
 
 interface LogoProps {
-  className?: string
-  showText?: boolean
-  size?: "sm" | "md" | "lg"
-  variant?: "positive" | "negative"
-  asChild?: boolean
+  className?: string;
+  showText?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'positive' | 'negative';
+  asChild?: boolean;
 }
 
 export function Logo({
-  className = "",
+  className = '',
   showText = true,
-  size = "md",
-  variant = "positive",
+  size = 'md',
+  variant = 'positive',
   asChild = false,
 }: LogoProps) {
   const sizes = {
     sm: { logo: 24, height: 24 },
     md: { logo: 32, height: 32 },
     lg: { logo: 48, height: 48 },
-  }
+  };
 
-  const textColor = variant === "positive" ? "text-gray-800 dark:text-white" : "text-white"
-  const circleFill = variant === "positive" ? "#00BF9A" : "white"
-  const pathStroke = variant === "positive" ? "white" : "#00BF9A"
+  const textColor = variant === 'positive' ? 'text-gray-800 dark:text-white' : 'text-white';
+  const circleFill = variant === 'positive' ? '#00BF9A' : 'white';
+  const pathStroke = variant === 'positive' ? 'white' : '#00BF9A';
 
   const LogoContent = (
     <>
@@ -48,24 +48,24 @@ export function Logo({
       {showText && (
         <span
           className={`ml-2 font-onest font-bold ${textColor} ${
-            size === "sm" ? "text-lg" : size === "md" ? "text-xl" : "text-2xl"
+            size === 'sm' ? 'text-lg' : size === 'md' ? 'text-xl' : 'text-2xl'
           }`}
         >
           GradeGenie
         </span>
       )}
     </>
-  )
+  );
 
   if (asChild) {
-    return <div className={`flex items-center ${className}`}>{LogoContent}</div>
+    return <div className={`flex items-center ${className}`}>{LogoContent}</div>;
   }
 
   return (
     <Link href="/" className={`flex items-center ${className}`}>
       {LogoContent}
     </Link>
-  )
+  );
 }
 
-export default Logo
+export default Logo;

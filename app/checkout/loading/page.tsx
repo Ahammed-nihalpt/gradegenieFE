@@ -1,20 +1,20 @@
-"use client"
+'use client';
 
-import { useEffect } from "react"
-import { Loader2 } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function CheckoutLoadingPage() {
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     // Simulate Stripe checkout redirect and then success
     const timer = setTimeout(() => {
-      router.push("/checkout/success")
-    }, 3000)
+      router.push('/checkout/success');
+    }, 3000);
 
-    return () => clearTimeout(timer)
-  }, [router])
+    return () => clearTimeout(timer);
+  }, [router]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-secondary/50 to-background">
@@ -24,5 +24,5 @@ export default function CheckoutLoadingPage() {
         <p className="text-muted-foreground">Please wait while we prepare your trial.</p>
       </div>
     </div>
-  )
+  );
 }

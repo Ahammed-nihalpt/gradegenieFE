@@ -1,8 +1,15 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Input } from "@/components/ui/input"
-import { Plus, Search } from "lucide-react"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
+import { Plus, Search } from 'lucide-react';
 
 export default function StudentsPage() {
   return (
@@ -60,72 +67,72 @@ export default function StudentsPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 const students = [
   {
-    id: "1",
-    name: "Emma Johnson",
-    email: "emma.j@university.edu",
-    courses: "PSY 101, ENG 215",
-    completed: "13/18",
-    avgGrade: "A-",
+    id: '1',
+    name: 'Emma Johnson',
+    email: 'emma.j@university.edu',
+    courses: 'PSY 101, ENG 215',
+    completed: '13/18',
+    avgGrade: 'A-',
   },
   {
-    id: "2",
-    name: "Michael Chen",
-    email: "m.chen@university.edu",
-    courses: "PSY 101, STAT 301",
-    completed: "15/20",
-    avgGrade: "B+",
+    id: '2',
+    name: 'Michael Chen',
+    email: 'm.chen@university.edu',
+    courses: 'PSY 101, STAT 301',
+    completed: '15/20',
+    avgGrade: 'B+',
   },
   {
-    id: "3",
-    name: "Sophia Rodriguez",
-    email: "s.rodriguez@university.edu",
-    courses: "ENV 201, STAT 301",
-    completed: "10/18",
-    avgGrade: "A",
+    id: '3',
+    name: 'Sophia Rodriguez',
+    email: 's.rodriguez@university.edu',
+    courses: 'ENV 201, STAT 301',
+    completed: '10/18',
+    avgGrade: 'A',
   },
   {
-    id: "4",
-    name: "James Wilson",
-    email: "j.wilson@university.edu",
-    courses: "PSY 101, ENV 201",
-    completed: "12/14",
-    avgGrade: "B",
+    id: '4',
+    name: 'James Wilson',
+    email: 'j.wilson@university.edu',
+    courses: 'PSY 101, ENV 201',
+    completed: '12/14',
+    avgGrade: 'B',
   },
   {
-    id: "5",
-    name: "Olivia Smith",
-    email: "o.smith@university.edu",
-    courses: "ENG 215, ENV 201",
-    completed: "8/16",
-    avgGrade: "A-",
+    id: '5',
+    name: 'Olivia Smith',
+    email: 'o.smith@university.edu',
+    courses: 'ENG 215, ENV 201',
+    completed: '8/16',
+    avgGrade: 'A-',
   },
   {
-    id: "6",
-    name: "William Brown",
-    email: "w.brown@university.edu",
-    courses: "STAT 301, ENG 215",
-    completed: "14/20",
-    avgGrade: "B+",
+    id: '6',
+    name: 'William Brown',
+    email: 'w.brown@university.edu',
+    courses: 'STAT 301, ENG 215',
+    completed: '14/20',
+    avgGrade: 'B+',
   },
   {
-    id: "7",
-    name: "Ava Garcia",
-    email: "a.garcia@university.edu",
-    courses: "PSY 101, STAT 301",
-    completed: "16/18",
-    avgGrade: "A",
+    id: '7',
+    name: 'Ava Garcia',
+    email: 'a.garcia@university.edu',
+    courses: 'PSY 101, STAT 301',
+    completed: '16/18',
+    avgGrade: 'A',
   },
   {
-    id: "8",
-    name: "Ethan Davis",
-    email: "e.davis@university.edu",
-    courses: "ENV 201, ENG 215",
-    completed: "9/16",
-    avgGrade: "B-",
+    id: '8',
+    name: 'Ethan Davis',
+    email: 'e.davis@university.edu',
+    courses: 'ENV 201, ENG 215',
+    completed: '9/16',
+    avgGrade: 'B-',
   },
-]
+];

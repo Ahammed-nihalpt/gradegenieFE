@@ -1,7 +1,7 @@
-"use client"
-import Link from "next/link"
-import { ForgotPasswordForm } from "@/components/forgot-password-form"
-import { Logo } from "@/components/logo"
+'use client';
+import Link from 'next/link';
+import { ForgotPasswordForm } from '@/components/forgot-password-form';
+import { Logo } from '@/components/logo';
 
 export default function ForgotPasswordPage() {
   return (
@@ -22,5 +22,5 @@ export default function ForgotPasswordPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import axios from "axios";
-import { getSession } from "next-auth/react"; // Import getSession
+import axios from 'axios';
+import { getSession } from 'next-auth/react'; // Import getSession
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 

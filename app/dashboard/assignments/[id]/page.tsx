@@ -1,20 +1,14 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Download, Eye, Share2, Edit } from "lucide-react";
-import Link from "next/link";
-import { FileUpload } from "@/components/file-upload";
-import { useParams, useRouter } from "next/navigation";
-import { use, useState } from "react";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Download, Eye, Share2, Edit } from 'lucide-react';
+import Link from 'next/link';
+import { FileUpload } from '@/components/file-upload';
+import { useParams, useRouter } from 'next/navigation';
+import { use, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -22,70 +16,69 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/components/ui/use-toast";
-import api from "@/lib/axios";
-import { fetchAssignmentById } from "@/lib/assignmentApi";
-import { useAssignmentById } from "@/hooks/use-assignment";
-import { ISubmission } from "@/types/submission";
-import { useStudentByUserId } from "@/hooks/use-student";
-import { useSession } from "next-auth/react";
+} from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/components/ui/use-toast';
+import api from '@/lib/axios';
+import { fetchAssignmentById } from '@/lib/assignmentApi';
+import { useAssignmentById } from '@/hooks/use-assignment';
+import { ISubmission } from '@/types/submission';
+import { useStudentByUserId } from '@/hooks/use-student';
+import { useSession } from 'next-auth/react';
 
 export default function AssignmentDetailPage() {
   const router = useRouter();
   const { id } = useParams();
   const { data: session } = useSession();
   const { data: assignment, refetch } = useAssignmentById(id as string);
-  const { data: student } = useStudentByUserId(session?.user.id || "");
+  const { data: student } = useStudentByUserId(session?.user.id || '');
   const [assignNameOpen, setAssignNameOpen] = useState(false);
-  const [selectedSubmission, setSelectedSubmission] =
-    useState<ISubmission | null>(null);
-  const [selectedStudent, setSelectedStudent] = useState("");
-  const [manualStudentName, setManualStudentName] = useState("");
-  const [activeTab, setActiveTab] = useState("select");
+  const [selectedSubmission, setSelectedSubmission] = useState<ISubmission | null>(null);
+  const [selectedStudent, setSelectedStudent] = useState('');
+  const [manualStudentName, setManualStudentName] = useState('');
+  const [activeTab, setActiveTab] = useState('select');
   const { toast } = useToast();
 
   const handleUploadComplete = async (files: File[], images: string[]) => {
     const formData = new FormData();
-    console.log("🚀 ~ handleUploadComplete ~ formData:", "formData");
+    console.log('🚀 ~ handleUploadComplete ~ formData:', 'formData');
 
     if (files.length > 0) {
       files.forEach((file) => {
-        formData.append("files[]", file);
+        formData.append('files[]', file);
       });
     }
 
     if (images.length > 0) {
       images.forEach((image) => {
-        const blob = new Blob([image], { type: "image/jpeg" });
-        formData.append("images[]", blob, `image-${Date.now()}.jpg`);
+        const blob = new Blob([image], { type: 'image/jpeg' });
+        formData.append('images[]', blob, `image-${Date.now()}.jpg`);
       });
     }
 
-    formData.append("assignmentId", id as string);
+    formData.append('assignmentId', id as string);
 
     try {
-      await api.post("/submission/add", formData, {
+      await api.post('/submission/add', formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       });
       refetch(); // Trigger refetch after data upload
     } catch (error) {
       toast({
-        title: "Upload Failed",
-        description: "There was an error uploading your files.",
-        variant: "destructive",
+        title: 'Upload Failed',
+        description: 'There was an error uploading your files.',
+        variant: 'destructive',
       });
     }
   };
@@ -96,10 +89,9 @@ export default function AssignmentDetailPage() {
   };
 
   const handleAssignName = async () => {
-    const studentName =
-      activeTab === "select" ? selectedStudent : manualStudentName;
+    const studentName = activeTab === 'select' ? selectedStudent : manualStudentName;
     const body =
-      activeTab === "select" && selectedStudent
+      activeTab === 'select' && selectedStudent
         ? {
             studentId: selectedStudent,
           }
@@ -109,20 +101,20 @@ export default function AssignmentDetailPage() {
     try {
       await api.put(`/submission/edit/${selectedSubmission?._id}`, body);
       toast({
-        title: "Success",
+        title: 'Success',
         description: `Submission assigned to ${studentName}`,
       });
       refetch();
       setAssignNameOpen(false);
       setSelectedSubmission(null);
-      setSelectedStudent("");
-      setManualStudentName("");
+      setSelectedStudent('');
+      setManualStudentName('');
     } catch (error) {
-      console.error("Error assigning name:", error);
+      console.error('Error assigning name:', error);
       toast({
-        title: "Error",
-        description: "Failed to assign student name.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to assign student name.',
+        variant: 'destructive',
       });
     }
 
@@ -139,13 +131,9 @@ export default function AssignmentDetailPage() {
     <div className="container mx-auto py-6 space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {assignment?.title}
-          </h1>
+          <h1 className="text-3xl font-bold tracking-tight">{assignment?.title}</h1>
           <p className="text-muted-foreground">
-            Due:{" "}
-            {assignment?.dueDate &&
-              new Date(assignment?.dueDate).toLocaleDateString()}
+            Due: {assignment?.dueDate && new Date(assignment?.dueDate).toLocaleDateString()}
           </p>
         </div>
         <div className="flex gap-2">
@@ -177,9 +165,7 @@ export default function AssignmentDetailPage() {
       <Card>
         <CardHeader>
           <CardTitle>Submissions</CardTitle>
-          <CardDescription>
-            {assignment?.submissions.length} submissions received
-          </CardDescription>
+          <CardDescription>{assignment?.submissions.length} submissions received</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -193,9 +179,9 @@ export default function AssignmentDetailPage() {
                     <AvatarImage src={`/placeholder.svg?height=40&width=40`} />
                     <AvatarFallback>
                       {submission.studentName
-                        ?.split(" ")
+                        ?.split(' ')
                         .map((n) => n[0])
-                        .join("") || "?"}
+                        .join('') || '?'}
                     </AvatarFallback>
                   </Avatar>
                   <div>
@@ -211,16 +197,13 @@ export default function AssignmentDetailPage() {
                       </Button>
                     )}
                     <p className="text-sm text-muted-foreground">
-                      Submitted:{" "}
-                      {new Date(submission.createdAt).toLocaleDateString()}
+                      Submitted: {new Date(submission.createdAt).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  {submission?.status?.toLocaleLowerCase() === "graded" ? (
-                    <Badge className="bg-green-500">
-                      {submission.score}/100
-                    </Badge>
+                  {submission?.status?.toLocaleLowerCase() === 'graded' ? (
+                    <Badge className="bg-green-500">{submission.score}/100</Badge>
                   ) : (
                     <Badge variant="outline">Pending</Badge>
                   )}
@@ -234,12 +217,7 @@ export default function AssignmentDetailPage() {
                         <Share2 className="h-4 w-4" />
                       </Link>
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      asChild
-                      title="Download"
-                    >
+                    <Button variant="outline" size="icon" asChild title="Download">
                       <Link
                         href={`/dashboard/assignments/${
                           id as string
@@ -248,12 +226,7 @@ export default function AssignmentDetailPage() {
                         <Download className="h-4 w-4" />
                       </Link>
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      asChild
-                      title="Review"
-                    >
+                    <Button variant="outline" size="icon" asChild title="Review">
                       <Link
                         href={`/dashboard/assignments/${
                           id as string
@@ -274,16 +247,11 @@ export default function AssignmentDetailPage() {
           <DialogHeader>
             <DialogTitle>Assign Student Name</DialogTitle>
             <DialogDescription>
-              This submission doesn't have a student name. Please assign a
-              student to it.
+              This submission doesn't have a student name. Please assign a student to it.
             </DialogDescription>
           </DialogHeader>
 
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="select">Select Student</TabsTrigger>
               <TabsTrigger value="manual">Enter Manually</TabsTrigger>
@@ -292,10 +260,7 @@ export default function AssignmentDetailPage() {
             <TabsContent value="select" className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label htmlFor="student-select">Select from class roster</Label>
-                <Select
-                  value={selectedStudent}
-                  onValueChange={setSelectedStudent}
-                >
+                <Select value={selectedStudent} onValueChange={setSelectedStudent}>
                   <SelectTrigger id="student-select">
                     <SelectValue placeholder="Select a student" />
                   </SelectTrigger>

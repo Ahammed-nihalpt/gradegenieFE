@@ -1,18 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
+import { useState, useRef, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
 import {
   ArrowLeft,
   Download,
@@ -23,17 +17,17 @@ import {
   ArrowRight,
   MessageSquare,
   Sparkles,
-} from "lucide-react";
-import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { toast } from "@/components/ui/use-toast";
-import { useSubmissionById } from "@/hooks/use-submission";
-import { useParams } from "next/navigation";
-import api from "@/lib/axios";
+} from 'lucide-react';
+import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { toast } from '@/components/ui/use-toast';
+import { useSubmissionById } from '@/hooks/use-submission';
+import { useParams } from 'next/navigation';
+import api from '@/lib/axios';
 
 // Types for our comments and highlights
 type InlineComment = {
@@ -62,39 +56,36 @@ type OverallFeedback = {
 
 export default function SubmissionReviewPage() {
   const { id, submissionId } = useParams();
-  const { data: submission, isLoading } = useSubmissionById(
-    submissionId as string,
-    id as string
-  );
+  const { data: submission, isLoading } = useSubmissionById(submissionId as string, id as string);
 
   // Mock data for the submission
   const submissionDefault = {
     id: submissionId as string,
     assignmentId: id as string,
-    assignmentTitle: "Essay on Climate Change",
-    studentName: "John Doe",
-    studentId: "S12345",
-    submissionDate: "2023-12-10",
-    status: "pending",
+    assignmentTitle: 'Essay on Climate Change',
+    studentName: 'John Doe',
+    studentId: 'S12345',
+    submissionDate: '2023-12-10',
+    status: 'pending',
     aiCheckerResults: {
       score: 92,
-      confidence: "High",
+      confidence: 'High',
       details: [
         {
-          section: "Introduction",
+          section: 'Introduction',
           aiProbability: 0.15,
           humanProbability: 0.85,
         },
-        { section: "Main Body", aiProbability: 0.08, humanProbability: 0.92 },
-        { section: "Conclusion", aiProbability: 0.12, humanProbability: 0.88 },
+        { section: 'Main Body', aiProbability: 0.08, humanProbability: 0.92 },
+        { section: 'Conclusion', aiProbability: 0.12, humanProbability: 0.88 },
       ],
     },
     plagiarismResults: {
       score: 98,
       matches: [
         {
-          text: "The heat-trapping nature of carbon dioxide and other gases was demonstrated in the mid-19th century.",
-          source: "NASA Climate Change Website",
+          text: 'The heat-trapping nature of carbon dioxide and other gases was demonstrated in the mid-19th century.',
+          source: 'NASA Climate Change Website',
           similarity: 0.92,
         },
       ],
@@ -107,20 +98,19 @@ export default function SubmissionReviewPage() {
   );
 
   // State for overall feedback
-  const [overallFeedback, setOverallFeedback] =
-    useState<OverallFeedback | null>(submission?.overallFeedback || null);
+  const [overallFeedback, setOverallFeedback] = useState<OverallFeedback | null>(
+    submission?.overallFeedback || null
+  );
 
   // State for subscores with rationale
-  const [subScores, setSubScores] = useState<SubScore[] | []>(
-    submission?.subScores || []
-  );
+  const [subScores, setSubScores] = useState<SubScore[] | []>(submission?.subScores || []);
 
   // State for final score
   const [finalScore, setFinalScore] = useState<number>(85);
 
   // State for new comment
-  const [newCommentText, setNewCommentText] = useState<string>("");
-  const [selectedText, setSelectedText] = useState<string>("");
+  const [newCommentText, setNewCommentText] = useState<string>('');
+  const [selectedText, setSelectedText] = useState<string>('');
   const [selectionRange, setSelectionRange] = useState<{
     start: number;
     end: number;
@@ -174,20 +164,20 @@ export default function SubmissionReviewPage() {
       text: newCommentText,
       color: getRandomHighlightColor(),
       timestamp: new Date().toISOString(),
-      author: "Instructor",
+      author: 'Instructor',
       isAIGenerated: false,
     };
 
     const updatedComments = [...inlineComments, newComment];
     setInlineComments(updatedComments);
-    setNewCommentText("");
-    setSelectedText("");
+    setNewCommentText('');
+    setSelectedText('');
     setSelectionRange(null);
     setActiveCommentId(newComment.id);
 
     toast({
-      title: "Comment added",
-      description: "Your comment has been added to the selected text.",
+      title: 'Comment added',
+      description: 'Your comment has been added to the selected text.',
     });
   };
 
@@ -227,16 +217,13 @@ export default function SubmissionReviewPage() {
   };
 
   // Update overall feedback
-  const updateOverallFeedback = (
-    field: keyof OverallFeedback,
-    value: string
-  ) => {
+  const updateOverallFeedback = (field: keyof OverallFeedback, value: string) => {
     setOverallFeedback((prev) => ({
       // If previous is null, use default empty values
       ...(prev || {
-        strengths: "",
-        improvements: "",
-        actionItems: "",
+        strengths: '',
+        improvements: '',
+        actionItems: '',
       }),
       // Update the specific field
       [field]: value,
@@ -245,13 +232,7 @@ export default function SubmissionReviewPage() {
 
   // Get a random highlight color
   const getRandomHighlightColor = () => {
-    const colors = [
-      "bg-yellow-200",
-      "bg-green-200",
-      "bg-blue-200",
-      "bg-purple-200",
-      "bg-pink-200",
-    ];
+    const colors = ['bg-yellow-200', 'bg-green-200', 'bg-blue-200', 'bg-purple-200', 'bg-pink-200'];
     return colors[Math.floor(Math.random() * colors.length)];
   };
 
@@ -266,20 +247,19 @@ export default function SubmissionReviewPage() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Example AI-generated comment based on selected text
-      let aiComment = "This section could be improved by...";
+      let aiComment = 'This section could be improved by...';
 
       if (selectedText.length < 20) {
-        aiComment = "Consider revising this phrase for clarity.";
+        aiComment = 'Consider revising this phrase for clarity.';
       } else if (
-        selectedText.toLowerCase().includes("however") ||
-        selectedText.toLowerCase().includes("but") ||
-        selectedText.toLowerCase().includes("although")
+        selectedText.toLowerCase().includes('however') ||
+        selectedText.toLowerCase().includes('but') ||
+        selectedText.toLowerCase().includes('although')
       ) {
-        aiComment =
-          "Good use of transition words to connect contrasting ideas.";
+        aiComment = 'Good use of transition words to connect contrasting ideas.';
       } else if (selectedText.length > 100) {
         aiComment =
-          "This paragraph is well-structured but could benefit from more specific examples to support your argument.";
+          'This paragraph is well-structured but could benefit from more specific examples to support your argument.';
       }
 
       setNewCommentText(aiComment);
@@ -297,7 +277,7 @@ export default function SubmissionReviewPage() {
         `[data-comment-id="${commentId}"]`
       );
       if (commentElement) {
-        commentElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
   };
@@ -307,11 +287,11 @@ export default function SubmissionReviewPage() {
     setIsCommentMode(!isCommentMode);
     if (!isCommentMode) {
       toast({
-        title: "Comment mode enabled",
-        description: "Select text in the document to add comments.",
+        title: 'Comment mode enabled',
+        description: 'Select text in the document to add comments.',
       });
     } else {
-      setSelectedText("");
+      setSelectedText('');
       setSelectionRange(null);
     }
   };
@@ -330,9 +310,7 @@ export default function SubmissionReviewPage() {
     const lastIndex = 0;
 
     // Sort comments by startIndex
-    const sortedComments = [...inlineComments].sort(
-      (a, b) => a.startIndex - b.startIndex
-    );
+    const sortedComments = [...inlineComments].sort((a, b) => a.startIndex - b.startIndex);
 
     // Create an array to hold all segments (text and highlights)
     const segments = [];
@@ -340,12 +318,12 @@ export default function SubmissionReviewPage() {
     // Add the beginning of the text
     if (sortedComments.length > 0 && sortedComments[0].startIndex > 0) {
       segments.push({
-        type: "text",
+        type: 'text',
         content: content?.substring(0, sortedComments[0].startIndex),
       });
     } else if (sortedComments.length === 0) {
       segments.push({
-        type: "text",
+        type: 'text',
         content: content,
       });
     }
@@ -356,19 +334,17 @@ export default function SubmissionReviewPage() {
 
       // Add the highlight
       segments.push({
-        type: "highlight",
+        type: 'highlight',
         content: content?.substring(comment.startIndex, comment.endIndex),
         comment: comment,
       });
 
       // Add text between this highlight and the next one (or the end)
       const nextIndex =
-        i < sortedComments.length - 1
-          ? sortedComments[i + 1].startIndex
-          : content?.length;
+        i < sortedComments.length - 1 ? sortedComments[i + 1].startIndex : content?.length;
       if (nextIndex && comment.endIndex < nextIndex) {
         segments.push({
-          type: "text",
+          type: 'text',
           content: content?.substring(comment.endIndex, nextIndex),
         });
       }
@@ -379,14 +355,14 @@ export default function SubmissionReviewPage() {
     const paragraphs = [];
 
     for (const segment of segments) {
-      if (segment.type === "text") {
+      if (segment.type === 'text') {
         // Split text by paragraphs
-        const paragraphTexts = segment?.content?.split("\n\n");
+        const paragraphTexts = segment?.content?.split('\n\n');
 
         // Add first part to current paragraph
         if (paragraphTexts && paragraphTexts.length > 0) {
           currentParagraph.push({
-            type: "text",
+            type: 'text',
             content: paragraphTexts[0],
           });
         }
@@ -401,7 +377,7 @@ export default function SubmissionReviewPage() {
 
           // Start new paragraph
           currentParagraph.push({
-            type: "text",
+            type: 'text',
             content: paragraphTexts?.[i],
           });
         }
@@ -420,7 +396,7 @@ export default function SubmissionReviewPage() {
     return paragraphs.map((paragraph, pIndex) => (
       <p key={`p-${pIndex}`} className="mb-4">
         {paragraph.map((segment, sIndex) => {
-          if (segment.type === "text") {
+          if (segment.type === 'text') {
             return <span key={`s-${pIndex}-${sIndex}`}>{segment.content}</span>;
           } else {
             const comment = segment.comment;
@@ -432,9 +408,9 @@ export default function SubmissionReviewPage() {
                 className={`relative inline-block cursor-pointer group ${
                   comment?.color
                 } px-0.5 rounded transition-all duration-200 ${
-                  isActive ? "ring-2 ring-primary" : ""
+                  isActive ? 'ring-2 ring-primary' : ''
                 }`}
-                onClick={() => scrollToComment(comment?.id || "")}
+                onClick={() => scrollToComment(comment?.id || '')}
               >
                 {segment.content}
                 <span className="absolute -top-2 -right-2 w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
@@ -458,13 +434,13 @@ export default function SubmissionReviewPage() {
         score: finalScore,
       });
       toast({
-        title: "Changes saved",
-        description: "All comments and grades have been saved.",
+        title: 'Changes saved',
+        description: 'All comments and grades have been saved.',
       });
     } catch (error) {
       toast({
-        title: "Something went wrong",
-        description: "Something went wrong",
+        title: 'Something went wrong',
+        description: 'Something went wrong',
       });
     }
   };
@@ -472,11 +448,11 @@ export default function SubmissionReviewPage() {
   // Format date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
     }).format(date);
   };
 
@@ -490,18 +466,14 @@ export default function SubmissionReviewPage() {
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">
-              Submission Review
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tight">Submission Review</h1>
             <p className="text-muted-foreground">{submission?.assignmentId}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <div className="bg-muted px-4 py-2 rounded-lg flex flex-col items-center">
-            <span className="text-sm font-medium text-muted-foreground">
-              Final Score
-            </span>
+            <span className="text-sm font-medium text-muted-foreground">Final Score</span>
             <div className="flex items-baseline">
               <span className="text-2xl font-bold">{finalScore}</span>
               <span className="text-sm ml-1">/100</span>
@@ -521,7 +493,7 @@ export default function SubmissionReviewPage() {
               <div>
                 <CardTitle>Submission Content</CardTitle>
                 <CardDescription>
-                  Submitted on{" "}
+                  Submitted on{' '}
                   {submission &&
                     submission?.createdAt &&
                     new Date(submission?.createdAt).toLocaleDateString()}
@@ -529,13 +501,13 @@ export default function SubmissionReviewPage() {
               </div>
               <div className="flex gap-2">
                 <Button
-                  variant={isCommentMode ? "default" : "outline"}
+                  variant={isCommentMode ? 'default' : 'outline'}
                   size="sm"
                   onClick={toggleCommentMode}
                   className="flex items-center gap-1"
                 >
                   <MessageSquare className="h-4 w-4" />
-                  {isCommentMode ? "Exit Comment Mode" : "Add Comments"}
+                  {isCommentMode ? 'Exit Comment Mode' : 'Add Comments'}
                 </Button>
                 <Button variant="outline" size="icon" title="Share" asChild>
                   <Link
@@ -554,15 +526,12 @@ export default function SubmissionReviewPage() {
             <CardContent className="relative">
               {isCommentMode && (
                 <div className="absolute top-0 left-0 right-0 bg-muted/30 p-2 rounded-t-md text-sm text-center">
-                  Select text to add comments. Click on highlighted text to view
-                  comments.
+                  Select text to add comments. Click on highlighted text to view comments.
                 </div>
               )}
               <div
                 ref={contentRef}
-                className={`prose max-w-none ${
-                  isCommentMode ? "pt-8 cursor-text" : ""
-                }`}
+                className={`prose max-w-none ${isCommentMode ? 'pt-8 cursor-text' : ''}`}
                 onMouseUp={handleTextSelection}
               >
                 {renderHighlightedContent()}
@@ -573,9 +542,7 @@ export default function SubmissionReviewPage() {
           <Card>
             <CardHeader>
               <CardTitle>Overall Feedback</CardTitle>
-              <CardDescription>
-                Provide structured feedback on the submission
-              </CardDescription>
+              <CardDescription>Provide structured feedback on the submission</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
@@ -590,9 +557,7 @@ export default function SubmissionReviewPage() {
                     id="strengths"
                     placeholder="What did the student do well?"
                     value={overallFeedback?.strengths}
-                    onChange={(e) =>
-                      updateOverallFeedback("strengths", e.target.value)
-                    }
+                    onChange={(e) => updateOverallFeedback('strengths', e.target.value)}
                     className="min-h-[100px]"
                   />
                 </div>
@@ -608,9 +573,7 @@ export default function SubmissionReviewPage() {
                     id="improvements"
                     placeholder="What could the student improve?"
                     value={overallFeedback?.improvements}
-                    onChange={(e) =>
-                      updateOverallFeedback("improvements", e.target.value)
-                    }
+                    onChange={(e) => updateOverallFeedback('improvements', e.target.value)}
                     className="min-h-[100px]"
                   />
                 </div>
@@ -626,9 +589,7 @@ export default function SubmissionReviewPage() {
                     id="actionItems"
                     placeholder="What specific actions should the student take?"
                     value={overallFeedback?.actionItems}
-                    onChange={(e) =>
-                      updateOverallFeedback("actionItems", e.target.value)
-                    }
+                    onChange={(e) => updateOverallFeedback('actionItems', e.target.value)}
                     className="min-h-[100px]"
                   />
                 </div>
@@ -641,15 +602,10 @@ export default function SubmissionReviewPage() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle>Inline Comments</CardTitle>
-              <CardDescription>
-                {inlineComments.length} comments on this submission
-              </CardDescription>
+              <CardDescription>{inlineComments.length} comments on this submission</CardDescription>
             </CardHeader>
             <CardContent className="p-0">
-              <div
-                ref={commentSidebarRef}
-                className="max-h-[350px] overflow-hidden"
-              >
+              <div ref={commentSidebarRef} className="max-h-[350px] overflow-hidden">
                 <ScrollArea className="h-[350px]">
                   <div className="px-4 py-2">
                     {selectedText && isCommentMode && (
@@ -677,7 +633,7 @@ export default function SubmissionReviewPage() {
                             disabled={isGeneratingAI}
                           >
                             <Sparkles className="h-3.5 w-3.5 mr-1" />
-                            {isGeneratingAI ? "Generating..." : "AI Suggest"}
+                            {isGeneratingAI ? 'Generating...' : 'AI Suggest'}
                           </Button>
                           <Button
                             size="sm"
@@ -694,7 +650,7 @@ export default function SubmissionReviewPage() {
                     {inlineComments.length === 0 ? (
                       <div className="text-center py-8 text-muted-foreground">
                         {isCommentMode
-                          ? "Select text to add comments"
+                          ? 'Select text to add comments'
                           : "No comments yet. Click 'Add Comments' to start."}
                       </div>
                     ) : (
@@ -707,19 +663,15 @@ export default function SubmissionReviewPage() {
                               data-comment-id={comment.id}
                               className={`p-3 border rounded-md transition-all ${
                                 comment.id === activeCommentId
-                                  ? "ring-2 ring-primary bg-muted/20"
-                                  : "hover:bg-muted/10"
+                                  ? 'ring-2 ring-primary bg-muted/20'
+                                  : 'hover:bg-muted/10'
                               }`}
                               onClick={() => setActiveCommentId(comment.id)}
                             >
                               <div className="flex justify-between items-start mb-1">
                                 <div className="flex items-center gap-1">
-                                  <span
-                                    className={`w-3 h-3 rounded-full ${comment.color}`}
-                                  ></span>
-                                  <span className="text-xs font-medium">
-                                    {comment.author}
-                                  </span>
+                                  <span className={`w-3 h-3 rounded-full ${comment.color}`}></span>
+                                  <span className="text-xs font-medium">{comment.author}</span>
                                   {comment.isAIGenerated && (
                                     <Sparkles className="h-3 w-3 text-purple-500" />
                                   )}
@@ -749,12 +701,8 @@ export default function SubmissionReviewPage() {
                                   className="h-7 px-2"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    const newText = prompt(
-                                      "Edit comment:",
-                                      comment.text
-                                    );
-                                    if (newText)
-                                      updateComment(comment.id, newText);
+                                    const newText = prompt('Edit comment:', comment.text);
+                                    if (newText) updateComment(comment.id, newText);
                                   }}
                                 >
                                   Edit
@@ -765,7 +713,7 @@ export default function SubmissionReviewPage() {
                                   className="h-7 px-2"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    if (confirm("Delete this comment?")) {
+                                    if (confirm('Delete this comment?')) {
                                       removeInlineComment(comment.id);
                                     }
                                   }}
@@ -794,16 +742,14 @@ export default function SubmissionReviewPage() {
                   <AvatarFallback>
                     {submission?.studentName &&
                       submission?.studentName
-                        .split(" ")
+                        .split(' ')
                         .map((n) => n[0])
-                        .join("")}
+                        .join('')}
                   </AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="font-medium">{submission?.studentName}</p>
-                  <p className="text-sm text-muted-foreground">
-                    ID: {submission?.studentId}
-                  </p>
+                  <p className="text-sm text-muted-foreground">ID: {submission?.studentId}</p>
                 </div>
               </div>
             </CardContent>
@@ -838,16 +784,12 @@ export default function SubmissionReviewPage() {
                         min="0"
                         max={score.maxScore}
                         value={score.score}
-                        onChange={(e) =>
-                          updateSubScore(index, Number.parseInt(e.target.value))
-                        }
+                        onChange={(e) => updateSubScore(index, Number.parseInt(e.target.value))}
                       />
                       <Textarea
                         placeholder={`Rationale for ${score.name} score...`}
                         value={score.rationale}
-                        onChange={(e) =>
-                          updateSubScoreRationale(index, e.target.value)
-                        }
+                        onChange={(e) => updateSubScoreRationale(index, e.target.value)}
                         className="text-sm"
                       />
                     </div>
@@ -876,32 +818,21 @@ export default function SubmissionReviewPage() {
                       <span>Human-Written Score</span>
                       <Badge>{submission?.aiCheckerResults?.score}%</Badge>
                     </div>
-                    <Progress
-                      value={submission?.aiCheckerResults?.score}
-                      className="h-2"
-                    />
+                    <Progress value={submission?.aiCheckerResults?.score} className="h-2" />
 
                     <Separator />
 
                     <h3 className="font-medium">Detailed Analysis</h3>
                     <div className="space-y-4">
-                      {submission?.aiCheckerResults?.details?.map(
-                        (detail, index) => (
-                          <div key={index} className="space-y-2">
-                            <div className="flex justify-between">
-                              <span>{detail.section}</span>
-                              <span>
-                                {Math.round(detail.humanProbability * 100)}%
-                                Human
-                              </span>
-                            </div>
-                            <Progress
-                              value={detail.humanProbability * 100}
-                              className="h-2"
-                            />
+                      {submission?.aiCheckerResults?.details?.map((detail, index) => (
+                        <div key={index} className="space-y-2">
+                          <div className="flex justify-between">
+                            <span>{detail.section}</span>
+                            <span>{Math.round(detail.humanProbability * 100)}% Human</span>
                           </div>
-                        )
-                      )}
+                          <Progress value={detail.humanProbability * 100} className="h-2" />
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </CardContent>
@@ -912,45 +843,31 @@ export default function SubmissionReviewPage() {
                 <CardHeader>
                   <CardTitle>Plagiarism Check</CardTitle>
                   <CardDescription>
-                    Originality Score:{" "}
-                    {submissionDefault?.plagiarismResults?.score}%
+                    Originality Score: {submissionDefault?.plagiarismResults?.score}%
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <Progress
-                      value={submissionDefault.plagiarismResults.score}
-                      className="h-2"
-                    />
+                    <Progress value={submissionDefault.plagiarismResults.score} className="h-2" />
 
                     <Separator />
 
                     <h3 className="font-medium">Matched Content</h3>
-                    {submissionDefault.plagiarismResults.matches.length ===
-                    0 ? (
-                      <p className="text-muted-foreground">
-                        No plagiarism detected
-                      </p>
+                    {submissionDefault.plagiarismResults.matches.length === 0 ? (
+                      <p className="text-muted-foreground">No plagiarism detected</p>
                     ) : (
                       <div className="space-y-4">
-                        {submissionDefault.plagiarismResults.matches.map(
-                          (match, index) => (
-                            <div
-                              key={index}
-                              className="p-3 border rounded-md space-y-2"
-                            >
-                              <p className="italic text-sm">"{match.text}"</p>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">
-                                  Source: {match.source}
-                                </span>
-                                <Badge variant="outline">
-                                  {Math.round(match.similarity * 100)}% Match
-                                </Badge>
-                              </div>
+                        {submissionDefault.plagiarismResults.matches.map((match, index) => (
+                          <div key={index} className="p-3 border rounded-md space-y-2">
+                            <p className="italic text-sm">"{match.text}"</p>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-muted-foreground">Source: {match.source}</span>
+                              <Badge variant="outline">
+                                {Math.round(match.similarity * 100)}% Match
+                              </Badge>
                             </div>
-                          )
-                        )}
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>

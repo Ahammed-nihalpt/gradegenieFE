@@ -1,6 +1,6 @@
-import ICourse from "@/types/courses";
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import ICourse from '@/types/courses';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 type CourseStore = {
   course: ICourse | null;
@@ -16,7 +16,7 @@ export const useCourseStore = create<CourseStore>()(
       clearCourseId: () => set({ course: null }),
     }),
     {
-      name: "course-storage", // localStorage key
+      name: 'course-storage', // localStorage key
     }
   )
 );

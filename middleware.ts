@@ -1,7 +1,7 @@
-import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
+import { withAuth } from 'next-auth/middleware';
+import { NextResponse } from 'next/server';
 
-const PUBLIC_PATHS = ["/", "/login", "/signup"];
+const PUBLIC_PATHS = ['/', '/login', '/signup'];
 
 export default withAuth(
   function middleware(req) {
@@ -14,7 +14,7 @@ export default withAuth(
 
     // If trying to access a protected route and not authenticated
     if (!req.nextauth.token) {
-      const loginUrl = new URL("/login", req.url);
+      const loginUrl = new URL('/login', req.url);
       return NextResponse.redirect(loginUrl);
     }
 
@@ -24,7 +24,7 @@ export default withAuth(
   {
     callbacks: {
       authorized: ({ token, req }) => {
-        const publicPaths = ["/", "/login", "/signup"];
+        const publicPaths = ['/', '/login', '/signup'];
         const { pathname } = req.nextUrl;
 
         if (publicPaths.includes(pathname)) {
@@ -35,11 +35,11 @@ export default withAuth(
       },
     },
     pages: {
-      signIn: "/login",
+      signIn: '/login',
     },
   }
 );
 
 export const config = {
-  matcher: ["/((?!api|_next|.*\\..*).*)"], // Match all except /api, /_next, and static files
+  matcher: ['/((?!api|_next|.*\\..*).*)'], // Match all except /api, /_next, and static files
 };

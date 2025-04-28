@@ -1,20 +1,20 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { ArrowLeft, ExternalLink, Info } from "lucide-react"
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowLeft, ExternalLink, Info } from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { PageHeader } from "@/components/page-header"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PageHeader } from '@/components/page-header';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export const metadata: Metadata = {
-  title: "Canvas Integration | GradeGenie",
-  description: "Connect GradeGenie with Canvas",
-}
+  title: 'Canvas Integration | GradeGenie',
+  description: 'Connect GradeGenie with Canvas',
+};
 
 export default function CanvasIntegrationPage() {
   return (
@@ -39,7 +39,9 @@ export default function CanvasIntegrationPage() {
           <Card>
             <CardHeader>
               <CardTitle>Connection Setup</CardTitle>
-              <CardDescription>Follow these steps to connect GradeGenie with your Canvas instance.</CardDescription>
+              <CardDescription>
+                Follow these steps to connect GradeGenie with your Canvas instance.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="automatic" className="w-full">
@@ -51,23 +53,29 @@ export default function CanvasIntegrationPage() {
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="canvas-url">Canvas Instance URL</Label>
-                      <Input id="canvas-url" placeholder="https://your-institution.instructure.com" />
-                      <p className="text-xs text-muted-foreground">Enter the URL of your Canvas instance</p>
+                      <Input
+                        id="canvas-url"
+                        placeholder="https://your-institution.instructure.com"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Enter the URL of your Canvas instance
+                      </p>
                     </div>
 
                     <Alert>
                       <Info className="h-4 w-4" />
                       <AlertTitle>Administrator privileges required</AlertTitle>
                       <AlertDescription>
-                        You'll need to log in with an account that has administrator privileges in Canvas.
+                        You'll need to log in with an account that has administrator privileges in
+                        Canvas.
                       </AlertDescription>
                     </Alert>
 
                     <Button className="w-full">Connect to Canvas</Button>
 
                     <p className="text-xs text-muted-foreground">
-                      By connecting, you'll be redirected to Canvas to authorize GradeGenie's access to your courses,
-                      assignments, and grades.
+                      By connecting, you'll be redirected to Canvas to authorize GradeGenie's access
+                      to your courses, assignments, and grades.
                     </p>
                   </div>
                 </TabsContent>
@@ -99,7 +107,10 @@ export default function CanvasIntegrationPage() {
 
                     <div className="space-y-2">
                       <Label htmlFor="canvas-url-manual">Canvas Instance URL</Label>
-                      <Input id="canvas-url-manual" placeholder="https://your-institution.instructure.com" />
+                      <Input
+                        id="canvas-url-manual"
+                        placeholder="https://your-institution.instructure.com"
+                      />
                     </div>
 
                     <div className="space-y-2">
@@ -109,7 +120,11 @@ export default function CanvasIntegrationPage() {
 
                     <div className="space-y-2">
                       <Label htmlFor="client-secret">Client Secret</Label>
-                      <Input id="client-secret" type="password" placeholder="••••••••••••••••••••••••" />
+                      <Input
+                        id="client-secret"
+                        type="password"
+                        placeholder="••••••••••••••••••••••••"
+                      />
                     </div>
 
                     <Button className="w-full">Save Connection</Button>
@@ -131,12 +146,18 @@ export default function CanvasIntegrationPage() {
                 title="Courses & Sections"
                 description="Import your Canvas courses and sections into GradeGenie."
               />
-              <SyncItem title="Students" description="Sync student roster information from Canvas." />
+              <SyncItem
+                title="Students"
+                description="Sync student roster information from Canvas."
+              />
               <SyncItem
                 title="Assignments"
                 description="Import existing assignments or create new ones that sync back to Canvas."
               />
-              <SyncItem title="Submissions" description="Access student submissions made through Canvas." />
+              <SyncItem
+                title="Submissions"
+                description="Access student submissions made through Canvas."
+              />
               <SyncItem
                 title="Grades & Feedback"
                 description="Push grades and feedback from GradeGenie to Canvas gradebook."
@@ -146,7 +167,7 @@ export default function CanvasIntegrationPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function SyncItem({ title, description }: { title: string; description: string }) {
@@ -156,5 +177,5 @@ function SyncItem({ title, description }: { title: string; description: string }
       <p className="text-sm text-muted-foreground">{description}</p>
       <Separator className="mt-2" />
     </div>
-  )
+  );
 }

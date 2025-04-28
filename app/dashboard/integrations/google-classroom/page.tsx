@@ -1,17 +1,17 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { ArrowLeft, Info } from "lucide-react"
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowLeft, Info } from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { PageHeader } from "@/components/page-header"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { PageHeader } from '@/components/page-header';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export const metadata: Metadata = {
-  title: "Google Classroom Integration | GradeGenie",
-  description: "Connect GradeGenie with Google Classroom",
-}
+  title: 'Google Classroom Integration | GradeGenie',
+  description: 'Connect GradeGenie with Google Classroom',
+};
 
 export default function GoogleClassroomIntegrationPage() {
   return (
@@ -57,15 +57,16 @@ export default function GoogleClassroomIntegrationPage() {
                   <li>• View your Google Classroom rosters</li>
                 </ul>
                 <p className="mt-4 text-xs text-muted-foreground">
-                  GradeGenie only requests the permissions necessary to sync your courses, assignments, and grades.
+                  GradeGenie only requests the permissions necessary to sync your courses,
+                  assignments, and grades.
                 </p>
               </div>
 
               <Button className="w-full">Connect with Google Classroom</Button>
 
               <p className="text-xs text-muted-foreground">
-                By connecting, you'll be redirected to Google to authorize GradeGenie's access to your Google Classroom
-                data.
+                By connecting, you'll be redirected to Google to authorize GradeGenie's access to
+                your Google Classroom data.
               </p>
             </CardContent>
           </Card>
@@ -75,16 +76,27 @@ export default function GoogleClassroomIntegrationPage() {
           <Card>
             <CardHeader>
               <CardTitle>What Gets Synced</CardTitle>
-              <CardDescription>Here's what GradeGenie will sync with Google Classroom</CardDescription>
+              <CardDescription>
+                Here's what GradeGenie will sync with Google Classroom
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <SyncItem title="Classes" description="Import your Google Classroom classes into GradeGenie." />
-              <SyncItem title="Students" description="Sync student roster information from Google Classroom." />
+              <SyncItem
+                title="Classes"
+                description="Import your Google Classroom classes into GradeGenie."
+              />
+              <SyncItem
+                title="Students"
+                description="Sync student roster information from Google Classroom."
+              />
               <SyncItem
                 title="Assignments"
                 description="Import existing assignments or create new ones that sync back to Google Classroom."
               />
-              <SyncItem title="Submissions" description="Access student submissions made through Google Classroom." />
+              <SyncItem
+                title="Submissions"
+                description="Access student submissions made through Google Classroom."
+              />
               <SyncItem
                 title="Grades & Feedback"
                 description="Push grades and feedback from GradeGenie to Google Classroom."
@@ -94,7 +106,7 @@ export default function GoogleClassroomIntegrationPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function SyncItem({ title, description }: { title: string; description: string }) {
@@ -104,5 +116,5 @@ function SyncItem({ title, description }: { title: string; description: string }
       <p className="text-sm text-muted-foreground">{description}</p>
       <Separator className="mt-2" />
     </div>
-  )
+  );
 }

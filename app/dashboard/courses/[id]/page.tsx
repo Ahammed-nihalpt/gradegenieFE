@@ -1,16 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Table,
   TableBody,
@@ -18,8 +12,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import {
   ArrowLeft,
   Download,
@@ -30,8 +24,8 @@ import {
   Save,
   Users,
   Link2,
-} from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+} from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import {
   Dialog,
   DialogContent,
@@ -39,19 +33,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useParams } from "next/navigation";
-import { useCoursesById } from "@/hooks/use-course";
-import { useCourseStore } from "@/lib/stores/courseStore";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useParams } from 'next/navigation';
+import { useCoursesById } from '@/hooks/use-course';
+import { useCourseStore } from '@/lib/stores/courseStore';
 
 export default function CourseDetailPage() {
   const { id }: { id: string } = useParams();
   const { setCourseId } = useCourseStore();
   const { toast } = useToast();
   const { data: course, isLoading } = useCoursesById(id);
-  const [activeTab, setActiveTab] = useState("assignments");
+  const [activeTab, setActiveTab] = useState('assignments');
   const [isDownloadingSyllabus, setIsDownloadingSyllabus] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -60,8 +54,8 @@ export default function CourseDetailPage() {
 
   const handleGradeAssignment = (assignmentId: string) => {
     toast({
-      title: "Opening grading interface",
-      description: "Loading assignment submissions",
+      title: 'Opening grading interface',
+      description: 'Loading assignment submissions',
     });
     // In a real app, this would navigate to the grading page for this assignment
     window.location.href = `/dashboard/assignments/${assignmentId}`;
@@ -73,16 +67,16 @@ export default function CourseDetailPage() {
 
   const handleSendEmail = () => {
     toast({
-      title: "Email Sent",
-      description: "Your email has been sent to all students in this course",
+      title: 'Email Sent',
+      description: 'Your email has been sent to all students in this course',
     });
     setIsEmailModalOpen(false);
   };
 
   const handleDownloadRoster = () => {
     toast({
-      title: "Downloading roster",
-      description: "Student roster CSV is being prepared for download",
+      title: 'Downloading roster',
+      description: 'Student roster CSV is being prepared for download',
     });
   };
 
@@ -94,8 +88,8 @@ export default function CourseDetailPage() {
       setIsDownloadingSyllabus(false);
 
       toast({
-        title: "Syllabus Downloaded",
-        description: "Your syllabus has been downloaded as a PDF",
+        title: 'Syllabus Downloaded',
+        description: 'Your syllabus has been downloaded as a PDF',
       });
 
       // In a real app, this would trigger a PDF download
@@ -110,7 +104,7 @@ export default function CourseDetailPage() {
       setIsSyncing(false);
 
       toast({
-        title: "Sync Complete",
+        title: 'Sync Complete',
         description: `Course has been synced with ${lms}`,
       });
     }, 2000);
@@ -126,16 +120,16 @@ export default function CourseDetailPage() {
 
   const handleLinkSubmit = () => {
     toast({
-      title: "Link Added",
-      description: "Your reference link has been added to the course",
+      title: 'Link Added',
+      description: 'Your reference link has been added to the course',
     });
     setIsLinkModalOpen(false);
   };
 
   const handleUploadSubmit = () => {
     toast({
-      title: "Reference Uploaded",
-      description: "Your reference material has been added to the course",
+      title: 'Reference Uploaded',
+      description: 'Your reference material has been added to the course',
     });
     setIsUploadModalOpen(false);
   };
@@ -151,7 +145,7 @@ export default function CourseDetailPage() {
     );
   }
 
-  console.log("🚀 ~ CourseDetailPage ~ course:", course);
+  console.log('🚀 ~ CourseDetailPage ~ course:', course);
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center space-x-2">
@@ -160,9 +154,7 @@ export default function CourseDetailPage() {
             <ArrowLeft className="h-4 w-4" />
           </Link>
         </Button>
-        <h2 className="text-3xl font-bold tracking-tight">
-          {course?.name || "asdfasf"}
-        </h2>
+        <h2 className="text-3xl font-bold tracking-tight">{course?.name || 'asdfasf'}</h2>
         <Badge>37</Badge>
       </div>
       <div className="grid gap-4 md:grid-cols-7">
@@ -184,11 +176,7 @@ export default function CourseDetailPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <Tabs
-              defaultValue="assignments"
-              className="space-y-4"
-              onValueChange={setActiveTab}
-            >
+            <Tabs defaultValue="assignments" className="space-y-4" onValueChange={setActiveTab}>
               <TabsList>
                 <TabsTrigger value="assignments">Assignments</TabsTrigger>
                 <TabsTrigger value="students">Students</TabsTrigger>
@@ -199,9 +187,7 @@ export default function CourseDetailPage() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Course Assignments</CardTitle>
-                    <CardDescription>
-                      Manage and grade assignments for this course
-                    </CardDescription>
+                    <CardDescription>Manage and grade assignments for this course</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Table>
@@ -215,22 +201,19 @@ export default function CourseDetailPage() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {course?.assignments &&
-                        course?.assignments.length > 0 ? (
+                        {course?.assignments && course?.assignments.length > 0 ? (
                           course.assignments.map((assignment) => (
                             <TableRow key={assignment._id}>
-                              <TableCell className="font-medium">
-                                {assignment.title}
-                              </TableCell>
+                              <TableCell className="font-medium">{assignment.title}</TableCell>
                               <TableCell>{assignment.dueDate}</TableCell>
                               <TableCell>
                                 <Badge
                                   variant={
-                                    assignment.status === "Active"
-                                      ? "default"
-                                      : assignment.status === "Draft"
-                                      ? "outline"
-                                      : "secondary"
+                                    assignment.status === 'Active'
+                                      ? 'default'
+                                      : assignment.status === 'Draft'
+                                        ? 'outline'
+                                        : 'secondary'
                                   }
                                 >
                                   {assignment.status}
@@ -241,9 +224,7 @@ export default function CourseDetailPage() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  onClick={() =>
-                                    handleGradeAssignment(assignment._id)
-                                  }
+                                  onClick={() => handleGradeAssignment(assignment._id)}
                                 >
                                   Grade
                                 </Button>
@@ -300,9 +281,7 @@ export default function CourseDetailPage() {
                       <TableBody>
                         {courseStudents.map((student) => (
                           <TableRow key={student.id}>
-                            <TableCell className="font-medium">
-                              {student.name}
-                            </TableCell>
+                            <TableCell className="font-medium">{student.name}</TableCell>
                             <TableCell>{student.email}</TableCell>
                             <TableCell>{student.completed}</TableCell>
                             <TableCell>{student.grade}</TableCell>
@@ -324,9 +303,7 @@ export default function CourseDetailPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <CardTitle>Course Syllabus</CardTitle>
-                        <CardDescription>
-                          Review and edit your course syllabus
-                        </CardDescription>
+                        <CardDescription>Review and edit your course syllabus</CardDescription>
                       </div>
                       <div className="flex space-x-2">
                         <Button
@@ -401,8 +378,7 @@ export default function CourseDetailPage() {
                       <div>
                         <CardTitle>Grading References</CardTitle>
                         <CardDescription>
-                          Upload links, documents, or text to use as references
-                          when grading
+                          Upload links, documents, or text to use as references when grading
                         </CardDescription>
                       </div>
                       <div className="flex space-x-2">
@@ -433,25 +409,21 @@ export default function CourseDetailPage() {
                               <TableHead>Type</TableHead>
                               <TableHead>Added</TableHead>
                               <TableHead>Used In</TableHead>
-                              <TableHead className="text-right">
-                                Actions
-                              </TableHead>
+                              <TableHead className="text-right">Actions</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
                             {gradingReferences.map((reference) => (
                               <TableRow key={reference.id}>
-                                <TableCell className="font-medium">
-                                  {reference.title}
-                                </TableCell>
+                                <TableCell className="font-medium">{reference.title}</TableCell>
                                 <TableCell>
                                   <Badge
                                     variant={
-                                      reference.type === "Document"
-                                        ? "default"
-                                        : reference.type === "Link"
-                                        ? "outline"
-                                        : "secondary"
+                                      reference.type === 'Document'
+                                        ? 'default'
+                                        : reference.type === 'Link'
+                                          ? 'outline'
+                                          : 'secondary'
                                     }
                                   >
                                     {reference.type}
@@ -473,7 +445,7 @@ export default function CourseDetailPage() {
                       <TabsContent value="documents" className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {gradingReferences
-                            .filter((ref) => ref.type === "Document")
+                            .filter((ref) => ref.type === 'Document')
                             .map((reference) => (
                               <Card key={reference.id}>
                                 <CardContent className="p-4">
@@ -482,15 +454,11 @@ export default function CourseDetailPage() {
                                       <FileText className="h-5 w-5 text-primary" />
                                     </div>
                                     <div className="flex-1">
-                                      <h3 className="font-medium">
-                                        {reference.title}
-                                      </h3>
+                                      <h3 className="font-medium">{reference.title}</h3>
                                       <p className="text-sm text-muted-foreground">
                                         Added {reference.added}
                                       </p>
-                                      <p className="text-sm mt-1">
-                                        Used in {reference.usedIn}
-                                      </p>
+                                      <p className="text-sm mt-1">Used in {reference.usedIn}</p>
                                     </div>
                                     <Button variant="ghost" size="icon">
                                       <Download className="h-4 w-4" />
@@ -505,7 +473,7 @@ export default function CourseDetailPage() {
                       <TabsContent value="links" className="space-y-4">
                         <div className="space-y-4">
                           {gradingReferences
-                            .filter((ref) => ref.type === "Link")
+                            .filter((ref) => ref.type === 'Link')
                             .map((reference) => (
                               <div
                                 key={reference.id}
@@ -516,12 +484,8 @@ export default function CourseDetailPage() {
                                     <Link2 className="h-5 w-5 text-primary" />
                                   </div>
                                   <div>
-                                    <h3 className="font-medium">
-                                      {reference.title}
-                                    </h3>
-                                    <p className="text-sm text-muted-foreground">
-                                      {reference.url}
-                                    </p>
+                                    <h3 className="font-medium">{reference.title}</h3>
+                                    <p className="text-sm text-muted-foreground">{reference.url}</p>
                                   </div>
                                 </div>
                                 <div className="flex space-x-2">
@@ -570,8 +534,8 @@ export default function CourseDetailPage() {
                               <p className="font-medium">{lms.name}</p>
                               <p className="text-sm text-muted-foreground">
                                 {lms.connected
-                                  ? "Connected - Course is synced"
-                                  : "Not connected - Connect to sync course content"}
+                                  ? 'Connected - Course is synced'
+                                  : 'Not connected - Connect to sync course content'}
                               </p>
                             </div>
                           </div>
@@ -597,11 +561,7 @@ export default function CourseDetailPage() {
                                     </>
                                   )}
                                 </Button>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="h-8"
-                                >
+                                <Button variant="outline" size="sm" className="h-8">
                                   View in {lms.name}
                                 </Button>
                               </>
@@ -610,10 +570,7 @@ export default function CourseDetailPage() {
                                 variant="default"
                                 size="sm"
                                 className="h-8"
-                                onClick={() =>
-                                  (window.location.href =
-                                    "/dashboard/integrations")
-                                }
+                                onClick={() => (window.location.href = '/dashboard/integrations')}
                               >
                                 <Link2 className="mr-2 h-4 w-4" />
                                 Connect
@@ -628,9 +585,7 @@ export default function CourseDetailPage() {
                       <Button
                         variant="outline"
                         className="w-full"
-                        onClick={() =>
-                          (window.location.href = "/dashboard/integrations")
-                        }
+                        onClick={() => (window.location.href = '/dashboard/integrations')}
                       >
                         Manage All Integrations
                       </Button>
@@ -686,19 +641,15 @@ export default function CourseDetailPage() {
           </CardContent>
         </Card>
       </div>
-      {activeTab === "assignments" && (
+      {activeTab === 'assignments' && (
         <Card className="mt-4">
           <CardHeader>
             <CardTitle>Assignment Analytics</CardTitle>
-            <CardDescription>
-              Performance metrics across all assignments
-            </CardDescription>
+            <CardDescription>Performance metrics across all assignments</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-[300px] flex items-center justify-center border rounded-md">
-              <p className="text-muted-foreground">
-                Assignment performance chart will appear here
-              </p>
+              <p className="text-muted-foreground">Assignment performance chart will appear here</p>
             </div>
           </CardContent>
         </Card>
@@ -708,8 +659,7 @@ export default function CourseDetailPage() {
           <DialogHeader>
             <DialogTitle>Upload Reference Material</DialogTitle>
             <DialogDescription>
-              Upload documents or text to use as grading references for this
-              course.
+              Upload documents or text to use as grading references for this course.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -717,11 +667,7 @@ export default function CourseDetailPage() {
               <Label htmlFor="title" className="text-right">
                 Title
               </Label>
-              <Input
-                id="title"
-                placeholder="APA Style Guide"
-                className="col-span-3"
-              />
+              <Input id="title" placeholder="APA Style Guide" className="col-span-3" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="file" className="text-right">
@@ -733,18 +679,11 @@ export default function CourseDetailPage() {
               <Label htmlFor="description" className="text-right">
                 Description
               </Label>
-              <Input
-                id="description"
-                placeholder="Optional description"
-                className="col-span-3"
-              />
+              <Input id="description" placeholder="Optional description" className="col-span-3" />
             </div>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsUploadModalOpen(false)}
-            >
+            <Button variant="outline" onClick={() => setIsUploadModalOpen(false)}>
               Cancel
             </Button>
             <Button onClick={handleUploadSubmit}>Upload</Button>
@@ -839,10 +778,7 @@ export default function CourseDetailPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsEmailModalOpen(false)}
-            >
+            <Button variant="outline" onClick={() => setIsEmailModalOpen(false)}>
               Cancel
             </Button>
             <Button onClick={handleSendEmail}>Send Email</Button>
@@ -855,33 +791,33 @@ export default function CourseDetailPage() {
 
 const courses = [
   {
-    id: "1",
-    title: "Introduction to Psychology",
-    code: "PSY 101",
+    id: '1',
+    title: 'Introduction to Psychology',
+    code: 'PSY 101',
     students: 42,
     assignments: 8,
     graded: 5,
   },
   {
-    id: "2",
-    title: "Advanced Statistics",
-    code: "STAT 301",
+    id: '2',
+    title: 'Advanced Statistics',
+    code: 'STAT 301',
     students: 28,
     assignments: 12,
     graded: 9,
   },
   {
-    id: "3",
-    title: "Environmental Science",
-    code: "ENV 201",
+    id: '3',
+    title: 'Environmental Science',
+    code: 'ENV 201',
     students: 35,
     assignments: 6,
     graded: 4,
   },
   {
-    id: "4",
-    title: "Creative Writing",
-    code: "ENG 215",
+    id: '4',
+    title: 'Creative Writing',
+    code: 'ENG 215',
     students: 22,
     assignments: 10,
     graded: 8,
@@ -890,121 +826,121 @@ const courses = [
 
 const courseActivity = [
   {
-    title: "New assignment created",
-    description: "Research Paper - Due Apr 15, 2025",
-    time: "2h ago",
+    title: 'New assignment created',
+    description: 'Research Paper - Due Apr 15, 2025',
+    time: '2h ago',
   },
   {
-    title: "Graded 15 submissions",
-    description: "Midterm Exam",
-    time: "1d ago",
+    title: 'Graded 15 submissions',
+    description: 'Midterm Exam',
+    time: '1d ago',
   },
   {
-    title: "Updated syllabus",
-    description: "Added new reading materials",
-    time: "3d ago",
+    title: 'Updated syllabus',
+    description: 'Added new reading materials',
+    time: '3d ago',
   },
   {
-    title: "New student enrolled",
-    description: "Emma Johnson joined the course",
-    time: "1w ago",
+    title: 'New student enrolled',
+    description: 'Emma Johnson joined the course',
+    time: '1w ago',
   },
 ];
 
 const courseAssignments = [
   {
-    id: "1",
-    title: "Research Paper",
-    dueDate: "Apr 15, 2025",
-    status: "Active",
-    submissions: "32/42",
+    id: '1',
+    title: 'Research Paper',
+    dueDate: 'Apr 15, 2025',
+    status: 'Active',
+    submissions: '32/42',
   },
   {
-    id: "2",
-    title: "Midterm Exam",
-    dueDate: "Mar 20, 2025",
-    status: "Completed",
-    submissions: "40/42",
+    id: '2',
+    title: 'Midterm Exam',
+    dueDate: 'Mar 20, 2025',
+    status: 'Completed',
+    submissions: '40/42',
   },
   {
-    id: "3",
-    title: "Weekly Quiz 5",
-    dueDate: "Mar 10, 2025",
-    status: "Completed",
-    submissions: "38/42",
+    id: '3',
+    title: 'Weekly Quiz 5',
+    dueDate: 'Mar 10, 2025',
+    status: 'Completed',
+    submissions: '38/42',
   },
   {
-    id: "4",
-    title: "Weekly Quiz 6",
-    dueDate: "Mar 17, 2025",
-    status: "Completed",
-    submissions: "36/42",
+    id: '4',
+    title: 'Weekly Quiz 6',
+    dueDate: 'Mar 17, 2025',
+    status: 'Completed',
+    submissions: '36/42',
   },
   {
-    id: "5",
-    title: "Weekly Quiz 7",
-    dueDate: "Mar 24, 2025",
-    status: "Active",
-    submissions: "30/42",
+    id: '5',
+    title: 'Weekly Quiz 7',
+    dueDate: 'Mar 24, 2025',
+    status: 'Active',
+    submissions: '30/42',
   },
   {
-    id: "6",
-    title: "Final Exam",
-    dueDate: "May 10, 2025",
-    status: "Draft",
-    submissions: "0/42",
+    id: '6',
+    title: 'Final Exam',
+    dueDate: 'May 10, 2025',
+    status: 'Draft',
+    submissions: '0/42',
   },
 ];
 
 const courseStudents = [
   {
-    id: "1",
-    name: "Emma Johnson",
-    email: "emma.j@university.edu",
-    completed: "5/8",
-    grade: "A-",
+    id: '1',
+    name: 'Emma Johnson',
+    email: 'emma.j@university.edu',
+    completed: '5/8',
+    grade: 'A-',
   },
   {
-    id: "2",
-    name: "Michael Chen",
-    email: "m.chen@university.edu",
-    completed: "4/8",
-    grade: "B+",
+    id: '2',
+    name: 'Michael Chen',
+    email: 'm.chen@university.edu',
+    completed: '4/8',
+    grade: 'B+',
   },
   {
-    id: "3",
-    name: "Sophia Rodriguez",
-    email: "s.rodriguez@university.edu",
-    completed: "6/8",
-    grade: "A",
+    id: '3',
+    name: 'Sophia Rodriguez',
+    email: 's.rodriguez@university.edu',
+    completed: '6/8',
+    grade: 'A',
   },
   {
-    id: "4",
-    name: "James Wilson",
-    email: "j.wilson@university.edu",
-    completed: "3/8",
-    grade: "B",
+    id: '4',
+    name: 'James Wilson',
+    email: 'j.wilson@university.edu',
+    completed: '3/8',
+    grade: 'B',
   },
   {
-    id: "5",
-    name: "Olivia Smith",
-    email: "o.smith@university.edu",
-    completed: "5/8",
-    grade: "B+",
+    id: '5',
+    name: 'Olivia Smith',
+    email: 'o.smith@university.edu',
+    completed: '5/8',
+    grade: 'B+',
   },
   {
-    id: "6",
-    name: "William Brown",
-    email: "w.brown@university.edu",
-    completed: "4/8",
-    grade: "C+",
+    id: '6',
+    name: 'William Brown',
+    email: 'w.brown@university.edu',
+    completed: '4/8',
+    grade: 'C+',
   },
 ];
 
 const lmsIntegrations = [
   {
-    id: "canvas",
-    name: "Canvas",
+    id: 'canvas',
+    name: 'Canvas',
     connected: true,
     icon: (
       <svg
@@ -1024,8 +960,8 @@ const lmsIntegrations = [
     ),
   },
   {
-    id: "google-classroom",
-    name: "Google Classroom",
+    id: 'google-classroom',
+    name: 'Google Classroom',
     connected: false,
     icon: (
       <svg
@@ -1045,8 +981,8 @@ const lmsIntegrations = [
     ),
   },
   {
-    id: "moodle",
-    name: "Moodle",
+    id: 'moodle',
+    name: 'Moodle',
     connected: false,
     icon: (
       <svg
@@ -1068,43 +1004,43 @@ const lmsIntegrations = [
 
 const gradingReferences = [
   {
-    id: "1",
-    title: "APA Style Guide 7th Edition",
-    type: "Document",
-    added: "Mar 15, 2025",
-    usedIn: "3 assignments",
-    url: "",
+    id: '1',
+    title: 'APA Style Guide 7th Edition',
+    type: 'Document',
+    added: 'Mar 15, 2025',
+    usedIn: '3 assignments',
+    url: '',
   },
   {
-    id: "2",
-    title: "Rubric Template - Research Papers",
-    type: "Document",
-    added: "Feb 28, 2025",
-    usedIn: "2 assignments",
-    url: "",
+    id: '2',
+    title: 'Rubric Template - Research Papers',
+    type: 'Document',
+    added: 'Feb 28, 2025',
+    usedIn: '2 assignments',
+    url: '',
   },
   {
-    id: "3",
-    title: "Purdue OWL Writing Resources",
-    type: "Link",
-    added: "Mar 10, 2025",
-    usedIn: "5 assignments",
-    url: "https://owl.purdue.edu/owl/research_and_citation/resources.html",
+    id: '3',
+    title: 'Purdue OWL Writing Resources',
+    type: 'Link',
+    added: 'Mar 10, 2025',
+    usedIn: '5 assignments',
+    url: 'https://owl.purdue.edu/owl/research_and_citation/resources.html',
   },
   {
-    id: "4",
-    title: "Psychology Journal Citation Examples",
-    type: "Text",
-    added: "Mar 5, 2025",
-    usedIn: "1 assignment",
-    url: "",
+    id: '4',
+    title: 'Psychology Journal Citation Examples',
+    type: 'Text',
+    added: 'Mar 5, 2025',
+    usedIn: '1 assignment',
+    url: '',
   },
   {
-    id: "5",
-    title: "Harvard Referencing Guide",
-    type: "Link",
-    added: "Feb 20, 2025",
-    usedIn: "4 assignments",
-    url: "https://www.citethisforme.com/harvard-referencing",
+    id: '5',
+    title: 'Harvard Referencing Guide',
+    type: 'Link',
+    added: 'Feb 20, 2025',
+    usedIn: '4 assignments',
+    url: 'https://www.citethisforme.com/harvard-referencing',
   },
 ];

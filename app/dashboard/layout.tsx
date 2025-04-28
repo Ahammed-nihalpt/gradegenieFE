@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import type { ReactNode } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,21 +13,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  BookOpen,
-  FileText,
-  LogOut,
-  Menu,
-  Users,
-  Link2,
-  MessageSquare,
-} from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
-import { FreeTrialBanner } from "@/components/free-trial-banner";
-import { Logo } from "@/components/logo";
-import LogoutButton from "@/components/logout-button";
+} from '@/components/ui/dropdown-menu';
+import { BookOpen, FileText, LogOut, Menu, Users, Link2, MessageSquare } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
+import { FreeTrialBanner } from '@/components/free-trial-banner';
+import { Logo } from '@/components/logo';
+import LogoutButton from '@/components/logout-button';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const [isMobile, setIsMobile] = useState(false);
@@ -43,16 +35,16 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     checkIsMobile();
 
     // Add event listener
-    window.addEventListener("resize", checkIsMobile);
+    window.addEventListener('resize', checkIsMobile);
 
     // Cleanup
-    return () => window.removeEventListener("resize", checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
 
   // Redirect from dashboard root to assignments
   useEffect(() => {
-    if (pathname === "/dashboard") {
-      window.location.href = "/dashboard/assignments";
+    if (pathname === '/dashboard') {
+      window.location.href = '/dashboard/assignments';
     }
   }, [pathname]);
 
@@ -65,60 +57,52 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       <Button
         variant="ghost"
         className={cn(
-          "justify-start hover:bg-primary hover:text-white w-full",
-          isSidebarCollapsed && "justify-center px-2"
+          'justify-start hover:bg-primary hover:text-white w-full',
+          isSidebarCollapsed && 'justify-center px-2'
         )}
         asChild
       >
         <Link href="/dashboard/courses">
-          <BookOpen
-            className={cn("h-4 w-4", isSidebarCollapsed ? "mr-0" : "mr-2")}
-          />
+          <BookOpen className={cn('h-4 w-4', isSidebarCollapsed ? 'mr-0' : 'mr-2')} />
           {!isSidebarCollapsed && <span>Courses</span>}
         </Link>
       </Button>
       <Button
         variant="ghost"
         className={cn(
-          "justify-start hover:bg-primary hover:text-white w-full",
-          isSidebarCollapsed && "justify-center px-2"
+          'justify-start hover:bg-primary hover:text-white w-full',
+          isSidebarCollapsed && 'justify-center px-2'
         )}
         asChild
       >
         <Link href="/dashboard/assignments">
-          <FileText
-            className={cn("h-4 w-4", isSidebarCollapsed ? "mr-0" : "mr-2")}
-          />
+          <FileText className={cn('h-4 w-4', isSidebarCollapsed ? 'mr-0' : 'mr-2')} />
           {!isSidebarCollapsed && <span>Assignments</span>}
         </Link>
       </Button>
       <Button
         variant="ghost"
         className={cn(
-          "justify-start hover:bg-primary hover:text-white w-full",
-          isSidebarCollapsed && "justify-center px-2"
+          'justify-start hover:bg-primary hover:text-white w-full',
+          isSidebarCollapsed && 'justify-center px-2'
         )}
         asChild
       >
         <Link href="/dashboard/classroom">
-          <Users
-            className={cn("h-4 w-4", isSidebarCollapsed ? "mr-0" : "mr-2")}
-          />
+          <Users className={cn('h-4 w-4', isSidebarCollapsed ? 'mr-0' : 'mr-2')} />
           {!isSidebarCollapsed && <span>Classroom</span>}
         </Link>
       </Button>
       <Button
         variant="ghost"
         className={cn(
-          "justify-start hover:bg-primary hover:text-white w-full",
-          isSidebarCollapsed && "justify-center px-2"
+          'justify-start hover:bg-primary hover:text-white w-full',
+          isSidebarCollapsed && 'justify-center px-2'
         )}
         asChild
       >
         <Link href="/dashboard/integrations">
-          <Link2
-            className={cn("h-4 w-4", isSidebarCollapsed ? "mr-0" : "mr-2")}
-          />
+          <Link2 className={cn('h-4 w-4', isSidebarCollapsed ? 'mr-0' : 'mr-2')} />
           {!isSidebarCollapsed && <span>Integrations</span>}
         </Link>
       </Button>
@@ -126,8 +110,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <Button
           variant="ghost"
           className={cn(
-            "justify-start hover:bg-primary hover:text-white w-full",
-            isSidebarCollapsed && "justify-center px-2"
+            'justify-start hover:bg-primary hover:text-white w-full',
+            isSidebarCollapsed && 'justify-center px-2'
           )}
           asChild
         >
@@ -136,9 +120,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <MessageSquare
-              className={cn("h-4 w-4", isSidebarCollapsed ? "mr-0" : "mr-2")}
-            />
+            <MessageSquare className={cn('h-4 w-4', isSidebarCollapsed ? 'mr-0' : 'mr-2')} />
             {!isSidebarCollapsed && <span>Feedback</span>}
           </a>
         </Button>
@@ -148,11 +130,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <FreeTrialBanner
-        daysRemaining={3}
-        hoursRemaining={0}
-        creditsRemaining={3}
-      />
+      <FreeTrialBanner daysRemaining={3} hoursRemaining={0} creditsRemaining={3} />
       <header className="sticky top-0 z-50 w-full border-b bg-background">
         <div className="container flex h-14 items-center">
           <div className="mr-4 flex items-center">
@@ -192,15 +170,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="relative h-8 w-8 rounded-full"
-                >
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="/placeholder.svg" alt="Professor" />
-                    <AvatarFallback className="bg-primary/10 text-primary">
-                      PF
-                    </AvatarFallback>
+                    <AvatarFallback className="bg-primary/10 text-primary">PF</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
@@ -232,9 +205,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         {/* Desktop Sidebar */}
         <aside
           className={cn(
-            "flex-col border-r bg-secondary transition-all duration-300 ease-in-out",
-            isMobile ? "hidden" : "flex",
-            isSidebarCollapsed ? "w-[60px]" : "w-[240px]"
+            'flex-col border-r bg-secondary transition-all duration-300 ease-in-out',
+            isMobile ? 'hidden' : 'flex',
+            isSidebarCollapsed ? 'w-[60px]' : 'w-[240px]'
           )}
         >
           <div className="flex flex-col space-y-1 p-4 h-full relative">

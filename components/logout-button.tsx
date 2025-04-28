@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function LogoutButton() {
   const router = useRouter();
@@ -11,22 +11,19 @@ export default function LogoutButton() {
   const handleLogout = async () => {
     setLoading(true);
     try {
-      console.log("🚀 ~ handleLogout ~ setLoading:", "setLoading");
+      console.log('🚀 ~ handleLogout ~ setLoading:', 'setLoading');
       await signOut({ redirect: false });
-      router.push("/login");
+      router.push('/login');
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Logout failed:', error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <button
-      onClick={handleLogout}
-      className="px-4 py-2 bg-red-500 text-white rounded"
-    >
-      {loading ? "Logging out..." : "Logout"}
+    <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded">
+      {loading ? 'Logging out...' : 'Logout'}
     </button>
   );
 }

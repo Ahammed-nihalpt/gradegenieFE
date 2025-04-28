@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { MoreHorizontal, Search } from "lucide-react";
+import { useState } from 'react';
+import { MoreHorizontal, Search } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,15 +12,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -28,16 +28,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useStudentByUserId } from "@/hooks/use-student";
-import { useSession } from "next-auth/react";
+} from '@/components/ui/table';
+import { useStudentByUserId } from '@/hooks/use-student';
+import { useSession } from 'next-auth/react';
 
 export function StudentsList() {
   const { data: session } = useSession();
-  const { data: students } = useStudentByUserId(session?.user.id || "");
+  const { data: students } = useStudentByUserId(session?.user.id || '');
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedClass, setSelectedClass] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedClass, setSelectedClass] = useState('all');
 
   const filteredStudents = students?.filter((student) => {
     const matchesSearch =
@@ -45,8 +45,7 @@ export function StudentsList() {
       student.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       student.class.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesClass =
-      selectedClass === "all" || student.class.toLowerCase() === selectedClass;
+    const matchesClass = selectedClass === 'all' || student.class.toLowerCase() === selectedClass;
 
     return matchesSearch && matchesClass;
   });
@@ -64,10 +63,7 @@ export function StudentsList() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Select
-          defaultValue="all"
-          onValueChange={(value) => setSelectedClass(value)}
-        >
+        <Select defaultValue="all" onValueChange={(value) => setSelectedClass(value)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Filter by class" />
           </SelectTrigger>
@@ -121,9 +117,7 @@ export function StudentsList() {
                       <DropdownMenuItem>View Submissions</DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive">
-                        Remove
-                      </DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive">Remove</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

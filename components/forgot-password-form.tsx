@@ -1,49 +1,56 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { requestPasswordReset } from "@/lib/actions/auth"
-import { toast } from "@/components/ui/use-toast"
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { requestPasswordReset } from '@/lib/actions/auth';
+import { toast } from '@/components/ui/use-toast';
 
 const formSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-})
+  email: z.string().email('Please enter a valid email address'),
+});
 
 export function ForgotPasswordForm() {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      email: '',
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await requestPasswordReset(values.email)
+      await requestPasswordReset(values.email);
       toast({
-        title: "Check your email",
+        title: 'Check your email',
         description: "We've sent you a link to reset your password.",
-      })
+      });
       // Optionally redirect to a confirmation page
-      router.push("/forgot-password/confirmation")
+      router.push('/forgot-password/confirmation');
     } catch (error) {
       toast({
-        title: "Something went wrong",
-        description: "Please try again later.",
-        variant: "destructive",
-      })
+        title: 'Something went wrong',
+        description: 'Please try again later.',
+        variant: 'destructive',
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -64,9 +71,9 @@ export function ForgotPasswordForm() {
           )}
         />
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Sending..." : "Send reset link"}
+          {isLoading ? 'Sending...' : 'Send reset link'}
         </Button>
       </form>
     </Form>
-  )
+  );
 }

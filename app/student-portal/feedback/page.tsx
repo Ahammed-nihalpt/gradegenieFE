@@ -1,63 +1,76 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Textarea } from "@/components/ui/textarea"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Loader2, MessageSquare, Send } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Loader2, MessageSquare, Send } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function FeedbackPage() {
-  const { toast } = useToast()
-  const [message, setMessage] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast();
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([
     {
-      role: "assistant",
+      role: 'assistant',
       content: "Hello! I'm your AI tutor. How can I help you with your coursework today?",
     },
-  ])
+  ]);
 
   const handleSendMessage = () => {
-    if (!message.trim()) return
+    if (!message.trim()) return;
 
     // Add user message to chat
-    setChatHistory([...chatHistory, { role: "user", content: message }])
+    setChatHistory([...chatHistory, { role: 'user', content: message }]);
 
     // Clear input
-    setMessage("")
+    setMessage('');
 
     // Simulate AI response
-    setIsLoading(true)
+    setIsLoading(true);
     setTimeout(() => {
       setChatHistory((prev) => [
         ...prev,
         {
-          role: "assistant",
+          role: 'assistant',
           content:
             "I'd be happy to help with that! Based on your question about cognitive biases in psychology, I can explain that these are systematic patterns of deviation from norm or rationality in judgment. There are several types of cognitive biases, including confirmation bias, anchoring bias, and availability heuristic. Would you like me to explain any of these in more detail or provide examples of how they might appear in everyday life?",
         },
-      ])
-      setIsLoading(false)
-    }, 2000)
-  }
+      ]);
+      setIsLoading(false);
+    }, 2000);
+  };
 
   const handleDraftFeedback = () => {
-    setIsLoading(true)
+    setIsLoading(true);
 
     // Simulate AI generating feedback
     setTimeout(() => {
       toast({
-        title: "Draft Feedback Generated",
-        description: "Your draft has been analyzed and feedback is ready",
-      })
-      setIsLoading(false)
-    }, 3000)
-  }
+        title: 'Draft Feedback Generated',
+        description: 'Your draft has been analyzed and feedback is ready',
+      });
+      setIsLoading(false);
+    }, 3000);
+  };
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -73,17 +86,22 @@ export default function FeedbackPage() {
           <Card className="h-[600px] flex flex-col">
             <CardHeader>
               <CardTitle>Chat with AI Tutor</CardTitle>
-              <CardDescription>Ask questions about your coursework and get instant help</CardDescription>
+              <CardDescription>
+                Ask questions about your coursework and get instant help
+              </CardDescription>
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto">
               <div className="space-y-4">
                 {chatHistory.map((chat, index) => (
-                  <div key={index} className={`flex ${chat.role === "assistant" ? "justify-start" : "justify-end"}`}>
+                  <div
+                    key={index}
+                    className={`flex ${chat.role === 'assistant' ? 'justify-start' : 'justify-end'}`}
+                  >
                     <div
                       className={`rounded-lg px-4 py-2 max-w-[80%] ${
-                        chat.role === "assistant"
-                          ? "bg-muted text-muted-foreground"
-                          : "bg-primary text-primary-foreground"
+                        chat.role === 'assistant'
+                          ? 'bg-muted text-muted-foreground'
+                          : 'bg-primary text-primary-foreground'
                       }`}
                     >
                       {chat.content}
@@ -107,9 +125,9 @@ export default function FeedbackPage() {
                   onChange={(e) => setMessage(e.target.value)}
                   className="flex-1"
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault()
-                      handleSendMessage()
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage();
                     }
                   }}
                 />
@@ -167,7 +185,11 @@ export default function FeedbackPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="notes">Additional Notes (Optional)</Label>
-                <Textarea id="notes" placeholder="Any specific areas you'd like feedback on?" rows={4} />
+                <Textarea
+                  id="notes"
+                  placeholder="Any specific areas you'd like feedback on?"
+                  rows={4}
+                />
               </div>
             </CardContent>
             <CardFooter>
@@ -189,5 +211,5 @@ export default function FeedbackPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

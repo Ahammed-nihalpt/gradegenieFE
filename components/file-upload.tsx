@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import type React from "react";
+import type React from 'react';
 
-import { useState, useRef } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useRef } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -12,12 +12,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useToast } from "@/hooks/use-toast";
-import { Camera, File, FileText, Plus, Upload, X } from "lucide-react";
+} from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { useToast } from '@/hooks/use-toast';
+import { Camera, File, FileText, Plus, Upload, X } from 'lucide-react';
 
 interface FileUploadProps {
   onUploadComplete?: (files: File[], images: string[]) => void;
@@ -29,12 +29,12 @@ interface FileUploadProps {
 export function FileUpload({
   onUploadComplete,
   trigger,
-  title = "Upload Files",
-  description = "Upload files or take photos",
+  title = 'Upload Files',
+  description = 'Upload files or take photos',
 }: FileUploadProps) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("file");
+  const [activeTab, setActiveTab] = useState('file');
   const [capturedImages, setCapturedImages] = useState<string[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
@@ -67,13 +67,13 @@ export function FileUpload({
 
   const handleUpload = () => {
     if (
-      (activeTab === "file" && selectedFiles.length === 0) ||
-      (activeTab === "camera" && capturedImages.length === 0)
+      (activeTab === 'file' && selectedFiles.length === 0) ||
+      (activeTab === 'camera' && capturedImages.length === 0)
     ) {
       toast({
-        title: "No files selected",
-        description: "Please select files or capture images to upload",
-        variant: "destructive",
+        title: 'No files selected',
+        description: 'Please select files or capture images to upload',
+        variant: 'destructive',
       });
       return;
     }
@@ -92,8 +92,8 @@ export function FileUpload({
           setOpen(false);
 
           toast({
-            title: "Upload complete",
-            description: "Your files have been uploaded successfully",
+            title: 'Upload complete',
+            description: 'Your files have been uploaded successfully',
           });
 
           // Reset the form
@@ -120,16 +120,16 @@ export function FileUpload({
   };
 
   const getFileIcon = (fileName: string) => {
-    const extension = fileName.split(".").pop()?.toLowerCase();
+    const extension = fileName.split('.').pop()?.toLowerCase();
 
     switch (extension) {
-      case "pdf":
+      case 'pdf':
         return <FileText className="h-5 w-5 text-red-500" />;
-      case "doc":
-      case "docx":
+      case 'doc':
+      case 'docx':
         return <FileText className="h-5 w-5 text-blue-500" />;
-      case "ppt":
-      case "pptx":
+      case 'ppt':
+      case 'pptx':
         return <FileText className="h-5 w-5 text-orange-500" />;
       default:
         return <File className="h-5 w-5 text-gray-500" />;
@@ -138,9 +138,7 @@ export function FileUpload({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger || <Button>Upload Files</Button>}
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger || <Button>Upload Files</Button>}</DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
@@ -167,12 +165,8 @@ export function FileUpload({
                 accept=".pdf,.doc,.docx,.ppt,.pptx"
               />
               <Upload className="h-10 w-10 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm font-medium">
-                Click to upload or drag and drop
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                PDF, DOCX, PPT (Max 10MB)
-              </p>
+              <p className="text-sm font-medium">Click to upload or drag and drop</p>
+              <p className="text-xs text-gray-500 mt-1">PDF, DOCX, PPT (Max 10MB)</p>
             </div>
 
             {selectedFiles.length > 0 && (
@@ -187,15 +181,9 @@ export function FileUpload({
                       >
                         <div className="flex items-center gap-2">
                           {getFileIcon(file.name)}
-                          <span className="text-sm truncate max-w-[300px]">
-                            {file.name}
-                          </span>
+                          <span className="text-sm truncate max-w-[300px]">{file.name}</span>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeFile(index)}
-                        >
+                        <Button variant="ghost" size="icon" onClick={() => removeFile(index)}>
                           <X className="h-4 w-4" />
                         </Button>
                       </div>
@@ -233,7 +221,7 @@ export function FileUpload({
                   {capturedImages.map((image, index) => (
                     <div key={index} className="relative">
                       <img
-                        src={image || "/placeholder.svg"}
+                        src={image || '/placeholder.svg'}
                         alt={`Captured ${index + 1}`}
                         className="w-full h-32 object-cover rounded"
                       />
@@ -270,15 +258,11 @@ export function FileUpload({
         )}
 
         <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={() => setOpen(false)}
-            disabled={isUploading}
-          >
+          <Button variant="outline" onClick={() => setOpen(false)} disabled={isUploading}>
             Cancel
           </Button>
           <Button onClick={handleUpload} disabled={isUploading}>
-            {isUploading ? "Uploading..." : "Upload"}
+            {isUploading ? 'Uploading...' : 'Upload'}
           </Button>
         </DialogFooter>
       </DialogContent>

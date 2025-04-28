@@ -1,7 +1,7 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Logo } from "@/components/logo"
-import { Mail } from "lucide-react"
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/logo';
+import { Mail } from 'lucide-react';
 
 export default function ForgotPasswordConfirmationPage() {
   return (
@@ -23,7 +23,7 @@ export default function ForgotPasswordConfirmationPage() {
           </Button>
           <div className="text-center text-sm">
             <p>
-              Didn't receive an email?{" "}
+              Didn't receive an email?{' '}
               <Link href="/forgot-password" className="text-primary hover:underline">
                 Try again
               </Link>
@@ -32,5 +32,5 @@ export default function ForgotPasswordConfirmationPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

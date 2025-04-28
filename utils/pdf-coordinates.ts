@@ -5,14 +5,14 @@ export function pdfToScreenCoordinates(
   pdfX: number,
   pdfY: number,
   pageElement: HTMLElement,
-  scale: number,
+  scale: number
 ): { x: number; y: number } {
-  const { left, top } = pageElement.getBoundingClientRect()
+  const { left, top } = pageElement.getBoundingClientRect();
 
   return {
     x: left + pdfX * scale,
     y: top + pdfY * scale,
-  }
+  };
 }
 
 /**
@@ -22,14 +22,14 @@ export function screenToPdfCoordinates(
   screenX: number,
   screenY: number,
   pageElement: HTMLElement,
-  scale: number,
+  scale: number
 ): { x: number; y: number } {
-  const { left, top } = pageElement.getBoundingClientRect()
+  const { left, top } = pageElement.getBoundingClientRect();
 
   return {
     x: (screenX - left) / scale,
     y: (screenY - top) / scale,
-  }
+  };
 }
 
 /**
@@ -37,12 +37,12 @@ export function screenToPdfCoordinates(
  */
 export function adjustHighlightForScale(
   position: { x: number; y: number; width: number; height: number },
-  scale: number,
+  scale: number
 ): { x: number; y: number; width: number; height: number } {
   return {
     x: position.x * scale,
     y: position.y * scale,
     width: position.width * scale,
     height: position.height * scale,
-  }
+  };
 }

@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { BookOpen, Calendar, FileText, MessageSquare, Upload } from "lucide-react"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { BookOpen, Calendar, FileText, MessageSquare, Upload } from 'lucide-react';
 
 export default function StudentDashboardPage() {
   return (
@@ -139,7 +139,8 @@ export default function StudentDashboardPage() {
             <div className="rounded-lg border p-4">
               <h3 className="text-sm font-medium">Ask a Question</h3>
               <p className="text-xs text-muted-foreground mt-1">
-                Your AI tutor can help with course concepts, assignment clarification, and study tips.
+                Your AI tutor can help with course concepts, assignment clarification, and study
+                tips.
               </p>
               <div className="mt-4 flex gap-2">
                 <Button variant="outline" className="flex-1">
@@ -164,94 +165,94 @@ export default function StudentDashboardPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
 
 const upcomingDeadlines = [
   {
-    id: "1",
-    title: "Research Paper",
-    course: "Introduction to Psychology",
-    dueDate: "Tomorrow",
+    id: '1',
+    title: 'Research Paper',
+    course: 'Introduction to Psychology',
+    dueDate: 'Tomorrow',
   },
   {
-    id: "2",
-    title: "Problem Set 3",
-    course: "Advanced Statistics",
-    dueDate: "2 days",
+    id: '2',
+    title: 'Problem Set 3',
+    course: 'Advanced Statistics',
+    dueDate: '2 days',
   },
   {
-    id: "3",
-    title: "Group Project",
-    course: "Environmental Science",
-    dueDate: "4 days",
+    id: '3',
+    title: 'Group Project',
+    course: 'Environmental Science',
+    dueDate: '4 days',
   },
   {
-    id: "4",
-    title: "Short Story",
-    course: "Creative Writing",
-    dueDate: "7 days",
+    id: '4',
+    title: 'Short Story',
+    course: 'Creative Writing',
+    dueDate: '7 days',
   },
-]
+];
 
 const courseProgress = [
   {
-    id: "1",
-    title: "Introduction to Psychology",
+    id: '1',
+    title: 'Introduction to Psychology',
     completed: 5,
     total: 8,
     progress: 62.5,
-    grade: "A-",
+    grade: 'A-',
   },
   {
-    id: "2",
-    title: "Advanced Statistics",
+    id: '2',
+    title: 'Advanced Statistics',
     completed: 9,
     total: 12,
     progress: 75,
-    grade: "B+",
+    grade: 'B+',
   },
   {
-    id: "3",
-    title: "Environmental Science",
+    id: '3',
+    title: 'Environmental Science',
     completed: 4,
     total: 6,
     progress: 66.7,
-    grade: "A",
+    grade: 'A',
   },
   {
-    id: "4",
-    title: "Creative Writing",
+    id: '4',
+    title: 'Creative Writing',
     completed: 8,
     total: 10,
     progress: 80,
-    grade: "A-",
+    grade: 'A-',
   },
-]
+];
 
 const recentFeedback = [
   {
-    id: "1",
-    assignment: "Midterm Exam",
-    course: "Introduction to Psychology",
-    grade: "A (92%)",
+    id: '1',
+    assignment: 'Midterm Exam',
+    course: 'Introduction to Psychology',
+    grade: 'A (92%)',
     comment:
-      "Excellent work! Your analysis of cognitive biases was particularly insightful. Consider exploring the practical applications of these concepts in your future work.",
+      'Excellent work! Your analysis of cognitive biases was particularly insightful. Consider exploring the practical applications of these concepts in your future work.',
   },
   {
-    id: "2",
-    assignment: "Problem Set 2",
-    course: "Advanced Statistics",
-    grade: "B+ (88%)",
+    id: '2',
+    assignment: 'Problem Set 2',
+    course: 'Advanced Statistics',
+    grade: 'B+ (88%)',
     comment:
-      "Good job on the regression analysis. Your interpretation of the results could be more detailed. Make sure to explain the practical significance of your findings.",
+      'Good job on the regression analysis. Your interpretation of the results could be more detailed. Make sure to explain the practical significance of your findings.',
   },
   {
-    id: "3",
-    assignment: "Essay 1",
-    course: "Creative Writing",
-    grade: "A- (90%)",
+    id: '3',
+    assignment: 'Essay 1',
+    course: 'Creative Writing',
+    grade: 'A- (90%)',
     comment:
-      "Your narrative voice is developing nicely. Pay attention to pacing in the middle section, and consider how dialogue can reveal character more effectively.",
+      'Your narrative voice is developing nicely. Pay attention to pacing in the middle section, and consider how dialogue can reveal character more effectively.',
   },
-]
+];

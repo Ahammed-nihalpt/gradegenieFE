@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Upload, Users } from "lucide-react";
+import { Upload, Users } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -10,34 +10,30 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { StudentsList } from "./students-list";
-import { CoTeachersList } from "./co-teachers-list";
-import { useToast } from "@/components/ui/toast";
-import { AddStudentForm } from "./_components/add-student-form";
-import { AddCoTeacherForm } from "./_components/add-co-teacher-form";
-import { useStudentByUserId } from "@/hooks/use-student";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import api from "@/lib/axios";
+} from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { StudentsList } from './students-list';
+import { CoTeachersList } from './co-teachers-list';
+import { useToast } from '@/components/ui/toast';
+import { AddStudentForm } from './_components/add-student-form';
+import { AddCoTeacherForm } from './_components/add-co-teacher-form';
+import { useStudentByUserId } from '@/hooks/use-student';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import api from '@/lib/axios';
 
 export default function ClassroomPage() {
   const { data: session } = useSession();
-  const { data: students } = useStudentByUserId(session?.user.id || "");
-  const [submissionsThisMonth, setSubmissionsThisMonth] = useState<
-    number | null
-  >(null);
+  const { data: students } = useStudentByUserId(session?.user.id || '');
+  const [submissionsThisMonth, setSubmissionsThisMonth] = useState<number | null>(null);
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
-        const response = await api.get(
-          `/submission/total/by/month/${session?.user.id}`
-        );
-        console.log("🚀 ~ fetchSubmissions ~ response:", response.data.total);
+        const response = await api.get(`/submission/total/by/month/${session?.user.id}`);
+        console.log('🚀 ~ fetchSubmissions ~ response:', response.data.total);
         setSubmissionsThisMonth(response.data.total);
       } catch (error) {
-        console.error("Error fetching submissions this month:", error);
+        console.error('Error fetching submissions this month:', error);
       }
     };
     if (session?.user.id) {
@@ -48,9 +44,7 @@ export default function ClassroomPage() {
     <div className="container py-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Classroom Management
-          </h1>
+          <h1 className="text-3xl font-bold tracking-tight">Classroom Management</h1>
           <p className="text-muted-foreground">
             Manage your students and co-teachers for all your classes
           </p>
@@ -68,21 +62,15 @@ export default function ClassroomPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Students
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Total Students</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
-                  {students?.length || 0}
-                </div>
+                <div className="text-2xl font-bold">{students?.length || 0}</div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Active Classes
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Active Classes</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">5</div>
@@ -90,9 +78,7 @@ export default function ClassroomPage() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Average Class Size
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Average Class Size</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">25</div>
@@ -100,14 +86,10 @@ export default function ClassroomPage() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Submissions This Month
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Submissions This Month</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
-                  {submissionsThisMonth || 0}
-                </div>
+                <div className="text-2xl font-bold">{submissionsThisMonth || 0}</div>
               </CardContent>
             </Card>
           </div>
@@ -132,8 +114,8 @@ export default function ClassroomPage() {
             <CardHeader>
               <CardTitle>Co-Teacher Management</CardTitle>
               <CardDescription>
-                Share access to your classes with other teachers. Each
-                co-teacher counts as one seat in your plan.
+                Share access to your classes with other teachers. Each co-teacher counts as one seat
+                in your plan.
               </CardDescription>
             </CardHeader>
             <CardContent>

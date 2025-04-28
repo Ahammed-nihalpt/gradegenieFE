@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import Link from 'next/link';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -10,17 +10,17 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { CalendarDays, FileText, Plus, Search } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
-import { useAssignment } from "@/hooks/use-assignment";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { CalendarDays, FileText, Plus, Search } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { useAssignment } from '@/hooks/use-assignment';
 
 export default function AssignmentsPage() {
   const { toast } = useToast();
   const { data: assignments = [] } = useAssignment();
-  const [searchQuery, setSearchQuery] = useState(""); // <-- Add search query state
+  const [searchQuery, setSearchQuery] = useState(''); // <-- Add search query state
 
   // Filter assignments based on search query
   const filteredAssignments = assignments.filter((assignment) =>
@@ -61,15 +61,9 @@ export default function AssignmentsPage() {
               <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
                 <div className="space-y-1">
                   <CardTitle>{assignment.title}</CardTitle>
-                  <CardDescription>
-                    {assignment?.courseId?.name}
-                  </CardDescription>
+                  <CardDescription>{assignment?.courseId?.name}</CardDescription>
                 </div>
-                <Badge
-                  variant={
-                    assignment.status === "active" ? "outline" : "secondary"
-                  }
-                >
+                <Badge variant={assignment.status === 'active' ? 'outline' : 'secondary'}>
                   {assignment.status}
                 </Badge>
               </CardHeader>
@@ -86,10 +80,7 @@ export default function AssignmentsPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Link
-                  href={`/dashboard/assignments/${assignment._id}`}
-                  className="w-full"
-                >
+                <Link href={`/dashboard/assignments/${assignment._id}`} className="w-full">
                   <Button variant="outline" className="w-full">
                     View Details
                   </Button>

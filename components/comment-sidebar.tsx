@@ -1,22 +1,22 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import type { Comment } from "@/types/comments"
-import { CommentCard } from "./comment-card"
-import { Sparkles, Plus, X } from "lucide-react"
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import type { Comment } from '@/types/comments';
+import { CommentCard } from './comment-card';
+import { Sparkles, Plus, X } from 'lucide-react';
 
 interface CommentSidebarProps {
-  comments: Comment[]
-  activeCommentId: string | null
-  selectedText: string
-  onAddComment: (text: string) => void
-  onUpdateComment: (id: string, text: string) => void
-  onDeleteComment: (id: string) => void
-  onCommentSelect: (id: string | null) => void
-  readOnly?: boolean
+  comments: Comment[];
+  activeCommentId: string | null;
+  selectedText: string;
+  onAddComment: (text: string) => void;
+  onUpdateComment: (id: string, text: string) => void;
+  onDeleteComment: (id: string) => void;
+  onCommentSelect: (id: string | null) => void;
+  readOnly?: boolean;
 }
 
 export function CommentSidebar({
@@ -29,54 +29,54 @@ export function CommentSidebar({
   onCommentSelect,
   readOnly = false,
 }: CommentSidebarProps) {
-  const [newComment, setNewComment] = useState("")
-  const [isGeneratingAI, setIsGeneratingAI] = useState(false)
+  const [newComment, setNewComment] = useState('');
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 
   // Sort comments by page and position
   const sortedComments = [...comments].sort((a, b) => {
     if (a.highlight.pageIndex !== b.highlight.pageIndex) {
-      return a.highlight.pageIndex - b.highlight.pageIndex
+      return a.highlight.pageIndex - b.highlight.pageIndex;
     }
-    return a.highlight.position.y - b.highlight.position.y
-  })
+    return a.highlight.position.y - b.highlight.position.y;
+  });
 
   // Function to generate AI comment
   async function generateAIComment() {
-    if (!selectedText) return
+    if (!selectedText) return;
 
-    setIsGeneratingAI(true)
+    setIsGeneratingAI(true);
 
     try {
       // Simulate AI generation
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Example AI-generated comment based on selected text
-      let aiComment = "This section could be improved by..."
+      let aiComment = 'This section could be improved by...';
 
       if (selectedText.length < 20) {
-        aiComment = "Consider revising this phrase for clarity."
+        aiComment = 'Consider revising this phrase for clarity.';
       } else if (
-        selectedText.toLowerCase().includes("however") ||
-        selectedText.toLowerCase().includes("but") ||
-        selectedText.toLowerCase().includes("although")
+        selectedText.toLowerCase().includes('however') ||
+        selectedText.toLowerCase().includes('but') ||
+        selectedText.toLowerCase().includes('although')
       ) {
-        aiComment = "Good use of transition words to connect contrasting ideas."
+        aiComment = 'Good use of transition words to connect contrasting ideas.';
       } else if (selectedText.length > 100) {
         aiComment =
-          "This paragraph is well-structured but could benefit from more specific examples to support your argument."
+          'This paragraph is well-structured but could benefit from more specific examples to support your argument.';
       }
 
-      setNewComment(aiComment)
+      setNewComment(aiComment);
     } finally {
-      setIsGeneratingAI(false)
+      setIsGeneratingAI(false);
     }
   }
 
   // Function to handle comment submission
   function handleSubmitComment() {
     if (newComment.trim()) {
-      onAddComment(newComment.trim())
-      setNewComment("")
+      onAddComment(newComment.trim());
+      setNewComment('');
     }
   }
 
@@ -114,9 +114,14 @@ export function CommentSidebar({
                   disabled={isGeneratingAI}
                 >
                   <Sparkles className="h-3.5 w-3.5 mr-1" />
-                  {isGeneratingAI ? "Generating..." : "AI Suggest"}
+                  {isGeneratingAI ? 'Generating...' : 'AI Suggest'}
                 </Button>
-                <Button size="sm" className="flex-1" onClick={handleSubmitComment} disabled={!newComment.trim()}>
+                <Button
+                  size="sm"
+                  className="flex-1"
+                  onClick={handleSubmitComment}
+                  disabled={!newComment.trim()}
+                >
                   <Plus className="h-3.5 w-3.5 mr-1" />
                   Add
                 </Button>
@@ -126,7 +131,7 @@ export function CommentSidebar({
 
           {sortedComments.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              {readOnly ? "No comments on this document" : "Select text to add comments"}
+              {readOnly ? 'No comments on this document' : 'Select text to add comments'}
             </div>
           ) : (
             sortedComments.map((comment) => (
@@ -144,5 +149,5 @@ export function CommentSidebar({
         </div>
       </ScrollArea>
     </div>
-  )
+  );
 }

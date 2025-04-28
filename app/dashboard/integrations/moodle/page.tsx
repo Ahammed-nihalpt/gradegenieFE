@@ -1,19 +1,19 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { ArrowLeft, ExternalLink, Info } from "lucide-react"
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowLeft, ExternalLink, Info } from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { PageHeader } from "@/components/page-header"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { PageHeader } from '@/components/page-header';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export const metadata: Metadata = {
-  title: "Moodle Integration | GradeGenie",
-  description: "Connect GradeGenie with Moodle",
-}
+  title: 'Moodle Integration | GradeGenie',
+  description: 'Connect GradeGenie with Moodle',
+};
 
 export default function MoodleIntegrationPage() {
   return (
@@ -38,7 +38,9 @@ export default function MoodleIntegrationPage() {
           <Card>
             <CardHeader>
               <CardTitle>Connection Setup</CardTitle>
-              <CardDescription>Follow these steps to connect GradeGenie with your Moodle instance.</CardDescription>
+              <CardDescription>
+                Follow these steps to connect GradeGenie with your Moodle instance.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <Alert>
@@ -74,7 +76,8 @@ export default function MoodleIntegrationPage() {
                 <Label htmlFor="token">Web Services Token</Label>
                 <Input id="token" placeholder="Your Moodle web services token" />
                 <p className="text-xs text-muted-foreground">
-                  Create a token in Moodle: Site administration → Plugins → Web services → Manage tokens
+                  Create a token in Moodle: Site administration → Plugins → Web services → Manage
+                  tokens
                 </p>
               </div>
 
@@ -91,12 +94,18 @@ export default function MoodleIntegrationPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <SyncItem title="Courses" description="Import your Moodle courses into GradeGenie." />
-              <SyncItem title="Students" description="Sync student roster information from Moodle." />
+              <SyncItem
+                title="Students"
+                description="Sync student roster information from Moodle."
+              />
               <SyncItem
                 title="Assignments"
                 description="Import existing assignments or create new ones that sync back to Moodle."
               />
-              <SyncItem title="Submissions" description="Access student submissions made through Moodle." />
+              <SyncItem
+                title="Submissions"
+                description="Access student submissions made through Moodle."
+              />
               <SyncItem
                 title="Grades & Feedback"
                 description="Push grades and feedback from GradeGenie to Moodle gradebook."
@@ -106,7 +115,7 @@ export default function MoodleIntegrationPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function SyncItem({ title, description }: { title: string; description: string }) {
@@ -116,5 +125,5 @@ function SyncItem({ title, description }: { title: string; description: string }
       <p className="text-sm text-muted-foreground">{description}</p>
       <Separator className="mt-2" />
     </div>
-  )
+  );
 }

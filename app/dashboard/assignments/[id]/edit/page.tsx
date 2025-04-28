@@ -1,53 +1,43 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2, Save, ArrowLeft } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { Badge } from "@/components/ui/badge";
-import { useAssignmentById } from "@/hooks/use-assignment";
-import api from "@/lib/axios";
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Loader2, Save, ArrowLeft } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
+import { useAssignmentById } from '@/hooks/use-assignment';
+import api from '@/lib/axios';
 
 export default function EditAssignmentPage() {
   const router = useRouter();
   const { id }: { id: string } = useParams();
-  const {
-    data: assignmentData,
-    isLoading: assignmentLoading,
-    refetch,
-  } = useAssignmentById(id);
+  const { data: assignmentData, isLoading: assignmentLoading, refetch } = useAssignmentById(id);
   const { toast } = useToast();
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [assignment, setAssignment] = useState({
-    title: "",
-    description: "",
-    dueDate: "",
+    title: '',
+    description: '',
+    dueDate: '',
     totalPoints: 100,
-    course: "",
-    type: "essay",
-    rubric: "",
-    instructions: "",
+    course: '',
+    type: 'essay',
+    rubric: '',
+    instructions: '',
     publishToLMS: [] as string[],
   });
 
@@ -56,15 +46,15 @@ export default function EditAssignmentPage() {
     // In a real app, this would be an API call to fetch the assignment data
     setTimeout(() => {
       setAssignment({
-        title: assignmentData?.title || "",
-        description: assignmentData?.description || "",
-        dueDate: assignmentData?.dueDate || "",
+        title: assignmentData?.title || '',
+        description: assignmentData?.description || '',
+        dueDate: assignmentData?.dueDate || '',
         totalPoints: 100,
-        course: assignmentData?.courseId?.name || "",
-        type: assignmentData?.assignmentType.toLocaleLowerCase() || "",
-        rubric: assignmentData?.rubric || "",
-        instructions: assignmentData?.instructions || "",
-        publishToLMS: ["Canvas"],
+        course: assignmentData?.courseId?.name || '',
+        type: assignmentData?.assignmentType.toLocaleLowerCase() || '',
+        rubric: assignmentData?.rubric || '',
+        instructions: assignmentData?.instructions || '',
+        publishToLMS: ['Canvas'],
       });
       setIsLoading(false);
     }, 1000);
@@ -77,8 +67,8 @@ export default function EditAssignmentPage() {
       await api.put(`/assignment/edit/${id}`, assignment);
     } catch (error) {
       toast({
-        title: "Something went wrong",
-        description: "Please try again",
+        title: 'Something went wrong',
+        description: 'Please try again',
       });
     }
 
@@ -87,8 +77,8 @@ export default function EditAssignmentPage() {
       setIsSaving(false);
 
       toast({
-        title: "Assignment Updated",
-        description: "Your assignment has been updated successfully",
+        title: 'Assignment Updated',
+        description: 'Your assignment has been updated successfully',
       });
 
       // Navigate back to the assignment details page
@@ -136,9 +126,7 @@ export default function EditAssignmentPage() {
           <Card>
             <CardHeader>
               <CardTitle>Basic Information</CardTitle>
-              <CardDescription>
-                Edit the basic details of your assignment
-              </CardDescription>
+              <CardDescription>Edit the basic details of your assignment</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -146,9 +134,7 @@ export default function EditAssignmentPage() {
                 <Input
                   id="assignment-title"
                   value={assignment.title}
-                  onChange={(e) =>
-                    setAssignment({ ...assignment, title: e.target.value })
-                  }
+                  onChange={(e) => setAssignment({ ...assignment, title: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
@@ -201,9 +187,7 @@ export default function EditAssignmentPage() {
                 <Label htmlFor="assignment-type">Assignment Type</Label>
                 <Select
                   value={assignment.type}
-                  onValueChange={(value) =>
-                    setAssignment({ ...assignment, type: value })
-                  }
+                  onValueChange={(value) => setAssignment({ ...assignment, type: value })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select assignment type" />
@@ -227,16 +211,12 @@ export default function EditAssignmentPage() {
           <Card>
             <CardHeader>
               <CardTitle>Assignment Instructions</CardTitle>
-              <CardDescription>
-                Edit the detailed instructions for this assignment
-              </CardDescription>
+              <CardDescription>Edit the detailed instructions for this assignment</CardDescription>
             </CardHeader>
             <CardContent>
               <Textarea
                 value={assignment.instructions}
-                onChange={(e) =>
-                  setAssignment({ ...assignment, instructions: e.target.value })
-                }
+                onChange={(e) => setAssignment({ ...assignment, instructions: e.target.value })}
                 className="min-h-[400px] font-mono"
               />
             </CardContent>
@@ -247,16 +227,12 @@ export default function EditAssignmentPage() {
           <Card>
             <CardHeader>
               <CardTitle>Grading Rubric</CardTitle>
-              <CardDescription>
-                Edit the rubric used to grade this assignment
-              </CardDescription>
+              <CardDescription>Edit the rubric used to grade this assignment</CardDescription>
             </CardHeader>
             <CardContent>
               <Textarea
                 value={assignment.rubric}
-                onChange={(e) =>
-                  setAssignment({ ...assignment, rubric: e.target.value })
-                }
+                onChange={(e) => setAssignment({ ...assignment, rubric: e.target.value })}
                 className="min-h-[400px] font-mono"
               />
             </CardContent>
@@ -267,9 +243,7 @@ export default function EditAssignmentPage() {
           <Card>
             <CardHeader>
               <CardTitle>Assignment Settings</CardTitle>
-              <CardDescription>
-                Configure additional settings for this assignment
-              </CardDescription>
+              <CardDescription>Configure additional settings for this assignment</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -279,21 +253,18 @@ export default function EditAssignmentPage() {
                     <div className="flex items-center space-x-2">
                       <Checkbox
                         id="canvas"
-                        checked={assignment.publishToLMS.includes("Canvas")}
+                        checked={assignment.publishToLMS.includes('Canvas')}
                         onCheckedChange={(checked) => {
                           if (checked) {
                             setAssignment({
                               ...assignment,
-                              publishToLMS: [
-                                ...assignment.publishToLMS,
-                                "Canvas",
-                              ],
+                              publishToLMS: [...assignment.publishToLMS, 'Canvas'],
                             });
                           } else {
                             setAssignment({
                               ...assignment,
                               publishToLMS: assignment.publishToLMS.filter(
-                                (lms) => lms !== "Canvas"
+                                (lms) => lms !== 'Canvas'
                               ),
                             });
                           }
@@ -315,32 +286,24 @@ export default function EditAssignmentPage() {
                     <div className="flex items-center space-x-2">
                       <Checkbox
                         id="google-classroom"
-                        checked={assignment.publishToLMS.includes(
-                          "Google Classroom"
-                        )}
+                        checked={assignment.publishToLMS.includes('Google Classroom')}
                         onCheckedChange={(checked) => {
                           if (checked) {
                             setAssignment({
                               ...assignment,
-                              publishToLMS: [
-                                ...assignment.publishToLMS,
-                                "Google Classroom",
-                              ],
+                              publishToLMS: [...assignment.publishToLMS, 'Google Classroom'],
                             });
                           } else {
                             setAssignment({
                               ...assignment,
                               publishToLMS: assignment.publishToLMS.filter(
-                                (lms) => lms !== "Google Classroom"
+                                (lms) => lms !== 'Google Classroom'
                               ),
                             });
                           }
                         }}
                       />
-                      <Label
-                        htmlFor="google-classroom"
-                        className="text-sm font-normal"
-                      >
+                      <Label htmlFor="google-classroom" className="text-sm font-normal">
                         Publish to Google Classroom
                       </Label>
                     </div>
@@ -348,7 +311,7 @@ export default function EditAssignmentPage() {
                       variant="outline"
                       size="sm"
                       className="h-7 text-xs"
-                      onClick={() => router.push("/dashboard/integrations")}
+                      onClick={() => router.push('/dashboard/integrations')}
                     >
                       Connect
                     </Button>
@@ -361,10 +324,7 @@ export default function EditAssignmentPage() {
                 <div className="space-y-3 rounded-md border p-4">
                   <div className="flex items-center space-x-2">
                     <Checkbox id="plagiarism-check" defaultChecked />
-                    <Label
-                      htmlFor="plagiarism-check"
-                      className="text-sm font-normal"
-                    >
+                    <Label htmlFor="plagiarism-check" className="text-sm font-normal">
                       Enable plagiarism detection
                     </Label>
                   </div>
@@ -378,10 +338,7 @@ export default function EditAssignmentPage() {
 
                   <div className="flex items-center space-x-2">
                     <Checkbox id="late-submissions" />
-                    <Label
-                      htmlFor="late-submissions"
-                      className="text-sm font-normal"
-                    >
+                    <Label htmlFor="late-submissions" className="text-sm font-normal">
                       Allow late submissions
                     </Label>
                   </div>

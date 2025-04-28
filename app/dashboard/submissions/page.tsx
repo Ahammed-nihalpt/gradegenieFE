@@ -1,199 +1,216 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { SubmissionDetailsDialog } from "@/components/submission-details-dialog"
-import { Download, ChevronDown, Search, FileText, ExternalLink } from "lucide-react"
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { SubmissionDetailsDialog } from '@/components/submission-details-dialog';
+import { Download, ChevronDown, Search, FileText, ExternalLink } from 'lucide-react';
 
 // Mock data for submissions
 const submissions = [
   {
-    id: "1",
-    studentName: "Emma Johnson",
-    fileName: "Macbeth_Analysis.pdf",
-    fileUrl: "/placeholder.svg?height=800&width=600",
+    id: '1',
+    studentName: 'Emma Johnson',
+    fileName: 'Macbeth_Analysis.pdf',
+    fileUrl: '/placeholder.svg?height=800&width=600',
     score: 85,
     maxScore: 100,
-    comments: "Excellent analysis of themes.",
-    status: "Graded",
-    submittedAt: "2023-05-15T14:30:00Z",
+    comments: 'Excellent analysis of themes.',
+    status: 'Graded',
+    submittedAt: '2023-05-15T14:30:00Z',
     aiPercentage: 32,
     plagiarismPercentage: 3,
   },
   {
-    id: "2",
-    studentName: "Michael Chen",
-    fileName: "Shakespeare_Essay.pdf",
-    fileUrl: "/placeholder.svg?height=800&width=600",
+    id: '2',
+    studentName: 'Michael Chen',
+    fileName: 'Shakespeare_Essay.pdf',
+    fileUrl: '/placeholder.svg?height=800&width=600',
     score: 92,
     maxScore: 100,
-    comments: "Outstanding work on character development.",
-    status: "Graded",
-    submittedAt: "2023-05-14T09:15:00Z",
+    comments: 'Outstanding work on character development.',
+    status: 'Graded',
+    submittedAt: '2023-05-14T09:15:00Z',
     aiPercentage: 12,
     plagiarismPercentage: 2,
   },
   {
-    id: "3",
-    studentName: "Sophia Rodriguez",
-    fileName: "Literary_Analysis.pdf",
-    fileUrl: "/placeholder.svg?height=800&width=600",
+    id: '3',
+    studentName: 'Sophia Rodriguez',
+    fileName: 'Literary_Analysis.pdf',
+    fileUrl: '/placeholder.svg?height=800&width=600',
     score: 78,
     maxScore: 100,
-    comments: "Good insights, but needs more textual evidence.",
-    status: "Graded",
-    submittedAt: "2023-05-16T11:45:00Z",
+    comments: 'Good insights, but needs more textual evidence.',
+    status: 'Graded',
+    submittedAt: '2023-05-16T11:45:00Z',
     aiPercentage: 45,
     plagiarismPercentage: 8,
   },
   {
-    id: "4",
-    studentName: "James Wilson",
-    fileName: "Macbeth_Essay.pdf",
-    fileUrl: "/placeholder.svg?height=800&width=600",
+    id: '4',
+    studentName: 'James Wilson',
+    fileName: 'Macbeth_Essay.pdf',
+    fileUrl: '/placeholder.svg?height=800&width=600',
     score: null,
     maxScore: 100,
-    comments: "",
-    status: "Submitted",
-    submittedAt: "2023-05-17T16:20:00Z",
+    comments: '',
+    status: 'Submitted',
+    submittedAt: '2023-05-17T16:20:00Z',
     aiPercentage: 0,
     plagiarismPercentage: 0,
   },
   {
-    id: "5",
-    studentName: "Olivia Kim",
-    fileName: "Character_Analysis.pdf",
-    fileUrl: "/placeholder.svg?height=800&width=600",
+    id: '5',
+    studentName: 'Olivia Kim',
+    fileName: 'Character_Analysis.pdf',
+    fileUrl: '/placeholder.svg?height=800&width=600',
     score: null,
     maxScore: 100,
-    comments: "",
-    status: "Submitted",
-    submittedAt: "2023-05-17T10:30:00Z",
+    comments: '',
+    status: 'Submitted',
+    submittedAt: '2023-05-17T10:30:00Z',
     aiPercentage: 0,
     plagiarismPercentage: 0,
   },
   {
-    id: "6",
-    studentName: "Ethan Brown",
-    fileName: "Theme_Analysis.pdf",
-    fileUrl: "/placeholder.svg?height=800&width=600",
+    id: '6',
+    studentName: 'Ethan Brown',
+    fileName: 'Theme_Analysis.pdf',
+    fileUrl: '/placeholder.svg?height=800&width=600',
     score: 88,
     maxScore: 100,
-    comments: "Well-structured analysis with strong conclusion.",
-    status: "Graded",
-    submittedAt: "2023-05-15T13:10:00Z",
+    comments: 'Well-structured analysis with strong conclusion.',
+    status: 'Graded',
+    submittedAt: '2023-05-15T13:10:00Z',
     aiPercentage: 18,
     plagiarismPercentage: 4,
   },
   {
-    id: "7",
-    studentName: "Ava Martinez",
-    fileName: "Shakespeare_Themes.pdf",
-    fileUrl: "/placeholder.svg?height=800&width=600",
+    id: '7',
+    studentName: 'Ava Martinez',
+    fileName: 'Shakespeare_Themes.pdf',
+    fileUrl: '/placeholder.svg?height=800&width=600',
     score: 90,
     maxScore: 100,
-    comments: "Excellent use of quotes and analysis.",
-    status: "Graded",
-    submittedAt: "2023-05-14T15:45:00Z",
+    comments: 'Excellent use of quotes and analysis.',
+    status: 'Graded',
+    submittedAt: '2023-05-14T15:45:00Z',
     aiPercentage: 5,
     plagiarismPercentage: 1,
   },
   {
-    id: "8",
-    studentName: "Noah Thompson",
-    fileName: "Macbeth_Characters.pdf",
-    fileUrl: "/placeholder.svg?height=800&width=600",
+    id: '8',
+    studentName: 'Noah Thompson',
+    fileName: 'Macbeth_Characters.pdf',
+    fileUrl: '/placeholder.svg?height=800&width=600',
     score: null,
     maxScore: 100,
-    comments: "Late submission.",
-    status: "Late",
-    submittedAt: "2023-05-18T09:00:00Z",
+    comments: 'Late submission.',
+    status: 'Late',
+    submittedAt: '2023-05-18T09:00:00Z',
     aiPercentage: 60,
     plagiarismPercentage: 15,
   },
-]
+];
 
 export default function SubmissionsPage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedSubmission, setSelectedSubmission] = useState<(typeof submissions)[0] | null>(null)
-  const [dialogOpen, setDialogOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedSubmission, setSelectedSubmission] = useState<(typeof submissions)[0] | null>(
+    null
+  );
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   // Filter submissions based on search query
   const filteredSubmissions = submissions.filter(
     (submission) =>
       submission.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      submission.fileName.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+      submission.fileName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   // Function to get status badge
   function getStatusBadge(status: string) {
     switch (status) {
-      case "graded":
-        return <Badge className="bg-green-500">Graded</Badge>
-      case "submitted":
-        return <Badge className="bg-blue-500">Submitted</Badge>
-      case "pending":
-        return <Badge className="bg-yellow-500">Pending</Badge>
+      case 'graded':
+        return <Badge className="bg-green-500">Graded</Badge>;
+      case 'submitted':
+        return <Badge className="bg-blue-500">Submitted</Badge>;
+      case 'pending':
+        return <Badge className="bg-yellow-500">Pending</Badge>;
       default:
-        return <Badge className="bg-gray-500">Unknown</Badge>
+        return <Badge className="bg-gray-500">Unknown</Badge>;
     }
   }
 
   // Function to get score badge
   function getScoreBadge(score: number, maxScore: number) {
-    if (score === 0 && ["submitted", "pending"].includes(submissions.find((s) => s.score === score)?.status || "")) {
-      return <Badge variant="outline">Not graded</Badge>
+    if (
+      score === 0 &&
+      ['submitted', 'pending'].includes(submissions.find((s) => s.score === score)?.status || '')
+    ) {
+      return <Badge variant="outline">Not graded</Badge>;
     }
 
-    const percentage = (score / maxScore) * 100
+    const percentage = (score / maxScore) * 100;
 
     if (percentage >= 90) {
       return (
         <Badge className="bg-green-500">
           {score}/{maxScore}
         </Badge>
-      )
+      );
     } else if (percentage >= 70) {
       return (
         <Badge className="bg-blue-500">
           {score}/{maxScore}
         </Badge>
-      )
+      );
     } else if (percentage >= 60) {
       return (
         <Badge className="bg-yellow-500">
           {score}/{maxScore}
         </Badge>
-      )
+      );
     } else {
       return (
         <Badge className="bg-red-500">
           {score}/{maxScore}
         </Badge>
-      )
+      );
     }
   }
 
   // Function to format date
   function formatDate(dateString: string) {
-    const date = new Date(dateString)
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
       hour12: true,
-    }).format(date)
+    }).format(date);
   }
 
   // Function to handle opening the submission details
   function handleOpenSubmission(submission: (typeof submissions)[0]) {
-    setSelectedSubmission(submission)
-    setDialogOpen(true)
+    setSelectedSubmission(submission);
+    setDialogOpen(true);
   }
 
   return (
@@ -265,12 +282,18 @@ export default function SubmissionsPage() {
                   </TableCell>
                   <TableCell>{getScoreBadge(submission.score, submission.maxScore)}</TableCell>
                   <TableCell>
-                    <span className="truncate max-w-[200px] block">{submission.comments || "No comments yet"}</span>
+                    <span className="truncate max-w-[200px] block">
+                      {submission.comments || 'No comments yet'}
+                    </span>
                   </TableCell>
                   <TableCell>{getStatusBadge(submission.status)}</TableCell>
                   <TableCell>{formatDate(submission.submittedAt)}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm" onClick={() => handleOpenSubmission(submission)}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleOpenSubmission(submission)}
+                    >
                       <ExternalLink className="h-4 w-4" />
                       <span className="sr-only">View</span>
                     </Button>
@@ -283,8 +306,12 @@ export default function SubmissionsPage() {
       </div>
 
       {selectedSubmission && (
-        <SubmissionDetailsDialog open={dialogOpen} onOpenChange={setDialogOpen} submission={selectedSubmission} />
+        <SubmissionDetailsDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          submission={selectedSubmission}
+        />
       )}
     </div>
-  )
+  );
 }

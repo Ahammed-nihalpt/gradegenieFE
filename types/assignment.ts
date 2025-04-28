@@ -1,4 +1,4 @@
-import { ISubmission } from "./submission";
+import { ISubmission } from './submission';
 
 interface IAssignment {
   assignmentType: string;

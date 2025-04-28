@@ -1,6 +1,6 @@
-"use client";
-import type React from "react";
-import { CheckCircle, ShieldCheck } from "lucide-react";
+'use client';
+import type React from 'react';
+import { CheckCircle, ShieldCheck } from 'lucide-react';
 import {
   Button,
   Card,
@@ -11,33 +11,33 @@ import {
   CardTitle,
   Input,
   Label,
-} from "@/components/ui";
-import Link from "next/link";
-import { Logo } from "@/components/logo";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+} from '@/components/ui';
+import Link from 'next/link';
+import { Logo } from '@/components/logo';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    const res = await signIn("credentials", {
+    const res = await signIn('credentials', {
       redirect: false,
       email,
       password,
     });
 
     if (res?.error) {
-      setError("Invalid credentials");
+      setError('Invalid credentials');
     } else {
-      router.push("/dashboard/assignments"); // or wherever you want to redirect after login
+      router.push('/dashboard/assignments'); // or wherever you want to redirect after login
     }
   };
   return (
@@ -52,8 +52,7 @@ export default function LoginPage() {
             Welcome back to GradeGenie
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300">
-            The AI-powered grading assistant that saves teachers 5+ hours every
-            week.
+            The AI-powered grading assistant that saves teachers 5+ hours every week.
           </p>
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -98,8 +97,8 @@ export default function LoginPage() {
               </div>
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">
-                  "GradeGenie has transformed my teaching workflow. I can focus
-                  on what matters most - teaching!"
+                  "GradeGenie has transformed my teaching workflow. I can focus on what matters most
+                  - teaching!"
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   — Sarah Johnson, High School English Teacher
@@ -120,9 +119,7 @@ export default function LoginPage() {
             <div className="flex justify-center lg:hidden">
               <Logo size="md" />
             </div>
-            <CardTitle className="text-center text-2xl font-bold">
-              Log in to your account
-            </CardTitle>
+            <CardTitle className="text-center text-2xl font-bold">Log in to your account</CardTitle>
             <CardDescription className="text-center">
               Enter your credentials to access your dashboard
             </CardDescription>
@@ -167,11 +164,7 @@ export default function LoginPage() {
                   Forgot password?
                 </Link>
               </div>
-              <Input
-                id="password"
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <Input id="password" type="password" onChange={(e) => setPassword(e.target.value)} />
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
             <Button className="w-full" size="lg" onClick={handleLogin}>
@@ -180,7 +173,7 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 border-t pt-4">
             <div className="text-center text-sm">
-              Don&apos;t have an account?{" "}
+              Don&apos;t have an account?{' '}
               <Link
                 href="/signup"
                 className="font-medium text-primary underline-offset-4 hover:underline"

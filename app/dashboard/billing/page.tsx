@@ -1,73 +1,81 @@
-"use client"
+'use client';
 
-import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
-import Link from "next/link"
-import { ArrowLeft, Check, CreditCard } from "lucide-react"
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { ArrowLeft, Check, CreditCard } from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function BillingPage() {
-  const searchParams = useSearchParams()
-  const planParam = searchParams.get("plan") || "educator"
-  const billingParam = searchParams.get("billing") || "monthly"
+  const searchParams = useSearchParams();
+  const planParam = searchParams.get('plan') || 'educator';
+  const billingParam = searchParams.get('billing') || 'monthly';
 
-  const [selectedPlan, setSelectedPlan] = useState(planParam)
-  const [billingCycle, setBillingCycle] = useState(billingParam)
+  const [selectedPlan, setSelectedPlan] = useState(planParam);
+  const [billingCycle, setBillingCycle] = useState(billingParam);
 
   useEffect(() => {
-    setSelectedPlan(planParam)
-    setBillingCycle(billingParam)
-  }, [planParam, billingParam])
+    setSelectedPlan(planParam);
+    setBillingCycle(billingParam);
+  }, [planParam, billingParam]);
 
   const plans = {
     educator: {
-      name: "Educator",
+      name: 'Educator',
       monthly: 14.99,
       yearly: 143.9,
       features: [
-        "Up to 5 classes",
-        "AI-powered assignment generation",
-        "Automated grading",
-        "Basic plagiarism detection",
-        "Email support",
+        'Up to 5 classes',
+        'AI-powered assignment generation',
+        'Automated grading',
+        'Basic plagiarism detection',
+        'Email support',
       ],
     },
     department: {
-      name: "Department",
+      name: 'Department',
       monthly: 74.99,
       yearly: 719.9,
       features: [
-        "Up to 25 classes",
-        "Everything in Educator plan",
-        "Co-teacher collaboration (up to 5 seats)",
-        "Advanced plagiarism & AI detection",
-        "Priority support",
+        'Up to 25 classes',
+        'Everything in Educator plan',
+        'Co-teacher collaboration (up to 5 seats)',
+        'Advanced plagiarism & AI detection',
+        'Priority support',
       ],
     },
     institution: {
-      name: "Institution",
+      name: 'Institution',
       monthly: 149.99,
       yearly: 1439.9,
       features: [
-        "Unlimited classes",
-        "Everything in Department plan",
-        "Unlimited co-teacher seats",
-        "LMS integration",
-        "24/7 dedicated support",
+        'Unlimited classes',
+        'Everything in Department plan',
+        'Unlimited co-teacher seats',
+        'LMS integration',
+        '24/7 dedicated support',
       ],
     },
-  }
+  };
 
-  const selectedPlanDetails = plans[selectedPlan as keyof typeof plans]
-  const price = billingCycle === "yearly" ? selectedPlanDetails.yearly : selectedPlanDetails.monthly
-  const billingText = billingCycle === "yearly" ? "/year" : "/month"
+  const selectedPlanDetails = plans[selectedPlan as keyof typeof plans];
+  const price =
+    billingCycle === 'yearly' ? selectedPlanDetails.yearly : selectedPlanDetails.monthly;
+  const billingText = billingCycle === 'yearly' ? '/year' : '/month';
 
   return (
     <div className="container max-w-6xl py-6">
@@ -82,7 +90,9 @@ export default function BillingPage() {
 
       <div className="grid gap-8 md:grid-cols-2">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Upgrade to {selectedPlanDetails.name}</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Upgrade to {selectedPlanDetails.name}
+          </h1>
           <p className="mt-2 text-muted-foreground">Choose your billing cycle and payment method</p>
 
           <div className="mt-8">
@@ -148,7 +158,7 @@ export default function BillingPage() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {billingCycle === "yearly" ? "Billed annually" : "Billed monthly"}
+                  {billingCycle === 'yearly' ? 'Billed annually' : 'Billed monthly'}
                 </p>
               </div>
 
@@ -182,11 +192,11 @@ export default function BillingPage() {
           </Card>
 
           <div className="mt-4 text-center text-sm text-muted-foreground">
-            By confirming your subscription, you agree to our{" "}
+            By confirming your subscription, you agree to our{' '}
             <Link href="/terms" className="underline underline-offset-4">
               Terms of Service
-            </Link>{" "}
-            and{" "}
+            </Link>{' '}
+            and{' '}
             <Link href="/privacy" className="underline underline-offset-4">
               Privacy Policy
             </Link>
@@ -195,5 +205,5 @@ export default function BillingPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

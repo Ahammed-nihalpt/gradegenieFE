@@ -1,12 +1,12 @@
-import Link from "next/link"
+import Link from 'next/link';
 
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { Icons } from "@/components/icons"
-import type { MainNavItem } from "@/types"
+import { siteConfig } from '@/config/site';
+import { cn } from '@/lib/utils';
+import { Icons } from '@/components/icons';
+import type { MainNavItem } from '@/types';
 
 interface MainNavProps {
-  items?: MainNavItem[]
+  items?: MainNavItem[];
 }
 
 export function MainNav({ items }: MainNavProps) {
@@ -24,16 +24,16 @@ export function MainNav({ items }: MainNavProps) {
                 key={index}
                 href={item.href}
                 className={cn(
-                  "flex items-center text-sm font-medium transition-colors hover:text-foreground/80 sm:text-base",
-                  item.disabled && "cursor-not-allowed opacity-80",
+                  'flex items-center text-sm font-medium transition-colors hover:text-foreground/80 sm:text-base',
+                  item.disabled && 'cursor-not-allowed opacity-80'
                 )}
               >
                 {item.title}
               </Link>
-            ) : null,
+            ) : null
           )}
         </nav>
       ) : null}
     </div>
-  )
+  );
 }

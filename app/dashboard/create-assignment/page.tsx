@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -10,19 +10,19 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Download,
   Loader2,
@@ -39,91 +39,91 @@ import {
   Users,
   ArrowRight,
   ChevronRight,
-} from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { Badge } from "@/components/ui/badge";
-import { PDFPreviewDialog } from "@/components/pdf-preview-dialog";
-import { EmailPreviewDialog } from "@/components/email-preview-dialog";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import api from "@/lib/axios";
-import { useCourses } from "@/hooks/use-course";
-import { useSession } from "next-auth/react";
+} from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
+import { PDFPreviewDialog } from '@/components/pdf-preview-dialog';
+import { EmailPreviewDialog } from '@/components/email-preview-dialog';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import api from '@/lib/axios';
+import { useCourses } from '@/hooks/use-course';
+import { useSession } from 'next-auth/react';
 
 // Assignment type definitions
 const ASSIGNMENT_TYPES = {
-  ESSAY: "essay",
-  RESEARCH_PAPER: "research_paper",
-  MULTIPLE_CHOICE: "multiple_choice",
-  SHORT_ANSWER: "short_answer",
-  PRESENTATION: "presentation",
-  GROUP_PROJECT: "group_project",
-  DISCUSSION: "discussion",
-  LAB_REPORT: "lab_report",
-  PORTFOLIO: "portfolio",
-  CASE_STUDY: "case_study",
+  ESSAY: 'essay',
+  RESEARCH_PAPER: 'research_paper',
+  MULTIPLE_CHOICE: 'multiple_choice',
+  SHORT_ANSWER: 'short_answer',
+  PRESENTATION: 'presentation',
+  GROUP_PROJECT: 'group_project',
+  DISCUSSION: 'discussion',
+  LAB_REPORT: 'lab_report',
+  PORTFOLIO: 'portfolio',
+  CASE_STUDY: 'case_study',
 };
 
 // Assignment type metadata
 const ASSIGNMENT_TYPE_INFO = {
   [ASSIGNMENT_TYPES.ESSAY]: {
-    title: "Essay",
-    description: "A written composition on a particular subject",
+    title: 'Essay',
+    description: 'A written composition on a particular subject',
     icon: FileText,
-    outputs: ["instructions", "rubric"],
+    outputs: ['instructions', 'rubric'],
   },
   [ASSIGNMENT_TYPES.RESEARCH_PAPER]: {
-    title: "Research Paper",
-    description: "An in-depth analysis requiring research and citations",
+    title: 'Research Paper',
+    description: 'An in-depth analysis requiring research and citations',
     icon: FileText,
-    outputs: ["instructions", "rubric"],
+    outputs: ['instructions', 'rubric'],
   },
   [ASSIGNMENT_TYPES.MULTIPLE_CHOICE]: {
-    title: "Multiple Choice Quiz",
-    description: "Questions with several possible answers to choose from",
+    title: 'Multiple Choice Quiz',
+    description: 'Questions with several possible answers to choose from',
     icon: FileQuestion,
-    outputs: ["questions", "answer_key"],
+    outputs: ['questions', 'answer_key'],
   },
   [ASSIGNMENT_TYPES.SHORT_ANSWER]: {
-    title: "Short Answer Test",
-    description: "Questions requiring brief written responses",
+    title: 'Short Answer Test',
+    description: 'Questions requiring brief written responses',
     icon: FileQuestion,
-    outputs: ["questions", "answer_key", "rubric"],
+    outputs: ['questions', 'answer_key', 'rubric'],
   },
   [ASSIGNMENT_TYPES.PRESENTATION]: {
-    title: "Presentation",
-    description: "Oral delivery of information or a project",
+    title: 'Presentation',
+    description: 'Oral delivery of information or a project',
     icon: Presentation,
-    outputs: ["instructions", "rubric"],
+    outputs: ['instructions', 'rubric'],
   },
   [ASSIGNMENT_TYPES.GROUP_PROJECT]: {
-    title: "Group Project",
-    description: "Collaborative work among multiple students",
+    title: 'Group Project',
+    description: 'Collaborative work among multiple students',
     icon: Users,
-    outputs: ["instructions", "rubric", "peer_evaluation"],
+    outputs: ['instructions', 'rubric', 'peer_evaluation'],
   },
   [ASSIGNMENT_TYPES.DISCUSSION]: {
-    title: "Discussion",
-    description: "Guided conversation on a specific topic",
+    title: 'Discussion',
+    description: 'Guided conversation on a specific topic',
     icon: MessageSquare,
-    outputs: ["instructions", "participation_criteria"],
+    outputs: ['instructions', 'participation_criteria'],
   },
   [ASSIGNMENT_TYPES.LAB_REPORT]: {
-    title: "Lab Report",
-    description: "Documentation of an experiment or investigation",
+    title: 'Lab Report',
+    description: 'Documentation of an experiment or investigation',
     icon: ListChecks,
-    outputs: ["instructions", "rubric", "checklist"],
+    outputs: ['instructions', 'rubric', 'checklist'],
   },
   [ASSIGNMENT_TYPES.PORTFOLIO]: {
-    title: "Portfolio",
-    description: "Collection of work demonstrating skills and growth",
+    title: 'Portfolio',
+    description: 'Collection of work demonstrating skills and growth',
     icon: FileText,
-    outputs: ["instructions", "rubric"],
+    outputs: ['instructions', 'rubric'],
   },
   [ASSIGNMENT_TYPES.CASE_STUDY]: {
-    title: "Case Study",
-    description: "Analysis of a specific instance or scenario",
+    title: 'Case Study',
+    description: 'Analysis of a specific instance or scenario',
     icon: FileText,
-    outputs: ["instructions", "rubric"],
+    outputs: ['instructions', 'rubric'],
   },
 };
 
@@ -135,25 +135,23 @@ export default function CreateAssignmentPage() {
   const { data: session } = useSession();
 
   // Step tracking
-  const [currentStep, setCurrentStep] = useState<
-    "type" | "details" | "generate"
-  >("type");
+  const [currentStep, setCurrentStep] = useState<'type' | 'details' | 'generate'>('type');
 
   // Assignment type selection
-  const [selectedType, setSelectedType] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>('');
 
   // Basic assignment info
-  const [assignmentTitle, setAssignmentTitle] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [description, setDescription] = useState("");
-  const [learningObjectives, setLearningObjectives] = useState("");
+  const [assignmentTitle, setAssignmentTitle] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState('');
+  const [dueDate, setDueDate] = useState('');
+  const [description, setDescription] = useState('');
+  const [learningObjectives, setLearningObjectives] = useState('');
 
   // Generation states
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [publishToLMS, setPublishToLMS] = useState<string[]>([]);
-  const [connectedLMS, setConnectedLMS] = useState<string[]>(["Canvas"]);
+  const [connectedLMS, setConnectedLMS] = useState<string[]>(['Canvas']);
 
   // Generated content
   const [generatedContent, setGeneratedContent] = useState<{
@@ -175,12 +173,12 @@ export default function CreateAssignmentPage() {
 
   // Handle query params for quick creation
   useEffect(() => {
-    const type = searchParams.get("type");
-    const topic = searchParams.get("topic");
+    const type = searchParams.get('type');
+    const topic = searchParams.get('topic');
 
     if (type && Object.values(ASSIGNMENT_TYPES).includes(type)) {
       setSelectedType(type);
-      setCurrentStep("details");
+      setCurrentStep('details');
     }
 
     if (topic) {
@@ -192,37 +190,37 @@ export default function CreateAssignmentPage() {
   const handleTypeSelection = () => {
     if (!selectedType) {
       toast({
-        title: "Please select an assignment type",
-        description: "You must select an assignment type to continue",
-        variant: "destructive",
+        title: 'Please select an assignment type',
+        description: 'You must select an assignment type to continue',
+        variant: 'destructive',
       });
       return;
     }
 
-    setCurrentStep("details");
+    setCurrentStep('details');
   };
 
   // Handle details submission and move to generation
   const handleDetailsSubmission = () => {
     if (!assignmentTitle) {
       toast({
-        title: "Missing information",
-        description: "Please enter an assignment title",
-        variant: "destructive",
+        title: 'Missing information',
+        description: 'Please enter an assignment title',
+        variant: 'destructive',
       });
       return;
     }
 
     if (!selectedCourse) {
       toast({
-        title: "Missing information",
-        description: "Please select a course",
-        variant: "destructive",
+        title: 'Missing information',
+        description: 'Please select a course',
+        variant: 'destructive',
       });
       return;
     }
 
-    setCurrentStep("generate");
+    setCurrentStep('generate');
     // Auto-generate content
     handleGenerateContent();
   };
@@ -234,9 +232,8 @@ export default function CreateAssignmentPage() {
     try {
       const outputs = ASSIGNMENT_TYPE_INFO[selectedType]?.outputs || [];
 
-      const response = await api.post("/assignment/ai/generate", {
-        assignmentType:
-          ASSIGNMENT_TYPE_INFO[selectedType]?.title || selectedType,
+      const response = await api.post('/assignment/ai/generate', {
+        assignmentType: ASSIGNMENT_TYPE_INFO[selectedType]?.title || selectedType,
         subType: outputs,
         title: assignmentTitle,
         course: courses.find((course) => course._id === selectedCourse)?.name,
@@ -251,23 +248,22 @@ export default function CreateAssignmentPage() {
       if (data.success) {
         setGeneratedContent(data.data); // 🎯 AI-generated content
         toast({
-          title: "Content Generated",
-          description:
-            "Your assignment content has been generated successfully!",
+          title: 'Content Generated',
+          description: 'Your assignment content has been generated successfully!',
         });
       } else {
         toast({
-          title: "Failed to generate content",
-          description: data.error || "Something went wrong",
-          variant: "destructive",
+          title: 'Failed to generate content',
+          description: data.error || 'Something went wrong',
+          variant: 'destructive',
         });
       }
     } catch (error) {
       console.error(error);
       toast({
-        title: "Error",
-        description: "Could not generate content. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Could not generate content. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsGenerating(false);
@@ -276,7 +272,7 @@ export default function CreateAssignmentPage() {
 
   // Content generation functions for different assignment types
   const generateInstructions = () => {
-    const typeTitle = ASSIGNMENT_TYPE_INFO[selectedType]?.title || "Assignment";
+    const typeTitle = ASSIGNMENT_TYPE_INFO[selectedType]?.title || 'Assignment';
 
     return `# ${typeTitle}: ${assignmentTitle}
 ## ${selectedCourse}
@@ -284,36 +280,36 @@ export default function CreateAssignmentPage() {
 ### Overview
 This ${typeTitle.toLowerCase()} will assess your understanding of the subject matter and demonstrate your ability to ${
       selectedType === ASSIGNMENT_TYPES.ESSAY
-        ? "analyze and articulate complex ideas"
+        ? 'analyze and articulate complex ideas'
         : selectedType === ASSIGNMENT_TYPES.RESEARCH_PAPER
-        ? "conduct research and synthesize information"
-        : selectedType === ASSIGNMENT_TYPES.PRESENTATION
-        ? "organize and present information clearly"
-        : "apply concepts to real-world scenarios"
+          ? 'conduct research and synthesize information'
+          : selectedType === ASSIGNMENT_TYPES.PRESENTATION
+            ? 'organize and present information clearly'
+            : 'apply concepts to real-world scenarios'
     }.
 
 ### Learning Objectives
 ${
   learningObjectives ||
-  "- Demonstrate understanding of key concepts\n- Apply theoretical knowledge to practical situations\n- Develop critical thinking and analytical skills"
+  '- Demonstrate understanding of key concepts\n- Apply theoretical knowledge to practical situations\n- Develop critical thinking and analytical skills'
 }
 
 ### Requirements
 - ${
       selectedType === ASSIGNMENT_TYPES.ESSAY
-        ? "Length: 1000-1500 words"
+        ? 'Length: 1000-1500 words'
         : selectedType === ASSIGNMENT_TYPES.RESEARCH_PAPER
-        ? "Length: 2000-2500 words with at least 8 scholarly sources"
-        : selectedType === ASSIGNMENT_TYPES.PRESENTATION
-        ? "Duration: 10-15 minutes with visual aids"
-        : "Follow all instructions carefully"
+          ? 'Length: 2000-2500 words with at least 8 scholarly sources'
+          : selectedType === ASSIGNMENT_TYPES.PRESENTATION
+            ? 'Duration: 10-15 minutes with visual aids'
+            : 'Follow all instructions carefully'
     }
 - Format: ${
       selectedType === ASSIGNMENT_TYPES.RESEARCH_PAPER
-        ? "APA style with proper citations"
-        : "Clear, organized structure with proper grammar and spelling"
+        ? 'APA style with proper citations'
+        : 'Clear, organized structure with proper grammar and spelling'
     }
-- Due Date: ${dueDate || "To be announced"}
+- Due Date: ${dueDate || 'To be announced'}
 
 ### Components
 Your ${typeTitle.toLowerCase()} should include the following:
@@ -338,7 +334,7 @@ Submit your ${typeTitle.toLowerCase()} through the course website by the due dat
   };
 
   const generateRubric = () => {
-    const typeTitle = ASSIGNMENT_TYPE_INFO[selectedType]?.title || "Assignment";
+    const typeTitle = ASSIGNMENT_TYPE_INFO[selectedType]?.title || 'Assignment';
 
     return `# ${typeTitle} Rubric: ${assignmentTitle}
 ## ${selectedCourse}
@@ -619,9 +615,8 @@ This peer evaluation will be used as part of the individual grade calculation fo
     setIsSaving(true);
     try {
       const outputs = ASSIGNMENT_TYPE_INFO[selectedType]?.outputs || [];
-      await api.post("/assignment/add", {
-        assignmentType:
-          ASSIGNMENT_TYPE_INFO[selectedType]?.title || selectedType,
+      await api.post('/assignment/add', {
+        assignmentType: ASSIGNMENT_TYPE_INFO[selectedType]?.title || selectedType,
         subType: outputs,
         title: assignmentTitle,
         courseId: selectedCourse,
@@ -634,17 +629,17 @@ This peer evaluation will be used as part of the individual grade calculation fo
       });
       setIsSaving(false);
       toast({
-        title: "Assignment Saved",
-        description: "Your assignment has been saved successfully",
+        title: 'Assignment Saved',
+        description: 'Your assignment has been saved successfully',
       });
-      router.push("/dashboard/assignments");
+      router.push('/dashboard/assignments');
     } catch (error) {
-      alert("Error saving assignment");
+      alert('Error saving assignment');
       setIsSaving(false);
 
       toast({
-        title: "Error saving assignment",
-        description: "something went wrong while saving your assignment",
+        title: 'Error saving assignment',
+        description: 'something went wrong while saving your assignment',
       });
     }
   };
@@ -659,7 +654,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
     }, 2000);
 
     toast({
-      title: "Copied to clipboard",
+      title: 'Copied to clipboard',
       description: `${type} has been copied to your clipboard.`,
     });
   };
@@ -670,9 +665,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
       <div className="space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold">Create New Assessment</h1>
-          <p className="text-muted-foreground">
-            Select the type of assessment you want to create
-          </p>
+          <p className="text-muted-foreground">Select the type of assessment you want to create</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -682,7 +675,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
               <Card
                 key={type}
                 className={`cursor-pointer transition-all hover:border-primary hover:shadow-md ${
-                  selectedType === type ? "border-primary bg-primary/5" : ""
+                  selectedType === type ? 'border-primary bg-primary/5' : ''
                 }`}
                 onClick={() => setSelectedType(type)}
               >
@@ -695,15 +688,13 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    {info.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{info.description}</p>
                 </CardContent>
                 <CardFooter className="pt-0">
                   <div className="flex flex-wrap gap-2">
                     {info.outputs.map((output) => (
                       <Badge key={output} variant="outline" className="text-xs">
-                        {output.replace("_", " ")}
+                        {output.replace('_', ' ')}
                       </Badge>
                     ))}
                   </div>
@@ -729,27 +720,18 @@ This peer evaluation will be used as part of the individual grade calculation fo
     return (
       <div className="space-y-6">
         <div className="flex items-center space-x-2">
-          <Button
-            variant="ghost"
-            onClick={() => setCurrentStep("type")}
-            className="p-0 h-auto"
-          >
+          <Button variant="ghost" onClick={() => setCurrentStep('type')} className="p-0 h-auto">
             <ChevronRight className="h-4 w-4 rotate-180" />
             Back
           </Button>
           <div className="h-1 w-1 rounded-full bg-muted-foreground" />
-          <span className="text-muted-foreground">
-            {typeInfo?.title || "Assignment"} Details
-          </span>
+          <span className="text-muted-foreground">{typeInfo?.title || 'Assignment'} Details</span>
         </div>
 
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">
-            Create {typeInfo?.title || "Assignment"}
-          </h1>
+          <h1 className="text-3xl font-bold">Create {typeInfo?.title || 'Assignment'}</h1>
           <p className="text-muted-foreground">
-            Enter the details for your{" "}
-            {typeInfo?.title.toLowerCase() || "assignment"}
+            Enter the details for your {typeInfo?.title.toLowerCase() || 'assignment'}
           </p>
         </div>
 
@@ -757,8 +739,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
           <CardHeader>
             <CardTitle>Basic Information</CardTitle>
             <CardDescription>
-              Enter the essential details about your{" "}
-              {typeInfo?.title.toLowerCase() || "assignment"}
+              Enter the essential details about your {typeInfo?.title.toLowerCase() || 'assignment'}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -766,7 +747,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
               <Label htmlFor="assignment-title">Title</Label>
               <Input
                 id="assignment-title"
-                placeholder={`${typeInfo?.title || "Assignment"} Title`}
+                placeholder={`${typeInfo?.title || 'Assignment'} Title`}
                 value={assignmentTitle}
                 onChange={(e) => setAssignmentTitle(e.target.value)}
               />
@@ -803,7 +784,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
               <Textarea
                 id="description"
                 placeholder={`Brief description of what students will do in this ${
-                  typeInfo?.title.toLowerCase() || "assignment"
+                  typeInfo?.title.toLowerCase() || 'assignment'
                 }...`}
                 rows={3}
                 value={description}
@@ -843,10 +824,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox id="show-answers" />
-                    <Label
-                      htmlFor="show-answers"
-                      className="text-sm font-normal"
-                    >
+                    <Label htmlFor="show-answers" className="text-sm font-normal">
                       Show correct answers after submission
                     </Label>
                   </div>
@@ -867,19 +845,13 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     <RadioGroup defaultValue="instructor">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="instructor" id="instructor" />
-                        <Label
-                          htmlFor="instructor"
-                          className="text-sm font-normal"
-                        >
+                        <Label htmlFor="instructor" className="text-sm font-normal">
                           Instructor-assigned groups
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="student" id="student" />
-                        <Label
-                          htmlFor="student"
-                          className="text-sm font-normal"
-                        >
+                        <Label htmlFor="student" className="text-sm font-normal">
                           Student-selected groups
                         </Label>
                       </div>
@@ -909,14 +881,12 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="canvas"
-                      checked={publishToLMS.includes("Canvas")}
+                      checked={publishToLMS.includes('Canvas')}
                       onCheckedChange={(checked) => {
                         if (checked) {
-                          setPublishToLMS([...publishToLMS, "Canvas"]);
+                          setPublishToLMS([...publishToLMS, 'Canvas']);
                         } else {
-                          setPublishToLMS(
-                            publishToLMS.filter((lms) => lms !== "Canvas")
-                          );
+                          setPublishToLMS(publishToLMS.filter((lms) => lms !== 'Canvas'));
                         }
                       }}
                     />
@@ -924,10 +894,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                       Publish to Canvas
                     </Label>
                   </div>
-                  <Badge
-                    variant="outline"
-                    className="bg-green-50 text-green-700 border-green-200"
-                  >
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                     Connected
                   </Badge>
                 </div>
@@ -936,37 +903,29 @@ This peer evaluation will be used as part of the individual grade calculation fo
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="google-classroom"
-                      checked={publishToLMS.includes("Google Classroom")}
+                      checked={publishToLMS.includes('Google Classroom')}
                       onCheckedChange={(checked) => {
-                        if (connectedLMS.includes("Google Classroom")) {
+                        if (connectedLMS.includes('Google Classroom')) {
                           if (checked) {
-                            setPublishToLMS([
-                              ...publishToLMS,
-                              "Google Classroom",
-                            ]);
+                            setPublishToLMS([...publishToLMS, 'Google Classroom']);
                           } else {
                             setPublishToLMS(
-                              publishToLMS.filter(
-                                (lms) => lms !== "Google Classroom"
-                              )
+                              publishToLMS.filter((lms) => lms !== 'Google Classroom')
                             );
                           }
                         } else {
                           toast({
-                            title: "Google Classroom Not Connected",
-                            description:
-                              "Please connect to Google Classroom first",
+                            title: 'Google Classroom Not Connected',
+                            description: 'Please connect to Google Classroom first',
                           });
                         }
                       }}
-                      disabled={!connectedLMS.includes("Google Classroom")}
+                      disabled={!connectedLMS.includes('Google Classroom')}
                     />
                     <Label
                       htmlFor="google-classroom"
                       className={`text-sm font-normal ${
-                        !connectedLMS.includes("Google Classroom")
-                          ? "text-muted-foreground"
-                          : ""
+                        !connectedLMS.includes('Google Classroom') ? 'text-muted-foreground' : ''
                       }`}
                     >
                       Publish to Google Classroom
@@ -976,9 +935,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     variant="outline"
                     size="sm"
                     className="h-7 text-xs"
-                    onClick={() =>
-                      (window.location.href = "/dashboard/integrations")
-                    }
+                    onClick={() => (window.location.href = '/dashboard/integrations')}
                   >
                     Connect
                   </Button>
@@ -1004,11 +961,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
     return (
       <div className="space-y-6">
         <div className="flex items-center space-x-2">
-          <Button
-            variant="ghost"
-            onClick={() => setCurrentStep("details")}
-            className="p-0 h-auto"
-          >
+          <Button variant="ghost" onClick={() => setCurrentStep('details')} className="p-0 h-auto">
             <ChevronRight className="h-4 w-4 rotate-180" />
             Back
           </Button>
@@ -1027,8 +980,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
               <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
               <h3 className="text-xl font-medium">Generating Content</h3>
               <p className="text-muted-foreground mt-2">
-                Our AI is creating your{" "}
-                {typeInfo?.title.toLowerCase() || "assignment"} content...
+                Our AI is creating your {typeInfo?.title.toLowerCase() || 'assignment'} content...
               </p>
             </CardContent>
           </Card>
@@ -1036,48 +988,39 @@ This peer evaluation will be used as part of the individual grade calculation fo
           <div className="space-y-6">
             <Tabs defaultValue={outputs[0]} className="space-y-4">
               <TabsList>
-                {outputs.includes("instructions") && (
+                {outputs.includes('instructions') && (
                   <TabsTrigger value="instructions">Instructions</TabsTrigger>
                 )}
-                {outputs.includes("rubric") && (
-                  <TabsTrigger value="rubric">Rubric</TabsTrigger>
-                )}
-                {outputs.includes("questions") && (
+                {outputs.includes('rubric') && <TabsTrigger value="rubric">Rubric</TabsTrigger>}
+                {outputs.includes('questions') && (
                   <TabsTrigger value="questions">Questions</TabsTrigger>
                 )}
-                {outputs.includes("answer_key") && (
+                {outputs.includes('answer_key') && (
                   <TabsTrigger value="answer_key">Answer Key</TabsTrigger>
                 )}
-                {outputs.includes("checklist") && (
+                {outputs.includes('checklist') && (
                   <TabsTrigger value="checklist">Checklist</TabsTrigger>
                 )}
-                {outputs.includes("participation_criteria") && (
-                  <TabsTrigger value="participation_criteria">
-                    Participation Criteria
-                  </TabsTrigger>
+                {outputs.includes('participation_criteria') && (
+                  <TabsTrigger value="participation_criteria">Participation Criteria</TabsTrigger>
                 )}
-                {outputs.includes("peer_evaluation") && (
-                  <TabsTrigger value="peer_evaluation">
-                    Peer Evaluation
-                  </TabsTrigger>
+                {outputs.includes('peer_evaluation') && (
+                  <TabsTrigger value="peer_evaluation">Peer Evaluation</TabsTrigger>
                 )}
               </TabsList>
 
-              {outputs.includes("instructions") && (
+              {outputs.includes('instructions') && (
                 <TabsContent value="instructions" className="space-y-4">
                   <div className="flex justify-end space-x-2 mb-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() =>
-                        handleCopyToClipboard(
-                          generatedContent.instructions || "",
-                          "Instructions"
-                        )
+                        handleCopyToClipboard(generatedContent.instructions || '', 'Instructions')
                       }
                       className="h-8"
                     >
-                      {copied === "Instructions" ? (
+                      {copied === 'Instructions' ? (
                         <>
                           <Check className="mr-2 h-4 w-4" />
                           Copied
@@ -1095,7 +1038,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     </Button>
                   </div>
                   <Textarea
-                    value={generatedContent.instructions || ""}
+                    value={generatedContent.instructions || ''}
                     onChange={(e) =>
                       setGeneratedContent({
                         ...generatedContent,
@@ -1107,21 +1050,16 @@ This peer evaluation will be used as part of the individual grade calculation fo
                 </TabsContent>
               )}
 
-              {outputs.includes("rubric") && (
+              {outputs.includes('rubric') && (
                 <TabsContent value="rubric" className="space-y-4">
                   <div className="flex justify-end space-x-2 mb-2">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() =>
-                        handleCopyToClipboard(
-                          generatedContent.rubric || "",
-                          "Rubric"
-                        )
-                      }
+                      onClick={() => handleCopyToClipboard(generatedContent.rubric || '', 'Rubric')}
                       className="h-8"
                     >
-                      {copied === "Rubric" ? (
+                      {copied === 'Rubric' ? (
                         <>
                           <Check className="mr-2 h-4 w-4" />
                           Copied
@@ -1139,7 +1077,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     </Button>
                   </div>
                   <Textarea
-                    value={generatedContent.rubric || ""}
+                    value={generatedContent.rubric || ''}
                     onChange={(e) =>
                       setGeneratedContent({
                         ...generatedContent,
@@ -1151,21 +1089,18 @@ This peer evaluation will be used as part of the individual grade calculation fo
                 </TabsContent>
               )}
 
-              {outputs.includes("questions") && (
+              {outputs.includes('questions') && (
                 <TabsContent value="questions" className="space-y-4">
                   <div className="flex justify-end space-x-2 mb-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() =>
-                        handleCopyToClipboard(
-                          generatedContent.questions || "",
-                          "Questions"
-                        )
+                        handleCopyToClipboard(generatedContent.questions || '', 'Questions')
                       }
                       className="h-8"
                     >
-                      {copied === "Questions" ? (
+                      {copied === 'Questions' ? (
                         <>
                           <Check className="mr-2 h-4 w-4" />
                           Copied
@@ -1183,7 +1118,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     </Button>
                   </div>
                   <Textarea
-                    value={generatedContent.questions || ""}
+                    value={generatedContent.questions || ''}
                     onChange={(e) =>
                       setGeneratedContent({
                         ...generatedContent,
@@ -1195,21 +1130,18 @@ This peer evaluation will be used as part of the individual grade calculation fo
                 </TabsContent>
               )}
 
-              {outputs.includes("answer_key") && (
+              {outputs.includes('answer_key') && (
                 <TabsContent value="answer_key" className="space-y-4">
                   <div className="flex justify-end space-x-2 mb-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() =>
-                        handleCopyToClipboard(
-                          generatedContent.answer_key || "",
-                          "Answer Key"
-                        )
+                        handleCopyToClipboard(generatedContent.answer_key || '', 'Answer Key')
                       }
                       className="h-8"
                     >
-                      {copied === "Answer Key" ? (
+                      {copied === 'Answer Key' ? (
                         <>
                           <Check className="mr-2 h-4 w-4" />
                           Copied
@@ -1227,7 +1159,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     </Button>
                   </div>
                   <Textarea
-                    value={generatedContent.answer_key || ""}
+                    value={generatedContent.answer_key || ''}
                     onChange={(e) =>
                       setGeneratedContent({
                         ...generatedContent,
@@ -1239,21 +1171,18 @@ This peer evaluation will be used as part of the individual grade calculation fo
                 </TabsContent>
               )}
 
-              {outputs.includes("checklist") && (
+              {outputs.includes('checklist') && (
                 <TabsContent value="checklist" className="space-y-4">
                   <div className="flex justify-end space-x-2 mb-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() =>
-                        handleCopyToClipboard(
-                          generatedContent.checklist || "",
-                          "Checklist"
-                        )
+                        handleCopyToClipboard(generatedContent.checklist || '', 'Checklist')
                       }
                       className="h-8"
                     >
-                      {copied === "Checklist" ? (
+                      {copied === 'Checklist' ? (
                         <>
                           <Check className="mr-2 h-4 w-4" />
                           Copied
@@ -1271,7 +1200,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     </Button>
                   </div>
                   <Textarea
-                    value={generatedContent.checklist || ""}
+                    value={generatedContent.checklist || ''}
                     onChange={(e) =>
                       setGeneratedContent({
                         ...generatedContent,
@@ -1283,24 +1212,21 @@ This peer evaluation will be used as part of the individual grade calculation fo
                 </TabsContent>
               )}
 
-              {outputs.includes("participation_criteria") && (
-                <TabsContent
-                  value="participation_criteria"
-                  className="space-y-4"
-                >
+              {outputs.includes('participation_criteria') && (
+                <TabsContent value="participation_criteria" className="space-y-4">
                   <div className="flex justify-end space-x-2 mb-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() =>
                         handleCopyToClipboard(
-                          generatedContent.participation_criteria || "",
-                          "Participation Criteria"
+                          generatedContent.participation_criteria || '',
+                          'Participation Criteria'
                         )
                       }
                       className="h-8"
                     >
-                      {copied === "Participation Criteria" ? (
+                      {copied === 'Participation Criteria' ? (
                         <>
                           <Check className="mr-2 h-4 w-4" />
                           Copied
@@ -1318,7 +1244,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     </Button>
                   </div>
                   <Textarea
-                    value={generatedContent.participation_criteria || ""}
+                    value={generatedContent.participation_criteria || ''}
                     onChange={(e) =>
                       setGeneratedContent({
                         ...generatedContent,
@@ -1330,7 +1256,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                 </TabsContent>
               )}
 
-              {outputs.includes("peer_evaluation") && (
+              {outputs.includes('peer_evaluation') && (
                 <TabsContent value="peer_evaluation" className="space-y-4">
                   <div className="flex justify-end space-x-2 mb-2">
                     <Button
@@ -1338,13 +1264,13 @@ This peer evaluation will be used as part of the individual grade calculation fo
                       size="sm"
                       onClick={() =>
                         handleCopyToClipboard(
-                          generatedContent.peer_evaluation || "",
-                          "Peer Evaluation"
+                          generatedContent.peer_evaluation || '',
+                          'Peer Evaluation'
                         )
                       }
                       className="h-8"
                     >
-                      {copied === "Peer Evaluation" ? (
+                      {copied === 'Peer Evaluation' ? (
                         <>
                           <Check className="mr-2 h-4 w-4" />
                           Copied
@@ -1362,7 +1288,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                     </Button>
                   </div>
                   <Textarea
-                    value={generatedContent.peer_evaluation || ""}
+                    value={generatedContent.peer_evaluation || ''}
                     onChange={(e) =>
                       setGeneratedContent({
                         ...generatedContent,
@@ -1377,17 +1303,11 @@ This peer evaluation will be used as part of the individual grade calculation fo
 
             <div className="flex justify-between">
               <div className="flex space-x-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setPdfPreviewOpen(true)}
-                >
+                <Button variant="outline" onClick={() => setPdfPreviewOpen(true)}>
                   <Download className="mr-2 h-4 w-4" />
                   Download PDF
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setEmailPreviewOpen(true)}
-                >
+                <Button variant="outline" onClick={() => setEmailPreviewOpen(true)}>
                   <Mail className="mr-2 h-4 w-4" />
                   Email to Students
                 </Button>
@@ -1401,7 +1321,7 @@ This peer evaluation will be used as part of the individual grade calculation fo
                 ) : (
                   <>
                     <Save className="mr-2 h-4 w-4" />
-                    Save {typeInfo?.title || "Assignment"}
+                    Save {typeInfo?.title || 'Assignment'}
                   </>
                 )}
               </Button>
@@ -1414,16 +1334,16 @@ This peer evaluation will be used as part of the individual grade calculation fo
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-      {currentStep === "type" && renderTypeSelection()}
-      {currentStep === "details" && renderDetailsForm()}
-      {currentStep === "generate" && renderGenerationStep()}
+      {currentStep === 'type' && renderTypeSelection()}
+      {currentStep === 'details' && renderDetailsForm()}
+      {currentStep === 'generate' && renderGenerationStep()}
 
       {/* PDF Preview Dialog */}
       <PDFPreviewDialog
         open={pdfPreviewOpen}
         onOpenChange={setPdfPreviewOpen}
-        assignment={generatedContent.instructions || ""}
-        rubric={generatedContent.rubric || ""}
+        assignment={generatedContent.instructions || ''}
+        rubric={generatedContent.rubric || ''}
         title={assignmentTitle}
         course={selectedCourse}
       />
@@ -1432,8 +1352,8 @@ This peer evaluation will be used as part of the individual grade calculation fo
       <EmailPreviewDialog
         open={emailPreviewOpen}
         onOpenChange={setEmailPreviewOpen}
-        assignment={generatedContent.instructions || ""}
-        rubric={generatedContent.rubric || ""}
+        assignment={generatedContent.instructions || ''}
+        rubric={generatedContent.rubric || ''}
         title={assignmentTitle}
         course={selectedCourse}
       />

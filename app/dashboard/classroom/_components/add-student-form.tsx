@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useToast } from "@/components/ui/toast";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useToast } from '@/components/ui/toast';
 import {
   Dialog,
   DialogContent,
@@ -11,14 +11,14 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import api from "@/lib/axios";
-import { useSession } from "next-auth/react";
-import { PlusCircle } from "lucide-react";
-import { useStudentByUserId } from "@/hooks/use-student";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import api from '@/lib/axios';
+import { useSession } from 'next-auth/react';
+import { PlusCircle } from 'lucide-react';
+import { useStudentByUserId } from '@/hooks/use-student';
 
 interface AddStudentFormData {
   name: string;
@@ -30,7 +30,7 @@ export function AddStudentForm() {
   const { toast } = useToast();
   const { data: session } = useSession();
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const { refetch } = useStudentByUserId(session?.user.id || "");
+  const { refetch } = useStudentByUserId(session?.user.id || '');
 
   const {
     register,
@@ -38,9 +38,9 @@ export function AddStudentForm() {
     formState: { errors },
   } = useForm<AddStudentFormData>({
     defaultValues: {
-      name: "",
-      email: "",
-      class: "all",
+      name: '',
+      email: '',
+      class: 'all',
     },
   });
 
@@ -52,16 +52,16 @@ export function AddStudentForm() {
       });
 
       toast({
-        title: "Student Added",
-        description: "The student has been successfully added.",
+        title: 'Student Added',
+        description: 'The student has been successfully added.',
       });
       setDialogOpen(false);
       refetch();
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Something went wrong.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Something went wrong.',
+        variant: 'destructive',
       });
     }
   };
@@ -91,13 +91,9 @@ export function AddStudentForm() {
               id="name"
               placeholder="John Doe"
               className="col-span-3"
-              {...register("name", { required: "Name is required" })}
+              {...register('name', { required: 'Name is required' })}
             />
-            {errors.name && (
-              <span className="text-red-600 text-sm">
-                {errors.name.message}
-              </span>
-            )}
+            {errors.name && <span className="text-red-600 text-sm">{errors.name.message}</span>}
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
@@ -109,13 +105,9 @@ export function AddStudentForm() {
               type="email"
               placeholder="student@school.edu"
               className="col-span-3"
-              {...register("email", { required: "Email is required" })}
+              {...register('email', { required: 'Email is required' })}
             />
-            {errors.email && (
-              <span className="text-red-600 text-sm">
-                {errors.email.message}
-              </span>
-            )}
+            {errors.email && <span className="text-red-600 text-sm">{errors.email.message}</span>}
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
@@ -125,18 +117,14 @@ export function AddStudentForm() {
             <select
               id="class"
               className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
-              {...register("class", { required: "Class is required" })}
+              {...register('class', { required: 'Class is required' })}
             >
               <option value="all">All Classes</option>
               <option value="math101">Math 101</option>
               <option value="science202">Science 202</option>
               <option value="history303">History 303</option>
             </select>
-            {errors.class && (
-              <span className="text-red-600 text-sm">
-                {errors.class.message}
-              </span>
-            )}
+            {errors.class && <span className="text-red-600 text-sm">{errors.class.message}</span>}
           </div>
 
           <DialogFooter>

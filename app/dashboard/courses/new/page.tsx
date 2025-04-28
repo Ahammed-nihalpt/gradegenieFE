@@ -1,36 +1,49 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, Loader2, Plus } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { ArrowLeft, Loader2, Plus } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function NewCoursePage() {
-  const { toast } = useToast()
-  const [isCreating, setIsCreating] = useState(false)
+  const { toast } = useToast();
+  const [isCreating, setIsCreating] = useState(false);
 
   const handleCreateCourse = () => {
-    setIsCreating(true)
+    setIsCreating(true);
 
     // Simulate course creation
     setTimeout(() => {
-      setIsCreating(false)
+      setIsCreating(false);
 
       toast({
-        title: "Course Created",
-        description: "Your new course has been created successfully",
-      })
+        title: 'Course Created',
+        description: 'Your new course has been created successfully',
+      });
 
       // In a real app, this would navigate to the new course page
-      window.location.href = "/dashboard/courses"
-    }, 2000)
-  }
+      window.location.href = '/dashboard/courses';
+    }, 2000);
+  };
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -148,5 +161,5 @@ export default function NewCoursePage() {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }

@@ -1,13 +1,20 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Check } from "lucide-react"
-import Link from "next/link"
-import type { Metadata } from "next"
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Check } from 'lucide-react';
+import Link from 'next/link';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Upgrade Your Plan | GradeGenie",
-  description: "Choose the perfect plan for your grading needs",
-}
+  title: 'Upgrade Your Plan | GradeGenie',
+  description: 'Choose the perfect plan for your grading needs',
+};
 
 export default function UpgradePage() {
   return (
@@ -162,27 +169,29 @@ export default function UpgradePage() {
           <div>
             <h3 className="font-semibold mb-2">Can I change plans later?</h3>
             <p className="text-muted-foreground">
-              Yes, you can upgrade or downgrade your plan at any time. Changes will be applied at the start of your next
-              billing cycle.
+              Yes, you can upgrade or downgrade your plan at any time. Changes will be applied at
+              the start of your next billing cycle.
             </p>
           </div>
           <div>
             <h3 className="font-semibold mb-2">Is there a free trial?</h3>
             <p className="text-muted-foreground">
-              Yes, all new users get a 7-day free trial with 10 credits to experience GradeGenie's features.
+              Yes, all new users get a 7-day free trial with 10 credits to experience GradeGenie's
+              features.
             </p>
           </div>
           <div>
             <h3 className="font-semibold mb-2">How does billing work?</h3>
             <p className="text-muted-foreground">
-              We offer monthly and annual billing options. Annual plans come with a 20% discount compared to monthly
-              plans.
+              We offer monthly and annual billing options. Annual plans come with a 20% discount
+              compared to monthly plans.
             </p>
           </div>
           <div>
             <h3 className="font-semibold mb-2">What payment methods do you accept?</h3>
             <p className="text-muted-foreground">
-              We accept all major credit cards, PayPal, and school purchase orders for Enterprise plans.
+              We accept all major credit cards, PayPal, and school purchase orders for Enterprise
+              plans.
             </p>
           </div>
           <div>
@@ -194,7 +203,8 @@ export default function UpgradePage() {
           <div>
             <h3 className="font-semibold mb-2">Do you offer educational discounts?</h3>
             <p className="text-muted-foreground">
-              Yes, we offer special pricing for educational institutions. Contact our sales team for details.
+              Yes, we offer special pricing for educational institutions. Contact our sales team for
+              details.
             </p>
           </div>
         </div>
@@ -203,13 +213,13 @@ export default function UpgradePage() {
       <div className="mt-16 text-center bg-muted p-8 rounded-lg">
         <h2 className="text-2xl font-bold mb-4">Need a custom solution?</h2>
         <p className="mb-6 max-w-2xl mx-auto">
-          We offer tailored solutions for schools and districts with specific requirements. Our team will work with you
-          to create a custom plan that fits your needs.
+          We offer tailored solutions for schools and districts with specific requirements. Our team
+          will work with you to create a custom plan that fits your needs.
         </p>
         <Button size="lg" variant="default" asChild>
           <Link href="/contact">Contact Sales</Link>
         </Button>
       </div>
     </div>
-  )
+  );
 }

@@ -1,12 +1,12 @@
-"use client"
+'use client';
 
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react';
 
 interface UpgradeDialogProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export function UpgradeDialog({ children }: UpgradeDialogProps) {
   // Simply render the children directly without the paywall dialog
-  return <>{children}</>
+  return <>{children}</>;
 }

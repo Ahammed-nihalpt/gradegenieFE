@@ -1,7 +1,7 @@
-"use client"
+'use client';
 
-import { ResetPasswordForm } from "@/components/reset-password-form"
-import { Logo } from "@/components/logo"
+import { ResetPasswordForm } from '@/components/reset-password-form';
+import { Logo } from '@/components/logo';
 
 export default function ResetPasswordPage({ params }: { params: { token: string } }) {
   return (
@@ -15,5 +15,5 @@ export default function ResetPasswordPage({ params }: { params: { token: string 
         <ResetPasswordForm token={params.token} />
       </div>
     </div>
-  )
+  );
 }

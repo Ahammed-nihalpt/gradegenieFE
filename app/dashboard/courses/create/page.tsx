@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -15,48 +15,42 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { PageHeader } from "@/components/page-header";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { SyllabusCreator } from "./syllabus-creator";
-import api from "@/lib/axios";
-import { useSession } from "next-auth/react";
+} from '@/components/ui/select';
+import { PageHeader } from '@/components/page-header';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { SyllabusCreator } from './syllabus-creator';
+import api from '@/lib/axios';
+import { useSession } from 'next-auth/react';
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Course name must be at least 2 characters.",
+    message: 'Course name must be at least 2 characters.',
   }),
   description: z.string().min(10, {
-    message: "Course description must be at least 10 characters.",
+    message: 'Course description must be at least 10 characters.',
   }),
   subject: z.string({
-    required_error: "Please select a subject.",
+    required_error: 'Please select a subject.',
   }),
   gradeLevel: z.string({
-    required_error: "Please select a grade level.",
+    required_error: 'Please select a grade level.',
   }),
 });
 
 export default function CreateCoursePage() {
   const router = useRouter();
   const { data: session } = useSession();
-  const [activeTab, setActiveTab] = useState("details");
+  const [activeTab, setActiveTab] = useState('details');
   const [isCreating, setIsCreating] = useState(false);
   const [courseId, setCourseId] = useState<string | null>(null);
   const [courseDetails, setCourseDetails] = useState<{
@@ -70,28 +64,26 @@ export default function CreateCoursePage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      subject: "",
-      gradeLevel: "",
+      name: '',
+      description: '',
+      subject: '',
+      gradeLevel: '',
     },
   });
 
   const onSubmitDetails = async (values: z.infer<typeof formSchema>) => {
     try {
-      const res = await api.post("/course/save", {
+      const res = await api.post('/course/save', {
         userId: session?.user.id,
         ...values,
       });
       setCourseId(res.data.courseId);
       // Redirect to courses dashboard
     } catch (error: any) {
-      alert(
-        error.response?.data?.message || "There was an error saving the course."
-      );
+      alert(error.response?.data?.message || 'There was an error saving the course.');
     }
     setCourseDetails(values);
-    setActiveTab("syllabus");
+    setActiveTab('syllabus');
   };
 
   async function onCreateCourse() {
@@ -100,18 +92,16 @@ export default function CreateCoursePage() {
     try {
       setIsCreating(true);
 
-      await api.post("/course/save", {
+      await api.post('/course/save', {
         courseId,
         userId: session?.user.id,
         ...courseDetails,
       });
 
       // Redirect to courses dashboard
-      router.push("/dashboard/courses");
+      router.push('/dashboard/courses');
     } catch (error: any) {
-      alert(
-        error.response?.data?.message || "There was an error saving the course."
-      );
+      alert(error.response?.data?.message || 'There was an error saving the course.');
     } finally {
       setIsCreating(false);
     }
@@ -137,16 +127,13 @@ export default function CreateCoursePage() {
             <CardHeader>
               <CardTitle>Course Information</CardTitle>
               <CardDescription>
-                Enter the basic details about your course. You'll create your
-                syllabus in the next step.
+                Enter the basic details about your course. You'll create your syllabus in the next
+                step.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmitDetails)}
-                  className="space-y-6"
-                >
+                <form onSubmit={form.handleSubmit(onSubmitDetails)} className="space-y-6">
                   <FormField
                     control={form.control}
                     name="name"
@@ -154,10 +141,7 @@ export default function CreateCoursePage() {
                       <FormItem>
                         <FormLabel>Course Name</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="Introduction to Literature"
-                            {...field}
-                          />
+                          <Input placeholder="Introduction to Literature" {...field} />
                         </FormControl>
                         <FormDescription>
                           The name of your course as it will appear to students.
@@ -174,10 +158,7 @@ export default function CreateCoursePage() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Subject</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select a subject" />
@@ -190,15 +171,9 @@ export default function CreateCoursePage() {
                               <SelectItem value="history">History</SelectItem>
                               <SelectItem value="art">Art</SelectItem>
                               <SelectItem value="music">Music</SelectItem>
-                              <SelectItem value="computerScience">
-                                Computer Science
-                              </SelectItem>
-                              <SelectItem value="foreignLanguage">
-                                Foreign Language
-                              </SelectItem>
-                              <SelectItem value="physicalEducation">
-                                Physical Education
-                              </SelectItem>
+                              <SelectItem value="computerScience">Computer Science</SelectItem>
+                              <SelectItem value="foreignLanguage">Foreign Language</SelectItem>
+                              <SelectItem value="physicalEducation">Physical Education</SelectItem>
                               <SelectItem value="other">Other</SelectItem>
                             </SelectContent>
                           </Select>
@@ -213,32 +188,19 @@ export default function CreateCoursePage() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Grade Level</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select a grade level" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="elementary">
-                                Elementary School
-                              </SelectItem>
-                              <SelectItem value="middleSchool">
-                                Middle School
-                              </SelectItem>
-                              <SelectItem value="highSchool">
-                                High School
-                              </SelectItem>
-                              <SelectItem value="undergraduate">
-                                Undergraduate
-                              </SelectItem>
+                              <SelectItem value="elementary">Elementary School</SelectItem>
+                              <SelectItem value="middleSchool">Middle School</SelectItem>
+                              <SelectItem value="highSchool">High School</SelectItem>
+                              <SelectItem value="undergraduate">Undergraduate</SelectItem>
                               <SelectItem value="graduate">Graduate</SelectItem>
-                              <SelectItem value="professional">
-                                Professional
-                              </SelectItem>
+                              <SelectItem value="professional">Professional</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -261,8 +223,7 @@ export default function CreateCoursePage() {
                           />
                         </FormControl>
                         <FormDescription>
-                          This will help our AI generate a more relevant
-                          syllabus.
+                          This will help our AI generate a more relevant syllabus.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>

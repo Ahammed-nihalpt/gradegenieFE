@@ -1,43 +1,50 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import type { Comment } from "@/types/comments"
-import { formatDistanceToNow } from "date-fns"
-import { Edit2, Trash2, Save, X, Sparkles } from "lucide-react"
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import type { Comment } from '@/types/comments';
+import { formatDistanceToNow } from 'date-fns';
+import { Edit2, Trash2, Save, X, Sparkles } from 'lucide-react';
 
 interface CommentCardProps {
-  comment: Comment
-  isActive: boolean
-  onUpdate: (text: string) => void
-  onDelete: () => void
-  onClick: () => void
-  readOnly?: boolean
+  comment: Comment;
+  isActive: boolean;
+  onUpdate: (text: string) => void;
+  onDelete: () => void;
+  onClick: () => void;
+  readOnly?: boolean;
 }
 
-export function CommentCard({ comment, isActive, onUpdate, onDelete, onClick, readOnly = false }: CommentCardProps) {
-  const [isEditing, setIsEditing] = useState(false)
-  const [editText, setEditText] = useState(comment.text)
+export function CommentCard({
+  comment,
+  isActive,
+  onUpdate,
+  onDelete,
+  onClick,
+  readOnly = false,
+}: CommentCardProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(comment.text);
 
   // Function to handle save
   function handleSave() {
     if (editText.trim()) {
-      onUpdate(editText.trim())
+      onUpdate(editText.trim());
     }
-    setIsEditing(false)
+    setIsEditing(false);
   }
 
   // Function to handle cancel
   function handleCancel() {
-    setEditText(comment.text)
-    setIsEditing(false)
+    setEditText(comment.text);
+    setIsEditing(false);
   }
 
   return (
     <div
       className={`border rounded-md p-3 transition-all ${
-        isActive ? "ring-2 ring-primary bg-muted/20" : "hover:bg-muted/10"
+        isActive ? 'ring-2 ring-primary bg-muted/20' : 'hover:bg-muted/10'
       }`}
       onClick={onClick}
     >
@@ -55,7 +62,7 @@ export function CommentCard({ comment, isActive, onUpdate, onDelete, onClick, re
         Page {comment.highlight.pageIndex} •
         <span className="italic ml-1">
           "{comment.highlight.text.substring(0, 40)}
-          {comment.highlight.text.length > 40 ? "..." : ""}"
+          {comment.highlight.text.length > 40 ? '...' : ''}"
         </span>
       </div>
 
@@ -87,8 +94,8 @@ export function CommentCard({ comment, isActive, onUpdate, onDelete, onClick, re
                 variant="ghost"
                 size="sm"
                 onClick={(e) => {
-                  e.stopPropagation()
-                  setIsEditing(true)
+                  e.stopPropagation();
+                  setIsEditing(true);
                 }}
               >
                 <Edit2 className="h-3.5 w-3.5" />
@@ -97,8 +104,8 @@ export function CommentCard({ comment, isActive, onUpdate, onDelete, onClick, re
                 variant="ghost"
                 size="sm"
                 onClick={(e) => {
-                  e.stopPropagation()
-                  onDelete()
+                  e.stopPropagation();
+                  onDelete();
                 }}
               >
                 <Trash2 className="h-3.5 w-3.5" />
@@ -108,5 +115,5 @@ export function CommentCard({ comment, isActive, onUpdate, onDelete, onClick, re
         </>
       )}
     </div>
-  )
+  );
 }

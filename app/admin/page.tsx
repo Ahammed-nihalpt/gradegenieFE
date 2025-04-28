@@ -1,10 +1,17 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { BarChart, Download, FileText, GraduationCap, Users } from "lucide-react"
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { BarChart, Download, FileText, GraduationCap, Users } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   return (
@@ -131,7 +138,11 @@ export default function AdminDashboardPage() {
                         <TableCell>
                           <Badge
                             variant={
-                              user.status === "Active" ? "default" : user.status === "Pending" ? "outline" : "secondary"
+                              user.status === 'Active'
+                                ? 'default'
+                                : user.status === 'Pending'
+                                  ? 'outline'
+                                  : 'secondary'
                             }
                           >
                             {user.status}
@@ -178,11 +189,11 @@ export default function AdminDashboardPage() {
                         <TableCell>
                           <Badge
                             variant={
-                              course.status === "Active"
-                                ? "default"
-                                : course.status === "Upcoming"
-                                  ? "outline"
-                                  : "secondary"
+                              course.status === 'Active'
+                                ? 'default'
+                                : course.status === 'Upcoming'
+                                  ? 'outline'
+                                  : 'secondary'
                             }
                           >
                             {course.status}
@@ -221,11 +232,11 @@ export default function AdminDashboardPage() {
                       </div>
                       <Badge
                         variant={
-                          item.status === "Compliant"
-                            ? "default"
-                            : item.status === "Partial"
-                              ? "outline"
-                              : "destructive"
+                          item.status === 'Compliant'
+                            ? 'default'
+                            : item.status === 'Partial'
+                              ? 'outline'
+                              : 'destructive'
                         }
                       >
                         {item.status}
@@ -239,124 +250,124 @@ export default function AdminDashboardPage() {
         </Tabs>
       </main>
     </div>
-  )
+  );
 }
 
 const users = [
   {
-    id: "1",
-    name: "Dr. Jane Smith",
-    email: "j.smith@university.edu",
-    role: "Instructor",
-    status: "Active",
-    lastActive: "Today",
+    id: '1',
+    name: 'Dr. Jane Smith',
+    email: 'j.smith@university.edu',
+    role: 'Instructor',
+    status: 'Active',
+    lastActive: 'Today',
   },
   {
-    id: "2",
-    name: "Dr. Michael Johnson",
-    email: "m.johnson@university.edu",
-    role: "Instructor",
-    status: "Active",
-    lastActive: "Yesterday",
+    id: '2',
+    name: 'Dr. Michael Johnson',
+    email: 'm.johnson@university.edu',
+    role: 'Instructor',
+    status: 'Active',
+    lastActive: 'Yesterday',
   },
   {
-    id: "3",
-    name: "Emma Johnson",
-    email: "emma.j@university.edu",
-    role: "Student",
-    status: "Active",
-    lastActive: "2 days ago",
+    id: '3',
+    name: 'Emma Johnson',
+    email: 'emma.j@university.edu',
+    role: 'Student',
+    status: 'Active',
+    lastActive: '2 days ago',
   },
   {
-    id: "4",
-    name: "Dr. Sarah Williams",
-    email: "s.williams@university.edu",
-    role: "Department Head",
-    status: "Active",
-    lastActive: "Today",
+    id: '4',
+    name: 'Dr. Sarah Williams',
+    email: 's.williams@university.edu',
+    role: 'Department Head',
+    status: 'Active',
+    lastActive: 'Today',
   },
   {
-    id: "5",
-    name: "James Wilson",
-    email: "j.wilson@university.edu",
-    role: "Student",
-    status: "Active",
-    lastActive: "3 days ago",
+    id: '5',
+    name: 'James Wilson',
+    email: 'j.wilson@university.edu',
+    role: 'Student',
+    status: 'Active',
+    lastActive: '3 days ago',
   },
-]
+];
 
 const courses = [
   {
-    id: "1",
-    title: "Introduction to Psychology (PSY 101)",
-    department: "Psychology",
-    instructor: "Dr. Jane Smith",
+    id: '1',
+    title: 'Introduction to Psychology (PSY 101)',
+    department: 'Psychology',
+    instructor: 'Dr. Jane Smith',
     students: 42,
-    status: "Active",
+    status: 'Active',
   },
   {
-    id: "2",
-    title: "Advanced Statistics (STAT 301)",
-    department: "Mathematics",
-    instructor: "Dr. Michael Johnson",
+    id: '2',
+    title: 'Advanced Statistics (STAT 301)',
+    department: 'Mathematics',
+    instructor: 'Dr. Michael Johnson',
     students: 28,
-    status: "Active",
+    status: 'Active',
   },
   {
-    id: "3",
-    title: "Environmental Science (ENV 201)",
-    department: "Environmental Studies",
-    instructor: "Dr. Robert Brown",
+    id: '3',
+    title: 'Environmental Science (ENV 201)',
+    department: 'Environmental Studies',
+    instructor: 'Dr. Robert Brown',
     students: 35,
-    status: "Active",
+    status: 'Active',
   },
   {
-    id: "4",
-    title: "Creative Writing (ENG 215)",
-    department: "English",
-    instructor: "Dr. Sarah Williams",
+    id: '4',
+    title: 'Creative Writing (ENG 215)',
+    department: 'English',
+    instructor: 'Dr. Sarah Williams',
     students: 22,
-    status: "Active",
+    status: 'Active',
   },
   {
-    id: "5",
-    title: "Organic Chemistry (CHEM 302)",
-    department: "Chemistry",
-    instructor: "Dr. David Lee",
+    id: '5',
+    title: 'Organic Chemistry (CHEM 302)',
+    department: 'Chemistry',
+    instructor: 'Dr. David Lee',
     students: 30,
-    status: "Upcoming",
+    status: 'Upcoming',
   },
-]
+];
 
 const compliance = [
   {
-    id: "1",
-    title: "Syllabus Compliance",
-    description: "All courses have syllabi that meet institutional requirements",
-    status: "Compliant",
+    id: '1',
+    title: 'Syllabus Compliance',
+    description: 'All courses have syllabi that meet institutional requirements',
+    status: 'Compliant',
   },
   {
-    id: "2",
-    title: "Accessibility Standards",
-    description: "Course materials meet accessibility guidelines",
-    status: "Partial",
+    id: '2',
+    title: 'Accessibility Standards',
+    description: 'Course materials meet accessibility guidelines',
+    status: 'Partial',
   },
   {
-    id: "3",
-    title: "Learning Outcomes",
-    description: "Courses have defined and measurable learning outcomes",
-    status: "Compliant",
+    id: '3',
+    title: 'Learning Outcomes',
+    description: 'Courses have defined and measurable learning outcomes',
+    status: 'Compliant',
   },
   {
-    id: "4",
-    title: "Grading Transparency",
-    description: "Clear grading criteria provided for all assignments",
-    status: "Compliant",
+    id: '4',
+    title: 'Grading Transparency',
+    description: 'Clear grading criteria provided for all assignments',
+    status: 'Compliant',
   },
   {
-    id: "5",
-    title: "Student Data Privacy",
-    description: "Compliance with FERPA and institutional data policies",
-    status: "Compliant",
+    id: '5',
+    title: 'Student Data Privacy',
+    description: 'Compliance with FERPA and institutional data policies',
+    status: 'Compliant',
   },
-]
+];

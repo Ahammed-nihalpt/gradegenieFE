@@ -1,14 +1,14 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import axios from "axios";
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import axios from 'axios';
 
 export const handler = NextAuth({
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -23,7 +23,7 @@ export const handler = NextAuth({
           });
 
           if (response.status === 200) {
-            console.log("🚀 ~ authorize ~ response.data:", response.data);
+            console.log('🚀 ~ authorize ~ response.data:', response.data);
 
             const { token, ...user } = response.data;
             return { ...user, token }; // Include accessToken in the returned user object
@@ -31,14 +31,14 @@ export const handler = NextAuth({
 
           return null;
         } catch (error) {
-          console.error("Error during authentication:", error);
+          console.error('Error during authentication:', error);
           return null;
         }
       },
     }),
   ],
   session: {
-    strategy: "jwt", // Use JWT to store the session
+    strategy: 'jwt', // Use JWT to store the session
   },
   callbacks: {
     async jwt({ token, user }) {

@@ -1,6 +1,6 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { CheckCircle2, ArrowRight } from "lucide-react"
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { CheckCircle2, ArrowRight } from 'lucide-react';
 
 export default function CheckoutSuccessPage() {
   return (
@@ -41,5 +41,5 @@ export default function CheckoutSuccessPage() {
         </Button>
       </div>
     </div>
-  )
+  );
 }

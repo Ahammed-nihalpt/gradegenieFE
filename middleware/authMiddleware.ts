@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { PUBLIC_PATHS } from "./publicPaths";
+import { NextResponse } from 'next/server';
+import { PUBLIC_PATHS } from './publicPaths';
 
 export function handleAuthMiddleware(req: Request & { nextUrl: URL }) {
   const { pathname } = req.nextUrl;

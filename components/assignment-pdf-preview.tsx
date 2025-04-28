@@ -1,27 +1,27 @@
-"use client"
+'use client';
 
-import { useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Download, Printer } from "lucide-react"
+import { useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Download, Printer } from 'lucide-react';
 
 interface AssignmentPDFPreviewProps {
-  assignment: string
-  rubric: string
-  title?: string
-  course?: string
+  assignment: string;
+  rubric: string;
+  title?: string;
+  course?: string;
 }
 
 export function AssignmentPDFPreview({
   assignment,
   rubric,
-  title = "Assignment",
-  course = "Course",
+  title = 'Assignment',
+  course = 'Course',
 }: AssignmentPDFPreviewProps) {
-  const contentRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = () => {
-    const printWindow = window.open("", "_blank")
+    const printWindow = window.open('', '_blank');
     if (printWindow && contentRef.current) {
       printWindow.document.write(`
         <html>
@@ -78,14 +78,14 @@ export function AssignmentPDFPreview({
             </div>
           </body>
         </html>
-      `)
-      printWindow.document.close()
-      printWindow.focus()
+      `);
+      printWindow.document.close();
+      printWindow.focus();
       setTimeout(() => {
-        printWindow.print()
-      }, 250)
+        printWindow.print();
+      }, 250);
     }
-  }
+  };
 
   return (
     <Card className="w-full">
@@ -107,16 +107,16 @@ export function AssignmentPDFPreview({
             <div
               dangerouslySetInnerHTML={{
                 __html: assignment
-                  .replace(/\n\n/g, "</p><p>")
-                  .replace(/\n/g, "<br />")
-                  .replace(/^(.+)$/gm, "<p>$1</p>")
+                  .replace(/\n\n/g, '</p><p>')
+                  .replace(/\n/g, '<br />')
+                  .replace(/^(.+)$/gm, '<p>$1</p>')
                   .replace(/<p>#+\s(.+)<\/p>/g, (match, content) => {
-                    const level = match.match(/#+/)[0].length
-                    return `<h${level}>${content}</h${level}>`
+                    const level = match.match(/#+/)[0].length;
+                    return `<h${level}>${content}</h${level}>`;
                   })
-                  .replace(/<p>-\s(.+)<\/p>/g, "<li>$1</li>")
-                  .replace(/<li>(.+)<\/li>/g, "<ul><li>$1</li></ul>")
-                  .replace(/<\/ul><ul>/g, ""),
+                  .replace(/<p>-\s(.+)<\/p>/g, '<li>$1</li>')
+                  .replace(/<li>(.+)<\/li>/g, '<ul><li>$1</li></ul>')
+                  .replace(/<\/ul><ul>/g, ''),
               }}
             />
           </div>
@@ -128,58 +128,58 @@ export function AssignmentPDFPreview({
             <div
               dangerouslySetInnerHTML={{
                 __html: rubric
-                  .replace(/\n\n/g, "</p><p>")
-                  .replace(/\n/g, "<br />")
-                  .replace(/^(.+)$/gm, "<p>$1</p>")
+                  .replace(/\n\n/g, '</p><p>')
+                  .replace(/\n/g, '<br />')
+                  .replace(/^(.+)$/gm, '<p>$1</p>')
                   .replace(/<p>#+\s(.+)<\/p>/g, (match, content) => {
-                    const level = match.match(/#+/)[0].length
-                    return `<h${level}>${content}</h${level}>`
+                    const level = match.match(/#+/)[0].length;
+                    return `<h${level}>${content}</h${level}>`;
                   })
                   .replace(/<p>\|(.+)\|<\/p>/g, (match, content) => {
-                    const cells = content.split("|").map((cell) => cell.trim())
-                    const isHeader = cells.some((cell) => cell.includes("--"))
+                    const cells = content.split('|').map((cell) => cell.trim());
+                    const isHeader = cells.some((cell) => cell.includes('--'));
 
                     if (isHeader) {
-                      return "" // Skip separator row
+                      return ''; // Skip separator row
                     }
 
-                    if (cells[0] === "" && cells[cells.length - 1] === "") {
+                    if (cells[0] === '' && cells[cells.length - 1] === '') {
                       // This is a table row
                       const cellsHtml = cells
                         .slice(1, -1)
                         .map((cell) => {
-                          return `<td>${cell}</td>`
+                          return `<td>${cell}</td>`;
                         })
-                        .join("")
+                        .join('');
 
-                      return `<tr>${cellsHtml}</tr>`
+                      return `<tr>${cellsHtml}</tr>`;
                     }
 
-                    return match
+                    return match;
                   })
                   .replace(/<p>\|(.+)\|<\/p>\s*<tr>/g, (match, content) => {
-                    const cells = content.split("|").map((cell) => cell.trim())
+                    const cells = content.split('|').map((cell) => cell.trim());
 
-                    if (cells[0] === "" && cells[cells.length - 1] === "") {
+                    if (cells[0] === '' && cells[cells.length - 1] === '') {
                       // This is a table header
                       const headerCells = cells
                         .slice(1, -1)
                         .map((cell) => {
-                          return `<th>${cell}</th>`
+                          return `<th>${cell}</th>`;
                         })
-                        .join("")
+                        .join('');
 
-                      return `<table><thead><tr>${headerCells}</tr></thead><tbody><tr>`
+                      return `<table><thead><tr>${headerCells}</tr></thead><tbody><tr>`;
                     }
 
-                    return match
+                    return match;
                   })
-                  .replace(/<\/tr>\s*(?!<tr|<\/tbody>)/g, "</tr></tbody></table>"),
+                  .replace(/<\/tr>\s*(?!<tr|<\/tbody>)/g, '</tr></tbody></table>'),
               }}
             />
           </div>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

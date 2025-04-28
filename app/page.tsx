@@ -1,7 +1,7 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ArrowRight } from "lucide-react"
-import { Logo } from "@/components/logo"
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
+import { Logo } from '@/components/logo';
 
 export default function Home() {
   return (
@@ -39,8 +39,9 @@ export default function Home() {
                     Meet Your New AI Teaching Partner.
                   </h1>
                   <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
-                    GradeGenie is your AI copilot, designed to empower you to design engaging courses, deliver
-                    personalized feedback, and improve student outcomes—all while reclaiming your time.
+                    GradeGenie is your AI copilot, designed to empower you to design engaging
+                    courses, deliver personalized feedback, and improve student outcomes—all while
+                    reclaiming your time.
                   </p>
                 </div>
                 <div className="flex flex-col gap-3 min-[400px]:flex-row">
@@ -119,13 +120,15 @@ export default function Home() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm text-primary">Key Features</div>
+                <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm text-primary">
+                  Key Features
+                </div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-primary font-onest">
                   AI-Powered Academic Workflows
                 </h2>
                 <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  GradeGenie streamlines the entire academic process from curriculum design to student feedback, making
-                  your teaching experience more rewarding.
+                  GradeGenie streamlines the entire academic process from curriculum design to
+                  student feedback, making your teaching experience more rewarding.
                 </p>
               </div>
             </div>
@@ -139,7 +142,9 @@ export default function Home() {
                     {feature.icon}
                   </div>
                   <h3 className="text-xl font-bold text-primary font-onest">{feature.title}</h3>
-                  <p className="text-center text-sm text-gray-500 dark:text-gray-400">{feature.description}</p>
+                  <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                    {feature.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -152,24 +157,30 @@ export default function Home() {
             © 2025 GradeGenie. All rights reserved.
           </p>
           <div className="flex gap-4">
-            <Link href="/terms" className="text-sm text-gray-500 hover:underline dark:text-gray-400">
+            <Link
+              href="/terms"
+              className="text-sm text-gray-500 hover:underline dark:text-gray-400"
+            >
               Terms
             </Link>
-            <Link href="/privacy" className="text-sm text-gray-500 hover:underline dark:text-gray-400">
+            <Link
+              href="/privacy"
+              className="text-sm text-gray-500 hover:underline dark:text-gray-400"
+            >
               Privacy
             </Link>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }
 
 const features = [
   {
-    title: "AI Syllabus Generator",
+    title: 'AI Syllabus Generator',
     description:
-      "Craft tailored grading criteria in seconds, so you can devote energy to mentoring students and fostering their growth.",
+      'Craft tailored grading criteria in seconds, so you can devote energy to mentoring students and fostering their growth.',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -192,8 +203,9 @@ const features = [
     ),
   },
   {
-    title: "Assignment Generator",
-    description: "Design effective assignments with clear instructions, requirements, and expectations.",
+    title: 'Assignment Generator',
+    description:
+      'Design effective assignments with clear instructions, requirements, and expectations.',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +229,7 @@ const features = [
     ),
   },
   {
-    title: "AI Grading Assistant",
+    title: 'AI Grading Assistant',
     description:
       "GradeGenie's AI detection identifies atypical patterns, giving you insights to uphold your institution’s standards and integrity.",
     icon: (
@@ -239,9 +251,9 @@ const features = [
     ),
   },
   {
-    title: "Student Feedback Portal",
+    title: 'Student Feedback Portal',
     description:
-      "Deliver targeted, actionable feedback with AI-powered insights—helping students grow while saving you time.",
+      'Deliver targeted, actionable feedback with AI-powered insights—helping students grow while saving you time.',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -264,8 +276,9 @@ const features = [
     ),
   },
   {
-    title: "LMS Integration",
-    description: "Seamlessly connect with Moodle, Canvas, and Google Classroom for grades and assignments.",
+    title: 'LMS Integration',
+    description:
+      'Seamlessly connect with Moodle, Canvas, and Google Classroom for grades and assignments.',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -287,8 +300,9 @@ const features = [
     ),
   },
   {
-    title: "Analytics Dashboard",
-    description: "Track student progress, identify learning gaps, and measure teaching effectiveness.",
+    title: 'Analytics Dashboard',
+    description:
+      'Track student progress, identify learning gaps, and measure teaching effectiveness.',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -307,4 +321,4 @@ const features = [
       </svg>
     ),
   },
-]
+];

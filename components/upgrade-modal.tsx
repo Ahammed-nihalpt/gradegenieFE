@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Check } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState } from 'react';
+import { Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -10,99 +10,103 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { useRouter } from "next/navigation"
+} from '@/components/ui/dialog';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { useRouter } from 'next/navigation';
 
 interface UpgradeModalProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly")
-  const [selectedPlan, setSelectedPlan] = useState<"educator" | "department" | "institution">("educator")
-  const router = useRouter()
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+  const [selectedPlan, setSelectedPlan] = useState<'educator' | 'department' | 'institution'>(
+    'educator'
+  );
+  const router = useRouter();
 
   const handleUpgrade = () => {
     // In a real implementation, this would navigate to checkout with the selected plan
-    router.push(`/dashboard/billing?plan=${selectedPlan}&cycle=${billingCycle}`)
-    onClose()
-  }
+    router.push(`/dashboard/billing?plan=${selectedPlan}&cycle=${billingCycle}`);
+    onClose();
+  };
 
   const plans = [
     {
-      id: "educator",
-      name: "Educator",
-      description: "Perfect for individual teachers",
+      id: 'educator',
+      name: 'Educator',
+      description: 'Perfect for individual teachers',
       monthlyPrice: 14.99,
       yearlyPrice: 143.9, // 20% discount applied
       features: [
-        "AI-powered grading",
-        "Unlimited assignments",
-        "Up to 150 students",
-        "Basic analytics",
-        "Email support",
+        'AI-powered grading',
+        'Unlimited assignments',
+        'Up to 150 students',
+        'Basic analytics',
+        'Email support',
       ],
       popular: false,
     },
     {
-      id: "department",
-      name: "Department",
-      description: "Ideal for teaching teams",
+      id: 'department',
+      name: 'Department',
+      description: 'Ideal for teaching teams',
       monthlyPrice: 74.99,
       yearlyPrice: 719.9, // 20% discount applied
       features: [
-        "Everything in Educator",
-        "Up to 5 teacher accounts",
-        "Up to 500 students",
-        "Advanced analytics",
-        "Priority support",
-        "LMS integrations",
+        'Everything in Educator',
+        'Up to 5 teacher accounts',
+        'Up to 500 students',
+        'Advanced analytics',
+        'Priority support',
+        'LMS integrations',
       ],
       popular: true,
     },
     {
-      id: "institution",
-      name: "Institution",
-      description: "For schools and universities",
+      id: 'institution',
+      name: 'Institution',
+      description: 'For schools and universities',
       monthlyPrice: 149.99,
       yearlyPrice: 1439.9, // 20% discount applied
       features: [
-        "Everything in Department",
-        "Unlimited teacher accounts",
-        "Unlimited students",
-        "Custom branding",
-        "Dedicated account manager",
-        "API access",
-        "SSO authentication",
+        'Everything in Department',
+        'Unlimited teacher accounts',
+        'Unlimited students',
+        'Custom branding',
+        'Dedicated account manager',
+        'API access',
+        'SSO authentication',
       ],
       popular: false,
     },
-  ]
+  ];
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">Upgrade Your GradeGenie Plan</DialogTitle>
-          <DialogDescription>Choose the plan that works best for you and your students.</DialogDescription>
+          <DialogDescription>
+            Choose the plan that works best for you and your students.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="my-6">
           <div className="flex items-center justify-center space-x-4 mb-8">
             <Button
-              variant={billingCycle === "monthly" ? "default" : "outline"}
-              onClick={() => setBillingCycle("monthly")}
+              variant={billingCycle === 'monthly' ? 'default' : 'outline'}
+              onClick={() => setBillingCycle('monthly')}
               className="w-32"
             >
               Monthly
             </Button>
             <Button
-              variant={billingCycle === "yearly" ? "default" : "outline"}
-              onClick={() => setBillingCycle("yearly")}
+              variant={billingCycle === 'yearly' ? 'default' : 'outline'}
+              onClick={() => setBillingCycle('yearly')}
               className="w-32"
             >
               Yearly
@@ -118,11 +122,13 @@ export function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
                 <div
                   key={plan.id}
                   className={`relative rounded-lg border p-4 ${
-                    selectedPlan === plan.id ? "border-primary bg-primary/5" : "border-border"
+                    selectedPlan === plan.id ? 'border-primary bg-primary/5' : 'border-border'
                   }`}
                 >
                   {plan.popular && (
-                    <Badge className="absolute -top-2 -right-2 bg-primary text-primary-foreground">Most Popular</Badge>
+                    <Badge className="absolute -top-2 -right-2 bg-primary text-primary-foreground">
+                      Most Popular
+                    </Badge>
                   )}
                   <div className="flex items-start">
                     <RadioGroupItem value={plan.id} id={plan.id} className="mt-1" />
@@ -133,9 +139,9 @@ export function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
                         </Label>
                         <div className="text-right">
                           <div className="text-xl font-bold">
-                            ${billingCycle === "monthly" ? plan.monthlyPrice : plan.yearlyPrice}
+                            ${billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice}
                             <span className="text-sm font-normal text-muted-foreground">
-                              /{billingCycle === "monthly" ? "month" : "year"}
+                              /{billingCycle === 'monthly' ? 'month' : 'year'}
                             </span>
                           </div>
                         </div>
@@ -167,7 +173,8 @@ export function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
             <div>
               <h4 className="font-medium">Your free trial benefits will be extended</h4>
               <p className="text-sm text-muted-foreground mt-1">
-                Upgrading now will preserve your remaining trial credits and add them to your paid plan.
+                Upgrading now will preserve your remaining trial credits and add them to your paid
+                plan.
               </p>
             </div>
           </div>
@@ -183,5 +190,5 @@ export function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

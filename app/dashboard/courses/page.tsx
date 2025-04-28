@@ -1,9 +1,9 @@
-"use client";
-import Link from "next/link";
-import { Plus } from "lucide-react";
+'use client';
+import Link from 'next/link';
+import { Plus } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { PageHeader } from "@/components/page-header";
+import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/page-header';
 import {
   Card,
   CardContent,
@@ -11,8 +11,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { useCourses } from "@/hooks/use-course";
+} from '@/components/ui/card';
+import { useCourses } from '@/hooks/use-course';
 
 export default function CoursesPage() {
   const { data: courses = [] } = useCourses();
@@ -20,10 +20,7 @@ export default function CoursesPage() {
   return (
     <div className="container mx-auto py-6">
       <div className="flex justify-between items-center mb-6">
-        <PageHeader
-          heading="Courses"
-          subheading="Manage your courses and create new ones"
-        />
+        <PageHeader heading="Courses" subheading="Manage your courses and create new ones" />
         <Button asChild>
           <Link
             href="/dashboard/courses/create"
@@ -43,25 +40,19 @@ export default function CoursesPage() {
               <CardDescription>{course.subject}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                {course.description}
-              </p>
+              <p className="text-sm text-muted-foreground mb-4">{course.description}</p>
               <div className="flex justify-between text-sm">
                 <div>
-                  <span className="font-medium">{course.students}</span>{" "}
-                  Students
+                  <span className="font-medium">{course.students}</span> Students
                 </div>
                 <div>
-                  <span className="font-medium">{course.assignmentCount}</span>{" "}
-                  Assignments
+                  <span className="font-medium">{course.assignmentCount}</span> Assignments
                 </div>
               </div>
             </CardContent>
             <CardFooter className="flex justify-between">
               <Button variant="outline" asChild className="w-full">
-                <Link href={`/dashboard/courses/${course._id}`}>
-                  View Details
-                </Link>
+                <Link href={`/dashboard/courses/${course._id}`}>View Details</Link>
               </Button>
             </CardFooter>
           </Card>

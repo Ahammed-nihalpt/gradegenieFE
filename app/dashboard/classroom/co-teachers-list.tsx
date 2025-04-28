@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { MoreHorizontal, Search } from "lucide-react";
+import { useState } from 'react';
+import { MoreHorizontal, Search } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,8 +11,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -20,15 +20,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { useTeacherByUserId } from "@/hooks/use-teacher";
-import { useSession } from "next-auth/react";
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { useTeacherByUserId } from '@/hooks/use-teacher';
+import { useSession } from 'next-auth/react';
 
 export function CoTeachersList() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const { data: session } = useSession();
-  const { data: coTeachers } = useTeacherByUserId(session?.user.id || "");
+  const { data: coTeachers } = useTeacherByUserId(session?.user.id || '');
 
   const filteredTeachers = coTeachers?.filter((teacher) =>
     teacher.email.toLowerCase().includes(searchQuery.toLowerCase())
@@ -66,11 +66,7 @@ export function CoTeachersList() {
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-wrap gap-1">
-                    <Badge
-                      key={teacher.class}
-                      variant="secondary"
-                      className="text-xs"
-                    >
+                    <Badge key={teacher.class} variant="secondary" className="text-xs">
                       {teacher.class}
                     </Badge>
                   </div>
@@ -88,9 +84,7 @@ export function CoTeachersList() {
                       <DropdownMenuItem>Edit Access</DropdownMenuItem>
                       <DropdownMenuItem>Resend Invitation</DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="text-destructive">
-                        Remove
-                      </DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive">Remove</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

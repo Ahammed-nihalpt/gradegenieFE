@@ -1,5 +1,5 @@
-import Image from "next/image"
-import { Card, CardContent } from "@/components/ui/card"
+import Image from 'next/image';
+import { Card, CardContent } from '@/components/ui/card';
 
 export function Testimonials() {
   return (
@@ -25,8 +25,8 @@ export function Testimonials() {
                 </div>
               </div>
               <p className="text-sm text-muted-foreground">
-                "GradeGenie saved me weeks of work. My students appreciate the fast turnaround, and I love how quick,
-                easy, and accurate it is."
+                "GradeGenie saved me weeks of work. My students appreciate the fast turnaround, and
+                I love how quick, easy, and accurate it is."
               </p>
             </div>
           </CardContent>
@@ -51,8 +51,8 @@ export function Testimonials() {
                 </div>
               </div>
               <p className="text-sm text-muted-foreground">
-                "Finding and managing TAs used to be a nightmare. With GradeGenie, I have a reliable, consistent grading
-                assistant, freeing up my time for research."
+                "Finding and managing TAs used to be a nightmare. With GradeGenie, I have a
+                reliable, consistent grading assistant, freeing up my time for research."
               </p>
             </div>
           </CardContent>
@@ -77,13 +77,13 @@ export function Testimonials() {
                 </div>
               </div>
               <p className="text-sm text-muted-foreground">
-                "The feedback it provides is much more detailed than I have time to give, and I can still add my
-                comments and adjust grades. I can't imagine going back to the old way!"
+                "The feedback it provides is much more detailed than I have time to give, and I can
+                still add my comments and adjust grades. I can't imagine going back to the old way!"
               </p>
             </div>
           </CardContent>
         </Card>
       </div>
     </div>
-  )
+  );
 }

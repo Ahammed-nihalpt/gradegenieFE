@@ -1,5 +1,5 @@
-"use client"
-import { Button } from "@/components/ui/button"
+'use client';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -7,13 +7,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { X, Sparkles, BookOpen, Clock, Shield } from "lucide-react"
-import Link from "next/link"
+} from '@/components/ui/dialog';
+import { X, Sparkles, BookOpen, Clock, Shield } from 'lucide-react';
+import Link from 'next/link';
 
 interface CreditsExhaustedModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 export function CreditsExhaustedModal({ open, onOpenChange }: CreditsExhaustedModalProps) {
@@ -26,8 +26,10 @@ export function CreditsExhaustedModal({ open, onOpenChange }: CreditsExhaustedMo
             You've utilized all 30 grading credits
           </DialogTitle>
           <DialogDescription>
-            Upgrade now to continue enhancing your teaching workflow with reliable, AI-powered grading. Use code
-            <span className="font-bold mx-1">GENIEFRIENDS20</span> for 20% savings — valid for 24 hours.
+            Upgrade now to continue enhancing your teaching workflow with reliable, AI-powered
+            grading. Use code
+            <span className="font-bold mx-1">GENIEFRIENDS20</span> for 20% savings — valid for 24
+            hours.
           </DialogDescription>
         </DialogHeader>
 
@@ -66,5 +68,5 @@ export function CreditsExhaustedModal({ open, onOpenChange }: CreditsExhaustedMo
         </button>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import IAssignment from "./assignment";
+import IAssignment from './assignment';
 
 interface IRequiredMaterial {
   title: string;

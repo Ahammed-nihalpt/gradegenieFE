@@ -1,22 +1,31 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { Check } from "lucide-react"
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { Check } from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Testimonials } from "./testimonials"
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Testimonials } from './testimonials';
 
 export const metadata: Metadata = {
-  title: "Pricing | GradeGenie",
-  description: "Choose the perfect plan for your teaching needs",
-}
+  title: 'Pricing | GradeGenie',
+  description: 'Choose the perfect plan for your teaching needs',
+};
 
 export default function PricingPage() {
   return (
     <div className="container max-w-6xl py-10">
       <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Simple, Transparent Pricing</h1>
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+          Simple, Transparent Pricing
+        </h1>
         <p className="max-w-[85%] text-muted-foreground sm:text-xl">
           Choose the perfect plan for your teaching needs. Upgrade, downgrade, or cancel anytime.
         </p>
@@ -38,7 +47,8 @@ export default function PricingPage() {
                 <CardHeader className="flex flex-col space-y-1">
                   <CardTitle className="text-2xl">Educator</CardTitle>
                   <div className="text-4xl font-bold">
-                    $14.99<span className="text-base font-normal text-muted-foreground">/month</span>
+                    $14.99
+                    <span className="text-base font-normal text-muted-foreground">/month</span>
                   </div>
                   <CardDescription>Perfect for individual teachers and tutors.</CardDescription>
                 </CardHeader>
@@ -79,7 +89,8 @@ export default function PricingPage() {
                   </div>
                   <CardTitle className="text-2xl">Department</CardTitle>
                   <div className="text-4xl font-bold">
-                    $74.99<span className="text-base font-normal text-muted-foreground">/month</span>
+                    $74.99
+                    <span className="text-base font-normal text-muted-foreground">/month</span>
                   </div>
                   <CardDescription>Ideal for departments and small schools.</CardDescription>
                 </CardHeader>
@@ -117,7 +128,8 @@ export default function PricingPage() {
                 <CardHeader className="flex flex-col space-y-1">
                   <CardTitle className="text-2xl">Institution</CardTitle>
                   <div className="text-4xl font-bold">
-                    $149.99<span className="text-base font-normal text-muted-foreground">/month</span>
+                    $149.99
+                    <span className="text-base font-normal text-muted-foreground">/month</span>
                   </div>
                   <CardDescription>For schools, colleges and universities.</CardDescription>
                 </CardHeader>
@@ -159,7 +171,8 @@ export default function PricingPage() {
                 <CardHeader className="flex flex-col space-y-1">
                   <CardTitle className="text-2xl">Educator</CardTitle>
                   <div className="text-4xl font-bold">
-                    $143.90<span className="text-base font-normal text-muted-foreground">/year</span>
+                    $143.90
+                    <span className="text-base font-normal text-muted-foreground">/year</span>
                   </div>
                   <CardDescription>Perfect for individual teachers and tutors.</CardDescription>
                 </CardHeader>
@@ -200,7 +213,8 @@ export default function PricingPage() {
                   </div>
                   <CardTitle className="text-2xl">Department</CardTitle>
                   <div className="text-4xl font-bold">
-                    $719.90<span className="text-base font-normal text-muted-foreground">/year</span>
+                    $719.90
+                    <span className="text-base font-normal text-muted-foreground">/year</span>
                   </div>
                   <CardDescription>Ideal for departments and small schools.</CardDescription>
                 </CardHeader>
@@ -228,7 +242,9 @@ export default function PricingPage() {
                 </CardContent>
                 <CardFooter className="mt-auto pt-4">
                   <Button asChild className="w-full">
-                    <Link href="/dashboard/billing?plan=department&billing=yearly">Upgrade Now</Link>
+                    <Link href="/dashboard/billing?plan=department&billing=yearly">
+                      Upgrade Now
+                    </Link>
                   </Button>
                 </CardFooter>
               </Card>
@@ -238,7 +254,8 @@ export default function PricingPage() {
                 <CardHeader className="flex flex-col space-y-1">
                   <CardTitle className="text-2xl">Institution</CardTitle>
                   <div className="text-4xl font-bold">
-                    $1,439.90<span className="text-base font-normal text-muted-foreground">/year</span>
+                    $1,439.90
+                    <span className="text-base font-normal text-muted-foreground">/year</span>
                   </div>
                   <CardDescription>For schools, colleges and universities.</CardDescription>
                 </CardHeader>
@@ -266,7 +283,9 @@ export default function PricingPage() {
                 </CardContent>
                 <CardFooter className="mt-auto pt-4">
                   <Button asChild className="w-full">
-                    <Link href="/dashboard/billing?plan=institution&billing=yearly">Contact Sales</Link>
+                    <Link href="/dashboard/billing?plan=institution&billing=yearly">
+                      Contact Sales
+                    </Link>
                   </Button>
                 </CardFooter>
               </Card>
@@ -287,5 +306,5 @@ export default function PricingPage() {
         </Button>
       </div>
     </div>
-  )
+  );
 }

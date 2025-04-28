@@ -1,6 +1,6 @@
-"use server"
+'use server';
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath } from 'next/cache';
 
 /**
  * Sends a password reset link to the provided email address
@@ -12,12 +12,12 @@ export async function requestPasswordReset(email: string) {
   // 3. Send an email with a link containing the token
 
   // For demo purposes, we'll just simulate a successful request
-  console.log(`Password reset requested for: ${email}`)
+  console.log(`Password reset requested for: ${email}`);
 
   // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  return { success: true }
+  return { success: true };
 }
 
 /**
@@ -31,13 +31,13 @@ export async function resetPassword(token: string, newPassword: string) {
   // 4. Invalidate the token
 
   // For demo purposes, we'll just simulate a successful reset
-  console.log(`Password reset with token: ${token}`)
+  console.log(`Password reset with token: ${token}`);
 
   // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // Revalidate the login page to ensure fresh data
-  revalidatePath("/login")
+  revalidatePath('/login');
 
-  return { success: true }
+  return { success: true };
 }

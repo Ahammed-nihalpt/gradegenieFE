@@ -1,86 +1,93 @@
-"use client"
+'use client';
 
-import type React from "react"
+import type React from 'react';
 
-import { useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowLeft, CreditCard, Check } from "lucide-react"
-import Link from "next/link"
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ArrowLeft, CreditCard, Check } from 'lucide-react';
+import Link from 'next/link';
 
 const planDetails = {
   basic: {
-    name: "Basic",
+    name: 'Basic',
     monthlyPrice: 9,
     yearlyPrice: 90,
     features: [
-      "50 assignments per month",
-      "AI grading assistance",
-      "Basic plagiarism detection",
-      "1 classroom",
-      "Email support",
+      '50 assignments per month',
+      'AI grading assistance',
+      'Basic plagiarism detection',
+      '1 classroom',
+      'Email support',
     ],
   },
   pro: {
-    name: "Pro",
+    name: 'Pro',
     monthlyPrice: 19,
     yearlyPrice: 190,
     features: [
-      "Unlimited assignments",
-      "Advanced AI grading",
-      "Enhanced plagiarism detection",
-      "5 classrooms",
-      "1 co-teacher per classroom",
-      "Priority email support",
+      'Unlimited assignments',
+      'Advanced AI grading',
+      'Enhanced plagiarism detection',
+      '5 classrooms',
+      '1 co-teacher per classroom',
+      'Priority email support',
     ],
   },
   enterprise: {
-    name: "Enterprise",
+    name: 'Enterprise',
     monthlyPrice: 49,
     yearlyPrice: 490,
     features: [
-      "Everything in Pro",
-      "Unlimited classrooms",
-      "Unlimited co-teachers",
-      "Advanced analytics dashboard",
-      "LMS integrations",
-      "Dedicated account manager",
-      "24/7 phone & email support",
+      'Everything in Pro',
+      'Unlimited classrooms',
+      'Unlimited co-teachers',
+      'Advanced analytics dashboard',
+      'LMS integrations',
+      'Dedicated account manager',
+      '24/7 phone & email support',
     ],
   },
-}
+};
 
 export default function CheckoutPage() {
-  const searchParams = useSearchParams()
-  const planParam = searchParams.get("plan") || "pro"
-  const [plan, setPlan] = useState(planParam)
-  const [billingCycle, setBillingCycle] = useState("monthly")
-  const [isProcessing, setIsProcessing] = useState(false)
+  const searchParams = useSearchParams();
+  const planParam = searchParams.get('plan') || 'pro';
+  const [plan, setPlan] = useState(planParam);
+  const [billingCycle, setBillingCycle] = useState('monthly');
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Ensure plan is valid
   useEffect(() => {
-    if (!["basic", "pro", "enterprise"].includes(plan)) {
-      setPlan("pro")
+    if (!['basic', 'pro', 'enterprise'].includes(plan)) {
+      setPlan('pro');
     }
-  }, [plan])
+  }, [plan]);
 
-  const selectedPlan = planDetails[plan as keyof typeof planDetails]
-  const price = billingCycle === "monthly" ? selectedPlan.monthlyPrice : selectedPlan.yearlyPrice
+  const selectedPlan = planDetails[plan as keyof typeof planDetails];
+  const price = billingCycle === 'monthly' ? selectedPlan.monthlyPrice : selectedPlan.yearlyPrice;
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsProcessing(true)
+    e.preventDefault();
+    setIsProcessing(true);
 
     // Simulate payment processing
     setTimeout(() => {
-      window.location.href = "/dashboard?upgraded=true"
-    }, 2000)
-  }
+      window.location.href = '/dashboard?upgraded=true';
+    }, 2000);
+  };
 
   return (
     <div className="container max-w-6xl py-10">
@@ -93,7 +100,9 @@ export default function CheckoutPage() {
         <div className="md:col-span-3">
           <div className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight">Checkout</h1>
-            <p className="text-muted-foreground mt-2">Complete your purchase to upgrade your GradeGenie experience</p>
+            <p className="text-muted-foreground mt-2">
+              Complete your purchase to upgrade your GradeGenie experience
+            </p>
           </div>
 
           <Tabs defaultValue="card" className="w-full">
@@ -152,7 +161,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <Button type="submit" className="w-full" disabled={isProcessing}>
-                    {isProcessing ? "Processing..." : `Pay $${price.toFixed(2)}`}
+                    {isProcessing ? 'Processing...' : `Pay $${price.toFixed(2)}`}
                   </Button>
                 </div>
               </form>
@@ -163,7 +172,7 @@ export default function CheckoutPage() {
                   You will be redirected to PayPal to complete your purchase.
                 </p>
                 <Button onClick={handleSubmit} disabled={isProcessing}>
-                  {isProcessing ? "Processing..." : "Continue to PayPal"}
+                  {isProcessing ? 'Processing...' : 'Continue to PayPal'}
                 </Button>
               </div>
             </TabsContent>
@@ -180,7 +189,11 @@ export default function CheckoutPage() {
               <div>
                 <div className="flex justify-between mb-2">
                   <h3 className="font-medium">{selectedPlan.name} Plan</h3>
-                  <RadioGroup value={billingCycle} onValueChange={setBillingCycle} className="flex space-x-4">
+                  <RadioGroup
+                    value={billingCycle}
+                    onValueChange={setBillingCycle}
+                    className="flex space-x-4"
+                  >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="monthly" id="monthly" />
                       <Label htmlFor="monthly" className="cursor-pointer">
@@ -197,9 +210,9 @@ export default function CheckoutPage() {
                 </div>
                 <p className="text-2xl font-bold">${price.toFixed(2)}</p>
                 <p className="text-sm text-muted-foreground">
-                  {billingCycle === "monthly"
-                    ? "per month"
-                    : "per year (equivalent to $" + (price / 12).toFixed(2) + "/month)"}
+                  {billingCycle === 'monthly'
+                    ? 'per month'
+                    : 'per year (equivalent to $' + (price / 12).toFixed(2) + '/month)'}
                 </p>
               </div>
 
@@ -217,7 +230,8 @@ export default function CheckoutPage() {
             </CardContent>
             <CardFooter className="flex flex-col items-start border-t pt-6">
               <p className="text-sm text-muted-foreground mb-2">
-                By proceeding with your purchase, you agree to our Terms of Service and Privacy Policy.
+                By proceeding with your purchase, you agree to our Terms of Service and Privacy
+                Policy.
               </p>
               <p className="text-sm text-muted-foreground">
                 You can cancel or change your subscription at any time from your account settings.
@@ -227,5 +241,5 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

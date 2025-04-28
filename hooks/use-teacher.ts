@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchTeacherById } from "@/lib/teacherApi";
+import { useQuery } from '@tanstack/react-query';
+import { fetchTeacherById } from '@/lib/teacherApi';
 
 export function useTeacherByUserId(userId: string) {
   const { data, refetch, isLoading, isError } = useQuery({
-    queryKey: ["teacher", userId],
+    queryKey: ['teacher', userId],
     queryFn: () => fetchTeacherById(userId),
     enabled: !!userId,
     retry: false,

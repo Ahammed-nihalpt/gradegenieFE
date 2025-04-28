@@ -1,17 +1,24 @@
-import type { Metadata } from "next"
-import Image from "next/image"
-import Link from "next/link"
-import { CheckCircle2, ChevronRight } from "lucide-react"
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+import { CheckCircle2, ChevronRight } from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { PageHeader } from "@/components/page-header"
-import { ConnectedSystems } from "./connected-systems"
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { PageHeader } from '@/components/page-header';
+import { ConnectedSystems } from './connected-systems';
 
 export const metadata: Metadata = {
-  title: "LMS Integrations | GradeGenie",
-  description: "Connect GradeGenie with your Learning Management System",
-}
+  title: 'LMS Integrations | GradeGenie',
+  description: 'Connect GradeGenie with your Learning Management System',
+};
 
 export default function IntegrationsPage() {
   return (
@@ -68,7 +75,7 @@ export default function IntegrationsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function LmsCard({
@@ -77,10 +84,10 @@ function LmsCard({
   description,
   setupUrl,
 }: {
-  name: string
-  logo: string
-  description: string
-  setupUrl: string
+  name: string;
+  logo: string;
+  description: string;
+  setupUrl: string;
 }) {
   return (
     <Card>
@@ -88,7 +95,7 @@ function LmsCard({
         <CardTitle className="text-xl">{name}</CardTitle>
         <div className="h-12 w-12 overflow-hidden rounded-md">
           <Image
-            src={logo || "/placeholder.svg"}
+            src={logo || '/placeholder.svg'}
             alt={`${name} logo`}
             width={48}
             height={48}
@@ -107,7 +114,7 @@ function LmsCard({
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
 
 function BenefitCard({ title, description }: { title: string; description: string }) {
@@ -117,5 +124,5 @@ function BenefitCard({ title, description }: { title: string; description: strin
       <h3 className="mt-4 text-xl font-medium">{title}</h3>
       <p className="mt-2 text-sm text-muted-foreground">{description}</p>
     </div>
-  )
+  );
 }

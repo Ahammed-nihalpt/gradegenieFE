@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -9,22 +9,22 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Download, Loader2, Save, Sparkles } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import api from "@/lib/axios";
-import { useCourseStore } from "@/lib/stores/courseStore";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/select';
+import { Download, Loader2, Save, Sparkles } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import api from '@/lib/axios';
+import { useCourseStore } from '@/lib/stores/courseStore';
+import { useRouter } from 'next/navigation';
 
 export default function CreateSyllabusPage() {
   const { toast } = useToast();
@@ -32,7 +32,7 @@ export default function CreateSyllabusPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [syllabus, setSyllabus] = useState("");
+  const [syllabus, setSyllabus] = useState('');
   const { course, setCourseId } = useCourseStore();
 
   const handleGenerateSyllabus = () => {
@@ -125,8 +125,8 @@ By the end of this course, students will be able to:
       setIsGenerating(false);
 
       toast({
-        title: "Syllabus Generated",
-        description: "AI-generated syllabus is ready for review",
+        title: 'Syllabus Generated',
+        description: 'AI-generated syllabus is ready for review',
       });
     }, 3000);
   };
@@ -139,8 +139,8 @@ By the end of this course, students will be able to:
       setIsDownloading(false);
 
       toast({
-        title: "PDF Downloaded",
-        description: "Your syllabus has been downloaded as a PDF",
+        title: 'PDF Downloaded',
+        description: 'Your syllabus has been downloaded as a PDF',
       });
 
       // In a real app, this would trigger a PDF download
@@ -157,8 +157,8 @@ By the end of this course, students will be able to:
       });
 
       toast({
-        title: "Syllabus Saved",
-        description: "Your syllabus has been saved successfully",
+        title: 'Syllabus Saved',
+        description: 'Your syllabus has been saved successfully',
       });
       setIsSaving(false);
       if (course?._id) {
@@ -169,9 +169,9 @@ By the end of this course, students will be able to:
     } catch (error) {
       setIsSaving(false);
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again later.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Something went wrong. Please try again later.',
+        variant: 'destructive',
       });
     }
   };
@@ -179,16 +179,12 @@ By the end of this course, students will be able to:
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 font-sans">
       <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight text-primary-dark">
-          Create Syllabus
-        </h2>
+        <h2 className="text-3xl font-bold tracking-tight text-primary-dark">Create Syllabus</h2>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         <Card className="border-primary/10">
           <CardHeader className="bg-secondary/50 rounded-t-lg">
-            <CardTitle className="text-primary-dark">
-              Course Information
-            </CardTitle>
+            <CardTitle className="text-primary-dark">Course Information</CardTitle>
             <CardDescription>
               Enter details about your course to generate a syllabus
             </CardDescription>
@@ -275,12 +271,8 @@ By the end of this course, students will be able to:
         {syllabus ? (
           <Card className="border-primary/10">
             <CardHeader className="bg-secondary/50 rounded-t-lg">
-              <CardTitle className="text-primary-dark">
-                Generated Syllabus
-              </CardTitle>
-              <CardDescription>
-                Review and edit the AI-generated syllabus
-              </CardDescription>
+              <CardTitle className="text-primary-dark">Generated Syllabus</CardTitle>
+              <CardDescription>Review and edit the AI-generated syllabus</CardDescription>
             </CardHeader>
             <CardContent className="pt-6">
               <Textarea
@@ -333,12 +325,10 @@ By the end of this course, students will be able to:
               <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
                 <Sparkles className="h-10 w-10 text-primary" />
               </div>
-              <h3 className="text-xl font-medium text-primary-dark">
-                AI Syllabus Generator
-              </h3>
+              <h3 className="text-xl font-medium text-primary-dark">AI Syllabus Generator</h3>
               <p className="text-sm text-muted-foreground mt-2">
-                Fill in the course information and click "Generate Syllabus" to
-                create a comprehensive course syllabus using AI.
+                Fill in the course information and click "Generate Syllabus" to create a
+                comprehensive course syllabus using AI.
               </p>
               <p className="text-sm text-muted-foreground mt-4">
                 The generated syllabus will include:

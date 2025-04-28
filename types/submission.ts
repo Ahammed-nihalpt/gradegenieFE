@@ -11,7 +11,7 @@ export interface InlineComment {
 
 interface AICheckerResults {
   score: number;
-  confidence: "High" | "Medium" | "Low"; // stricter typing
+  confidence: 'High' | 'Medium' | 'Low'; // stricter typing
   details: {
     section: string;
     aiProbability: number;
@@ -57,14 +57,14 @@ export interface ISubmission {
   inlineComments?: InlineComment[]; // Optional
   subScores?: SubScore[]; // Optional
   overallFeedback?: OverallFeedback; // Optional
-  status?: "Graded" | "Pending" | "In Progress";
+  status?: 'Graded' | 'Pending' | 'In Progress';
   submissionTime?: string;
   aiCheckerResults: AICheckerResults;
   integrityCheck?: {
-    status?: "Clear" | "Flagged" | "Checking..." | "Not Run";
+    status?: 'Clear' | 'Flagged' | 'Checking...' | 'Not Run';
     aiDetection?: {
       score?: number;
-      confidence?: "High" | "Medium" | "Low";
+      confidence?: 'High' | 'Medium' | 'Low';
       flaggedPhrases?: string[];
     };
     plagiarism?: {

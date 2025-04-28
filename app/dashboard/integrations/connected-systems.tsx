@@ -1,13 +1,20 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Check, RefreshCw, Trash2 } from "lucide-react"
+import { useState } from 'react';
+import { Check, RefreshCw, Trash2 } from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,41 +24,47 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from '@/components/ui/alert-dialog';
 
 type ConnectedSystem = {
-  id: string
-  name: string
-  type: "canvas" | "google-classroom" | "moodle"
-  status: "active" | "error" | "syncing"
-  lastSync: string
-  autoSync: boolean
-  courses: number
-  students: number
-}
+  id: string;
+  name: string;
+  type: 'canvas' | 'google-classroom' | 'moodle';
+  status: 'active' | 'error' | 'syncing';
+  lastSync: string;
+  autoSync: boolean;
+  courses: number;
+  students: number;
+};
 
 export function ConnectedSystems() {
   const [systems, setSystems] = useState<ConnectedSystem[]>([
     {
-      id: "1",
-      name: "My Canvas Instance",
-      type: "canvas",
-      status: "active",
-      lastSync: "2023-06-15T14:30:00Z",
+      id: '1',
+      name: 'My Canvas Instance',
+      type: 'canvas',
+      status: 'active',
+      lastSync: '2023-06-15T14:30:00Z',
       autoSync: true,
       courses: 5,
       students: 127,
     },
-  ])
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-  const [systemToRemove, setSystemToRemove] = useState<string | null>(null)
+  ]);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [systemToRemove, setSystemToRemove] = useState<string | null>(null);
 
   const handleAutoSyncToggle = (id: string) => {
-    setSystems(systems.map((system) => (system.id === id ? { ...system, autoSync: !system.autoSync } : system)))
-  }
+    setSystems(
+      systems.map((system) =>
+        system.id === id ? { ...system, autoSync: !system.autoSync } : system
+      )
+    );
+  };
 
   const handleSync = (id: string) => {
-    setSystems(systems.map((system) => (system.id === id ? { ...system, status: "syncing" } : system)))
+    setSystems(
+      systems.map((system) => (system.id === id ? { ...system, status: 'syncing' } : system))
+    );
 
     // Simulate sync completion after 2 seconds
     setTimeout(() => {
@@ -60,27 +73,27 @@ export function ConnectedSystems() {
           system.id === id
             ? {
                 ...system,
-                status: "active",
+                status: 'active',
                 lastSync: new Date().toISOString(),
               }
-            : system,
-        ),
-      )
-    }, 2000)
-  }
+            : system
+        )
+      );
+    }, 2000);
+  };
 
   const openConfirmDialog = (id: string) => {
-    setSystemToRemove(id)
-    setIsConfirmOpen(true)
-  }
+    setSystemToRemove(id);
+    setIsConfirmOpen(true);
+  };
 
   const handleRemove = () => {
     if (systemToRemove) {
-      setSystems(systems.filter((system) => system.id !== systemToRemove))
-      setSystemToRemove(null)
+      setSystems(systems.filter((system) => system.id !== systemToRemove));
+      setSystemToRemove(null);
     }
-    setIsConfirmOpen(false)
-  }
+    setIsConfirmOpen(false);
+  };
 
   if (systems.length === 0) {
     return (
@@ -90,7 +103,7 @@ export function ConnectedSystems() {
           Connect to a Learning Management System to sync your courses, assignments, and grades.
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -104,9 +117,9 @@ export function ConnectedSystems() {
                 <StatusBadge status={system.status} />
               </div>
               <CardDescription>
-                {system.type === "canvas" && "Canvas LMS"}
-                {system.type === "google-classroom" && "Google Classroom"}
-                {system.type === "moodle" && "Moodle"}
+                {system.type === 'canvas' && 'Canvas LMS'}
+                {system.type === 'google-classroom' && 'Google Classroom'}
+                {system.type === 'moodle' && 'Moodle'}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -123,10 +136,10 @@ export function ConnectedSystems() {
                   <p className="text-muted-foreground">Last Sync</p>
                   <p className="font-medium">
                     {new Date(system.lastSync).toLocaleString(undefined, {
-                      month: "short",
-                      day: "numeric",
-                      hour: "numeric",
-                      minute: "2-digit",
+                      month: 'short',
+                      day: 'numeric',
+                      hour: 'numeric',
+                      minute: '2-digit',
                     })}
                   </p>
                 </div>
@@ -150,10 +163,12 @@ export function ConnectedSystems() {
                 variant="outline"
                 size="sm"
                 onClick={() => handleSync(system.id)}
-                disabled={system.status === "syncing"}
+                disabled={system.status === 'syncing'}
               >
-                <RefreshCw className={`mr-2 h-4 w-4 ${system.status === "syncing" ? "animate-spin" : ""}`} />
-                {system.status === "syncing" ? "Syncing..." : "Sync Now"}
+                <RefreshCw
+                  className={`mr-2 h-4 w-4 ${system.status === 'syncing' ? 'animate-spin' : ''}`}
+                />
+                {system.status === 'syncing' ? 'Syncing...' : 'Sync Now'}
               </Button>
               <Button variant="outline" size="sm" onClick={() => openConfirmDialog(system.id)}>
                 <Trash2 className="mr-2 h-4 w-4" />
@@ -169,37 +184,47 @@ export function ConnectedSystems() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will disconnect the integration and remove all synced data. This action cannot be undone.
+              This will disconnect the integration and remove all synced data. This action cannot be
+              undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleRemove} className="bg-destructive text-destructive-foreground">
+            <AlertDialogAction
+              onClick={handleRemove}
+              className="bg-destructive text-destructive-foreground"
+            >
               Disconnect
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </>
-  )
+  );
 }
 
-function StatusBadge({ status }: { status: "active" | "error" | "syncing" }) {
-  if (status === "active") {
+function StatusBadge({ status }: { status: 'active' | 'error' | 'syncing' }) {
+  if (status === 'active') {
     return (
-      <Badge variant="outline" className="bg-green-50 text-green-700 hover:bg-green-50 hover:text-green-700">
+      <Badge
+        variant="outline"
+        className="bg-green-50 text-green-700 hover:bg-green-50 hover:text-green-700"
+      >
         <Check className="mr-1 h-3 w-3" /> Connected
       </Badge>
-    )
+    );
   }
 
-  if (status === "error") {
-    return <Badge variant="destructive">Error</Badge>
+  if (status === 'error') {
+    return <Badge variant="destructive">Error</Badge>;
   }
 
   return (
-    <Badge variant="outline" className="bg-blue-50 text-blue-700 hover:bg-blue-50 hover:text-blue-700">
+    <Badge
+      variant="outline"
+      className="bg-blue-50 text-blue-700 hover:bg-blue-50 hover:text-blue-700"
+    >
       <RefreshCw className="mr-1 h-3 w-3 animate-spin" /> Syncing
     </Badge>
-  )
+  );
 }

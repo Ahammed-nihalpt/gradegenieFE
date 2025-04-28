@@ -1,43 +1,41 @@
-"use server";
+'use server';
 
-import { redirect } from "next/navigation";
-import Stripe from "stripe";
+import { redirect } from 'next/navigation';
+import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "X", {
-  apiVersion: "2023-10-16",
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'X', {
+  apiVersion: '2023-10-16',
 });
 
 // Price ID for the subscription
-const PRICE_ID = "X"; // Replace with your actual price ID
+const PRICE_ID = 'X'; // Replace with your actual price ID
 
 export async function verifyEmailWithReoon(email: string): Promise<boolean> {
   try {
-    const response = await fetch("https://api.reoon.com/email-verifier", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const response = await fetch('https://api.reoon.com/email-verifier', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        api_key: "X",
+        api_key: 'X',
         email: email,
       }),
     });
 
     const result = await response.json();
     return (
-      result.status === "valid" &&
-      result.smtp_check === true &&
-      result.is_disposable === false
+      result.status === 'valid' && result.smtp_check === true && result.is_disposable === false
     );
   } catch (error) {
-    console.error("Error verifying email:", error);
+    console.error('Error verifying email:', error);
     return false;
   }
 }
 
 export async function createCheckoutSession(formData: FormData) {
-  const email = formData.get("email") as string;
+  const email = formData.get('email') as string;
 
   if (!email) {
-    return { error: "Email is required" };
+    return { error: 'Email is required' };
   }
 
   // Verify email with Reoon
@@ -45,16 +43,15 @@ export async function createCheckoutSession(formData: FormData) {
 
   if (!isEmailValid) {
     return {
-      error:
-        "Please use a real, non-temporary email address to begin your free trial.",
+      error: 'Please use a real, non-temporary email address to begin your free trial.',
     };
   }
 
   try {
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "subscription",
+      payment_method_types: ['card'],
+      mode: 'subscription',
       customer_email: email,
       line_items: [
         {
@@ -66,16 +63,14 @@ export async function createCheckoutSession(formData: FormData) {
         trial_period_days: 3,
         trial_settings: {
           end_behavior: {
-            missing_payment_method: "pause",
+            missing_payment_method: 'pause',
           },
         },
       },
       success_url: `${
-        process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+        process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
       }/dashboard/assignments?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${
-        process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-      }/signup`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/signup`,
     });
 
     if (session.url) {
@@ -84,6 +79,6 @@ export async function createCheckoutSession(formData: FormData) {
 
     return { sessionId: session.id };
   } catch (error) {
-    return { error: "Failed to create checkout session. Please try again." };
+    return { error: 'Failed to create checkout session. Please try again.' };
   }
 }

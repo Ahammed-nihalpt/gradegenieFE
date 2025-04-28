@@ -1,65 +1,69 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import { PDFViewerWithComments } from "./pdf-viewer-with-comments"
-import type { Comment } from "@/types/comments"
-import { Download, Share } from "lucide-react"
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { PDFViewerWithComments } from './pdf-viewer-with-comments';
+import type { Comment } from '@/types/comments';
+import { Download, Share } from 'lucide-react';
 
 // Mock data for initial comments
 const mockComments: Comment[] = [
   {
-    id: "comment-1",
-    text: "This introduction effectively sets up the thesis statement and provides good context for the argument.",
+    id: 'comment-1',
+    text: 'This introduction effectively sets up the thesis statement and provides good context for the argument.',
     highlight: {
-      id: "highlight-1",
+      id: 'highlight-1',
       text: "Shakespeare's Macbeth explores the corrupting influence of unchecked ambition on the human psyche.",
       pageIndex: 1,
       position: { x: 100, y: 150, width: 400, height: 20 },
-      color: "yellow",
+      color: 'yellow',
     },
-    author: "Dr. Smith",
+    author: 'Dr. Smith',
     timestamp: new Date(Date.now() - 3600000).toISOString(),
     isAIGenerated: false,
   },
   {
-    id: "comment-2",
-    text: "Consider strengthening this argument with more specific textual evidence from Act 3.",
+    id: 'comment-2',
+    text: 'Consider strengthening this argument with more specific textual evidence from Act 3.',
     highlight: {
-      id: "highlight-2",
+      id: 'highlight-2',
       text: "Macbeth's soliloquy reveals his deteriorating mental state after the murder.",
       pageIndex: 2,
       position: { x: 120, y: 250, width: 380, height: 20 },
-      color: "yellow",
+      color: 'yellow',
     },
-    author: "Dr. Smith",
+    author: 'Dr. Smith',
     timestamp: new Date(Date.now() - 1800000).toISOString(),
     isAIGenerated: true,
   },
-]
+];
 
 interface SubmissionDetailsDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   submission: {
-    id: string
-    studentName: string
-    fileName: string
-    fileUrl: string
-    score: number
-    maxScore: number
-    status: string
-    submittedAt: string
-    aiPercentage: number
-    plagiarismPercentage: number
-  }
+    id: string;
+    studentName: string;
+    fileName: string;
+    fileUrl: string;
+    score: number;
+    maxScore: number;
+    status: string;
+    submittedAt: string;
+    aiPercentage: number;
+    plagiarismPercentage: number;
+  };
 }
 
-export function SubmissionDetailsDialog({ open, onOpenChange, submission }: SubmissionDetailsDialogProps) {
-  const [activeTab, setActiveTab] = useState("feedback")
-  const [comments, setComments] = useState<Comment[]>(mockComments)
+export function SubmissionDetailsDialog({
+  open,
+  onOpenChange,
+  submission,
+}: SubmissionDetailsDialogProps) {
+  const [activeTab, setActiveTab] = useState('feedback');
+  const [comments, setComments] = useState<Comment[]>(mockComments);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -80,7 +84,11 @@ export function SubmissionDetailsDialog({ open, onOpenChange, submission }: Subm
           </DialogTitle>
         </DialogHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="flex-1 flex flex-col overflow-hidden"
+        >
           <TabsList className="w-full justify-start">
             <TabsTrigger value="feedback">Feedback</TabsTrigger>
             <TabsTrigger value="score">Score</TabsTrigger>
@@ -150,9 +158,10 @@ export function SubmissionDetailsDialog({ open, onOpenChange, submission }: Subm
               <div className="space-y-4">
                 <h4 className="font-medium">Instructor Notes</h4>
                 <p className="text-muted-foreground">
-                  Emma's essay demonstrates strong critical thinking and analysis. The content is well-researched and
-                  thoughtfully presented. Some improvements could be made in the organization of arguments and citation
-                  formatting. Overall, an excellent submission that shows deep engagement with the material.
+                  Emma's essay demonstrates strong critical thinking and analysis. The content is
+                  well-researched and thoughtfully presented. Some improvements could be made in the
+                  organization of arguments and citation formatting. Overall, an excellent
+                  submission that shows deep engagement with the material.
                 </p>
               </div>
             </div>
@@ -167,10 +176,10 @@ export function SubmissionDetailsDialog({ open, onOpenChange, submission }: Subm
                     <div
                       className={`px-2 py-1 rounded text-sm font-medium ${
                         submission.aiPercentage > 50
-                          ? "bg-red-100 text-red-800"
+                          ? 'bg-red-100 text-red-800'
                           : submission.aiPercentage > 30
-                            ? "bg-amber-100 text-amber-800"
-                            : "bg-green-100 text-green-800"
+                            ? 'bg-amber-100 text-amber-800'
+                            : 'bg-green-100 text-green-800'
                       }`}
                     >
                       {submission.aiPercentage}% AI Generated
@@ -181,10 +190,10 @@ export function SubmissionDetailsDialog({ open, onOpenChange, submission }: Subm
                     <div
                       className={`h-2.5 rounded-full ${
                         submission.aiPercentage > 50
-                          ? "bg-red-500"
+                          ? 'bg-red-500'
                           : submission.aiPercentage > 30
-                            ? "bg-amber-500"
-                            : "bg-green-500"
+                            ? 'bg-amber-500'
+                            : 'bg-green-500'
                       }`}
                       style={{ width: `${submission.aiPercentage}%` }}
                     ></div>
@@ -192,8 +201,8 @@ export function SubmissionDetailsDialog({ open, onOpenChange, submission }: Subm
 
                   <div className="text-sm text-muted-foreground">
                     <p>
-                      Our AI detection system has identified portions of this submission that may have been generated
-                      using AI tools like ChatGPT or similar language models.
+                      Our AI detection system has identified portions of this submission that may
+                      have been generated using AI tools like ChatGPT or similar language models.
                     </p>
                     <p className="mt-2">
                       Highlighted sections in the document indicate potential AI-generated content.
@@ -211,10 +220,10 @@ export function SubmissionDetailsDialog({ open, onOpenChange, submission }: Subm
                     <div
                       className={`px-2 py-1 rounded text-sm font-medium ${
                         submission.plagiarismPercentage > 15
-                          ? "bg-red-100 text-red-800"
+                          ? 'bg-red-100 text-red-800'
                           : submission.plagiarismPercentage > 5
-                            ? "bg-amber-100 text-amber-800"
-                            : "bg-green-100 text-green-800"
+                            ? 'bg-amber-100 text-amber-800'
+                            : 'bg-green-100 text-green-800'
                       }`}
                     >
                       {submission.plagiarismPercentage}% Similarity
@@ -225,10 +234,10 @@ export function SubmissionDetailsDialog({ open, onOpenChange, submission }: Subm
                     <div
                       className={`h-2.5 rounded-full ${
                         submission.plagiarismPercentage > 15
-                          ? "bg-red-500"
+                          ? 'bg-red-500'
                           : submission.plagiarismPercentage > 5
-                            ? "bg-amber-500"
-                            : "bg-green-500"
+                            ? 'bg-amber-500'
+                            : 'bg-green-500'
                       }`}
                       style={{ width: `${submission.plagiarismPercentage}%` }}
                     ></div>
@@ -237,15 +246,18 @@ export function SubmissionDetailsDialog({ open, onOpenChange, submission }: Subm
                   <div className="text-sm text-muted-foreground">
                     {submission.plagiarismPercentage <= 5 ? (
                       <p>
-                        Low similarity detected. This submission appears to be mostly original work with proper
-                        citations.
+                        Low similarity detected. This submission appears to be mostly original work
+                        with proper citations.
                       </p>
                     ) : submission.plagiarismPercentage <= 15 ? (
-                      <p>Moderate similarity detected. Some sections may require review for proper citation.</p>
+                      <p>
+                        Moderate similarity detected. Some sections may require review for proper
+                        citation.
+                      </p>
                     ) : (
                       <p>
-                        High similarity detected. This submission contains significant portions that match existing
-                        sources.
+                        High similarity detected. This submission contains significant portions that
+                        match existing sources.
                       </p>
                     )}
 
@@ -254,11 +266,11 @@ export function SubmissionDetailsDialog({ open, onOpenChange, submission }: Subm
                         <p className="mt-2">Sources matched with similarities:</p>
                         <ul className="list-disc list-inside mt-1">
                           <li>
-                            Johnson, M. (2022). Literary Analysis Techniques.{" "}
+                            Johnson, M. (2022). Literary Analysis Techniques.{' '}
                             <span className="text-blue-600 cursor-pointer">View</span>
                           </li>
                           <li>
-                            Smith, J. (2021). Shakespeare's Tragedies.{" "}
+                            Smith, J. (2021). Shakespeare's Tragedies.{' '}
                             <span className="text-blue-600 cursor-pointer">View</span>
                           </li>
                         </ul>
@@ -276,10 +288,10 @@ export function SubmissionDetailsDialog({ open, onOpenChange, submission }: Subm
                 <h3 className="text-lg font-medium mb-4">Integrity Summary</h3>
                 <p className="text-muted-foreground">
                   {submission.aiPercentage <= 10 && submission.plagiarismPercentage <= 3
-                    ? "This submission shows minimal AI usage and plagiarism. The work appears to be primarily original with proper citations."
+                    ? 'This submission shows minimal AI usage and plagiarism. The work appears to be primarily original with proper citations.'
                     : submission.aiPercentage > 50 || submission.plagiarismPercentage > 15
-                      ? `This submission shows significant ${submission.aiPercentage > 50 ? "AI usage" : ""} ${submission.aiPercentage > 50 && submission.plagiarismPercentage > 15 ? "and" : ""} ${submission.plagiarismPercentage > 15 ? "similarity to existing sources" : ""}. A detailed review is recommended.`
-                      : `This submission shows moderate AI usage (${submission.aiPercentage}%) ${submission.plagiarismPercentage > 5 ? `and similarity to existing sources (${submission.plagiarismPercentage}%)` : "with minimal similarity to existing sources"}. The student appears to have used AI tools to help structure their essay while contributing original analysis in some sections.`}
+                      ? `This submission shows significant ${submission.aiPercentage > 50 ? 'AI usage' : ''} ${submission.aiPercentage > 50 && submission.plagiarismPercentage > 15 ? 'and' : ''} ${submission.plagiarismPercentage > 15 ? 'similarity to existing sources' : ''}. A detailed review is recommended.`
+                      : `This submission shows moderate AI usage (${submission.aiPercentage}%) ${submission.plagiarismPercentage > 5 ? `and similarity to existing sources (${submission.plagiarismPercentage}%)` : 'with minimal similarity to existing sources'}. The student appears to have used AI tools to help structure their essay while contributing original analysis in some sections.`}
                 </p>
               </div>
             </div>
@@ -287,5 +299,5 @@ export function SubmissionDetailsDialog({ open, onOpenChange, submission }: Subm
         </Tabs>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
