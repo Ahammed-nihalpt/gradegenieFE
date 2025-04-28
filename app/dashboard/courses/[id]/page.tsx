@@ -276,13 +276,13 @@ export default function CourseDetailPage() {
                         <Button variant="outline" onClick={handleEmailStudents}>
                           Email All
                         </Button>
-                        <Button
+                        {/* <Button
                           variant="outline"
                           onClick={handleDownloadRoster}
                         >
                           <Download className="mr-2 h-4 w-4" />
                           Download Roster
-                        </Button>
+                        </Button> */}
                       </div>
                     </div>
                   </CardHeader>
@@ -662,13 +662,13 @@ export default function CourseDetailPage() {
                 Edit Syllabus
               </Link>
             </Button>
-            <Button
+            {/* <Button
               className="w-full justify-start"
               onClick={handleEmailStudents}
             >
               <Users className="mr-2 h-4 w-4" />
               Email Students
-            </Button>
+            </Button> */}
             <Button
               className="w-full justify-start"
               variant="outline"

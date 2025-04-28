@@ -38,71 +38,22 @@ import api from "@/lib/axios";
 import { fetchAssignmentById } from "@/lib/assignmentApi";
 import { useAssignmentById } from "@/hooks/use-assignment";
 import { ISubmission } from "@/types/submission";
+import { useStudentByUserId } from "@/hooks/use-student";
+import { useSession } from "next-auth/react";
 
 export default function AssignmentDetailPage() {
   const router = useRouter();
   const { id } = useParams();
+  const { data: session } = useSession();
   const { data: assignment, refetch } = useAssignmentById(id as string);
+  const { data: student } = useStudentByUserId(session?.user.id || "");
   const [assignNameOpen, setAssignNameOpen] = useState(false);
   const [selectedSubmission, setSelectedSubmission] =
     useState<ISubmission | null>(null);
-  const [dataUploaded, setDataUploaded] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState("");
   const [manualStudentName, setManualStudentName] = useState("");
   const [activeTab, setActiveTab] = useState("select");
   const { toast } = useToast();
-
-  // Mock data for the assignment
-  // const assignment = {
-  //   id: id as string,
-  //   title: "Essay on Climate Change",
-  //   description:
-  //     "Write a 500-word essay on the impacts of climate change on global ecosystems.",
-  //   dueDate: "2023-12-15",
-  //   totalPoints: 100,
-  //   submissions: [
-  //     {
-  //       id: "1",
-  //       studentName: "John Doe",
-  //       studentId: "S12345",
-  //       submissionDate: "2023-12-10",
-  //       status: "graded",
-  //       score: 85,
-  //       aiScore: 92,
-  //       plagiarismScore: 98,
-  //     },
-  //     {
-  //       id: "2",
-  //       studentName: "Jane Smith",
-  //       studentId: "S12346",
-  //       submissionDate: "2023-12-12",
-  //       status: "pending",
-  //       score: null,
-  //       aiScore: 88,
-  //       plagiarismScore: 95,
-  //     },
-  //     {
-  //       id: "3",
-  //       studentName: "Bob Johnson",
-  //       studentId: "S12347",
-  //       submissionDate: "2023-12-14",
-  //       status: "graded",
-  //       score: 92,
-  //       aiScore: 90,
-  //       plagiarismScore: 100,
-  //     },
-  //     {
-  //       id: "4",
-  //       studentName: null,
-  //       studentId: "S12348",
-  //       submissionDate: "2023-12-14",
-  //       status: "pending",
-  //       score: null,
-  //       aiScore: 0,
-  //       plagiarismScore: 0,
-  //     },
-  //   ],
-  // };
 
   const handleUploadComplete = async (files: File[], images: string[]) => {
     const formData = new FormData();
@@ -350,11 +301,9 @@ export default function AssignmentDetailPage() {
                   </SelectTrigger>
                   <SelectContent>
                     {/* This would be populated from your actual student list */}
-                    <SelectItem value="john-doe">John Doe</SelectItem>
-                    <SelectItem value="jane-smith">Jane Smith</SelectItem>
-                    <SelectItem value="alex-johnson">Alex Johnson</SelectItem>
-                    <SelectItem value="sam-wilson">Sam Wilson</SelectItem>
-                    <SelectItem value="taylor-brown">Taylor Brown</SelectItem>
+                    {student?.map((value) => (
+                      <SelectItem value={value._id}>{value?.name}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
