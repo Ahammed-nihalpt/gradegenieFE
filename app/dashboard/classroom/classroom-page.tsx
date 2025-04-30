@@ -72,7 +72,7 @@ export default function ClassroomPage() {
                 <CardTitle className="text-sm font-medium">Active Classes</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">5</div>
+                <div className="text-2xl font-bold">0</div>
               </CardContent>
             </Card>
             <Card>
@@ -80,7 +80,7 @@ export default function ClassroomPage() {
                 <CardTitle className="text-sm font-medium">Average Class Size</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">25</div>
+                <div className="text-2xl font-bold">0</div>
               </CardContent>
             </Card>
             <Card>

@@ -73,10 +73,10 @@ export default function AssignmentsPage() {
                     <CalendarDays className="mr-1 h-4 w-4" />
                     <span>Due: {assignment.dueDate}</span>
                   </div>
-                  <div className="flex items-center mt-1">
+                  {/* <div className="flex items-center mt-1">
                     <FileText className="mr-1 h-4 w-4" />
                     <span>{assignment?.submissionsNo} submissions</span>
-                  </div>
+                  </div> */}
                 </div>
               </CardContent>
               <CardFooter>

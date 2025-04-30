@@ -43,9 +43,9 @@ export default function CoursesPage() {
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">{course.description}</p>
                 <div className="flex justify-between text-sm">
-                  <div>
+                  {/* <div>
                     <span className="font-medium">{course.students}</span> Students
-                  </div>
+                  </div> */}
                   <div>
                     <span className="font-medium">{course.assignmentCount}</span> Assignments
                   </div>
@@ -59,9 +59,7 @@ export default function CoursesPage() {
             </Card>
           ))
         ) : (
-          <div className="col-span-full text-center text-muted-foreground">
-            No assignments found.
-          </div>
+          <div className="col-span-full text-center text-muted-foreground">No courses found.</div>
         )}
       </div>
     </div>
