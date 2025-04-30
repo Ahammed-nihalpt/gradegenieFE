@@ -35,7 +35,6 @@ export function FileUpload({
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('file');
-  const [capturedImages, setCapturedImages] = useState<string[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -45,31 +44,26 @@ export function FileUpload({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const filesArray = Array.from(e.target.files);
-      setSelectedFiles(filesArray);
-    }
-  };
+      const pdfFiles = filesArray.filter((file) => file.type === 'application/pdf');
 
-  const handleCameraCapture = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      const imageUrl = URL.createObjectURL(file);
-      setCapturedImages([...capturedImages, imageUrl]);
-    }
-  };
+      if (pdfFiles.length < filesArray.length) {
+        toast({
+          title: 'Invalid file(s) detected',
+          description: 'Only PDF files are allowed. Other files were excluded.',
+          variant: 'destructive',
+        });
+      }
 
-  const removeImage = (index: number) => {
-    setCapturedImages(capturedImages.filter((_, i) => i !== index));
+      setSelectedFiles(pdfFiles);
+    }
   };
 
   const removeFile = (index: number) => {
     setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
   };
 
-  const handleUpload = () => {
-    if (
-      (activeTab === 'file' && selectedFiles.length === 0) ||
-      (activeTab === 'camera' && capturedImages.length === 0)
-    ) {
+  const handleUpload = async () => {
+    if (activeTab === 'file' && selectedFiles.length === 0) {
       toast({
         title: 'No files selected',
         description: 'Please select files or capture images to upload',
@@ -81,7 +75,7 @@ export function FileUpload({
     setIsUploading(true);
     setUploadProgress(0);
     if (onUploadComplete) {
-      onUploadComplete(selectedFiles, capturedImages);
+      onUploadComplete(selectedFiles, []);
     }
     // Simulate upload progress
     const interval = setInterval(() => {
@@ -98,11 +92,10 @@ export function FileUpload({
 
           // Reset the form
           setSelectedFiles([]);
-          setCapturedImages([]);
 
           return 0;
         }
-        return prev + 10;
+        return prev + 5;
       });
     }, 300);
   };
@@ -146,9 +139,8 @@ export function FileUpload({
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-1">
             <TabsTrigger value="file">Upload Files</TabsTrigger>
-            <TabsTrigger value="camera">Take Photos</TabsTrigger>
           </TabsList>
 
           <TabsContent value="file" className="space-y-4 py-4">
@@ -162,11 +154,11 @@ export function FileUpload({
                 onChange={handleFileChange}
                 className="hidden"
                 multiple
-                accept=".pdf,.doc,.docx,.ppt,.pptx"
+                accept="application/pdf"
               />
               <Upload className="h-10 w-10 text-gray-400 mx-auto mb-2" />
               <p className="text-sm font-medium">Click to upload or drag and drop</p>
-              <p className="text-xs text-gray-500 mt-1">PDF, DOCX, PPT (Max 10MB)</p>
+              <p className="text-xs text-gray-500 mt-1">PDF</p>
             </div>
 
             {selectedFiles.length > 0 && (
@@ -190,58 +182,6 @@ export function FileUpload({
                     ))}
                   </div>
                 </ScrollArea>
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="camera" className="space-y-4 py-4">
-            <div
-              className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-gray-50 transition-colors"
-              onClick={triggerCameraInput}
-            >
-              <input
-                type="file"
-                ref={cameraInputRef}
-                onChange={handleCameraCapture}
-                className="hidden"
-                accept="image/*"
-                capture="environment"
-              />
-              <Camera className="h-10 w-10 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm font-medium">Click to take a photo</p>
-              <p className="text-xs text-gray-500 mt-1">
-                Take multiple photos for multi-page assignments
-              </p>
-            </div>
-
-            {capturedImages.length > 0 && (
-              <div className="mt-4">
-                <h4 className="text-sm font-medium mb-2">Captured Images</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  {capturedImages.map((image, index) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={image || '/placeholder.svg'}
-                        alt={`Captured ${index + 1}`}
-                        className="w-full h-32 object-cover rounded"
-                      />
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        className="absolute top-1 right-1 h-6 w-6"
-                        onClick={() => removeImage(index)}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ))}
-                  <div
-                    className="flex items-center justify-center h-32 border-2 border-dashed rounded cursor-pointer hover:bg-gray-50 transition-colors"
-                    onClick={triggerCameraInput}
-                  >
-                    <Plus className="h-8 w-8 text-gray-400" />
-                  </div>
-                </div>
               </div>
             )}
           </TabsContent>

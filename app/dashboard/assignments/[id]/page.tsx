@@ -126,6 +126,35 @@ export default function AssignmentDetailPage() {
     setAssignNameOpen(true);
   };
 
+  const handleDownload = async (submissionId: string) => {
+    try {
+      const response = await api.get(`/submission/download/file/${submissionId}`, {
+        responseType: 'blob',
+      });
+
+      // Extract filename from headers or fallback
+      const disposition = response.headers['content-disposition'];
+      const fileNameMatch = disposition?.match(/filename="?(.+)"?/);
+      const fileName = fileNameMatch?.[1] || `submission-${submissionId}.pdf`;
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download error:', error);
+      toast({
+        title: 'Download failed',
+        description: 'There was a problem downloading the file.',
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       <div className="flex justify-between items-center">
@@ -177,15 +206,19 @@ export default function AssignmentDetailPage() {
                   <Avatar>
                     <AvatarImage src={`/placeholder.svg?height=40&width=40`} />
                     <AvatarFallback>
-                      {submission.studentName
-                        ?.split(' ')
-                        .map((n) => n[0])
-                        .join('') || '?'}
+                      {submission?.studentName ||
+                        submission?.studentId?.name
+                          ?.split(' ')
+                          .map((n) => n[0])
+                          .join('') ||
+                        '?'}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    {submission.studentName ? (
-                      <p className="font-medium">{submission.studentName}</p>
+                    {submission?.studentName || submission?.studentId?.name ? (
+                      <p className="font-medium">
+                        {submission.studentName || submission?.studentId?.name}
+                      </p>
                     ) : (
                       <Button
                         variant="link"
@@ -202,28 +235,17 @@ export default function AssignmentDetailPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   {submission?.status?.toLocaleLowerCase() === 'graded' ? (
-                    <Badge className="bg-green-500">{submission.score}/100</Badge>
+                    <Badge className="bg-green-500">
+                      {submission?.score || submission?.aiCheckerResults.score}/100
+                    </Badge>
                   ) : (
                     <Badge variant="outline">Pending</Badge>
                   )}
                   <div className="flex gap-2">
-                    <Button variant="outline" size="icon" asChild title="Share">
-                      <Link
-                        href={`/dashboard/assignments/${
-                          id as string
-                        }/submissions/${submission._id}/share`}
-                      >
-                        <Share2 className="h-4 w-4" />
-                      </Link>
-                    </Button>
                     <Button variant="outline" size="icon" asChild title="Download">
-                      <Link
-                        href={`/dashboard/assignments/${
-                          id as string
-                        }/submissions/${submission._id}/download`}
-                      >
+                      <span role="button" onClick={() => handleDownload(submission._id)}>
                         <Download className="h-4 w-4" />
-                      </Link>
+                      </span>
                     </Button>
                     <Button variant="outline" size="icon" asChild title="Review">
                       <Link

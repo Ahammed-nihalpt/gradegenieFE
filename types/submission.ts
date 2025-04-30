@@ -35,11 +35,12 @@ export interface OverallFeedback {
 export interface ISubmission {
   _id: string;
   assignmentId?: string;
-  studentId?: string;
+  studentId?: IStudent;
   studentName?: string;
   fileName?: string;
   fileUrl?: string[];
   score?: number;
+  aiError: string;
   createdAt: string;
   content: string;
   comments?: {
@@ -68,12 +69,12 @@ export interface ISubmission {
       flaggedPhrases?: string[];
     };
     plagiarism?: {
-      matchPercentage?: number;
-      sources?: Array<{
-        url?: string;
-        matchPercentage?: number;
-        title?: string;
-      }>;
+      originalityScore: number;
+      matchedContent: {
+        sentence: string;
+        source: string;
+        matchScore: number;
+      };
     };
   };
 }

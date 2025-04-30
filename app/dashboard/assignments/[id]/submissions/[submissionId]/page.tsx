@@ -56,41 +56,18 @@ type OverallFeedback = {
 
 export default function SubmissionReviewPage() {
   const { id, submissionId } = useParams();
-  const { data: submission, isLoading } = useSubmissionById(submissionId as string, id as string);
+  const {
+    data: submission,
+    isLoading,
+    refetch,
+  } = useSubmissionById(submissionId as string, id as string);
 
-  // Mock data for the submission
-  const submissionDefault = {
-    id: submissionId as string,
-    assignmentId: id as string,
-    assignmentTitle: 'Essay on Climate Change',
-    studentName: 'John Doe',
-    studentId: 'S12345',
-    submissionDate: '2023-12-10',
-    status: 'pending',
-    aiCheckerResults: {
-      score: 92,
-      confidence: 'High',
-      details: [
-        {
-          section: 'Introduction',
-          aiProbability: 0.15,
-          humanProbability: 0.85,
-        },
-        { section: 'Main Body', aiProbability: 0.08, humanProbability: 0.92 },
-        { section: 'Conclusion', aiProbability: 0.12, humanProbability: 0.88 },
-      ],
-    },
-    plagiarismResults: {
-      score: 98,
-      matches: [
-        {
-          text: 'The heat-trapping nature of carbon dioxide and other gases was demonstrated in the mid-19th century.',
-          source: 'NASA Climate Change Website',
-          similarity: 0.92,
-        },
-      ],
-    },
-  };
+  console.log(
+    '🚀 ~ SubmissionReviewPage ~ submission?.integrityCheck?.plagiarism?.matchedConten:',
+    submission?.integrityCheck?.plagiarism?.matchedContent
+  );
+
+  const [isAILoading, setIsAILoading] = useState<boolean>(false);
 
   // State for inline comments
   const [inlineComments, setInlineComments] = useState<InlineComment[] | []>(
@@ -106,7 +83,9 @@ export default function SubmissionReviewPage() {
   const [subScores, setSubScores] = useState<SubScore[] | []>(submission?.subScores || []);
 
   // State for final score
-  const [finalScore, setFinalScore] = useState<number>(85);
+  const [finalScore, setFinalScore] = useState<number>(
+    submission?.score || submission?.aiCheckerResults.score || 85
+  );
 
   // State for new comment
   const [newCommentText, setNewCommentText] = useState<string>('');
@@ -128,9 +107,47 @@ export default function SubmissionReviewPage() {
       setInlineComments(submission.inlineComments || []);
       setOverallFeedback(submission.overallFeedback || null);
       setSubScores(submission.subScores || []);
-      setFinalScore(submission.score || 0);
+      setFinalScore(submission.score || submission?.aiCheckerResults.score || 0);
     }
   }, [submission]);
+
+  useEffect(() => {
+    if (submission && submission?.aiError) {
+      toast({
+        title: 'AI Grading Error Detected',
+        description: submission.aiError,
+        variant: 'destructive',
+      });
+    }
+  }, [submission]);
+
+  const reAICheck = async (submissionId: string) => {
+    try {
+      setIsAILoading(true);
+      const res = await api.put(`/submission/${submissionId}/recheck/ai`);
+      if (res.data.aiError) {
+        toast({
+          title: 'AI Grading Failed',
+          description: res.data.aiError,
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'AI Grading Successful',
+          description: 'The submission was regraded successfully.',
+        });
+      }
+      refetch();
+    } catch (err) {
+      toast({
+        title: 'Recheck Failed',
+        description: 'Something went wrong while retrying AI grading.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsAILoading(false);
+    }
+  };
   // Handle text selection
   const handleTextSelection = () => {
     if (!isCommentMode) return;
@@ -268,6 +285,35 @@ export default function SubmissionReviewPage() {
     }
   };
 
+  const handleDownload = async (submissionId: string) => {
+    try {
+      const response = await api.get(`/submission/download/file/${submissionId}`, {
+        responseType: 'blob',
+      });
+
+      // Extract filename from headers or fallback
+      const disposition = response.headers['content-disposition'];
+      const fileNameMatch = disposition?.match(/filename="?(.+)"?/);
+      const fileName = fileNameMatch?.[1] || `submission-${submissionId}.pdf`;
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download error:', error);
+      toast({
+        title: 'Download failed',
+        description: 'There was a problem downloading the file.',
+        variant: 'destructive',
+      });
+    }
+  };
+
   // Scroll to comment in the sidebar
   const scrollToComment = (commentId: string) => {
     setActiveCommentId(commentId);
@@ -296,7 +342,7 @@ export default function SubmissionReviewPage() {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isAILoading) {
     return (
       <div className="container mx-auto py-6 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary" />
@@ -509,7 +555,7 @@ export default function SubmissionReviewPage() {
                   <MessageSquare className="h-4 w-4" />
                   {isCommentMode ? 'Exit Comment Mode' : 'Add Comments'}
                 </Button>
-                <Button variant="outline" size="icon" title="Share" asChild>
+                {/* <Button variant="outline" size="icon" title="Share" asChild>
                   <Link
                     href={`/dashboard/assignments/${id as string}/submissions/${
                       submissionId as string
@@ -517,8 +563,13 @@ export default function SubmissionReviewPage() {
                   >
                     <Share2 className="h-4 w-4" />
                   </Link>
-                </Button>
-                <Button variant="outline" size="icon" title="Download as PDF">
+                </Button> */}
+                <Button
+                  variant="outline"
+                  size="icon"
+                  title="Download as PDF"
+                  onClick={() => handleDownload(submission?._id || '')}
+                >
                   <Download className="h-4 w-4" />
                 </Button>
               </div>
@@ -740,16 +791,20 @@ export default function SubmissionReviewPage() {
                 <Avatar className="h-12 w-12">
                   <AvatarImage src={`/placeholder.svg?height=48&width=48`} />
                   <AvatarFallback>
-                    {submission?.studentName &&
-                      submission?.studentName
+                    {submission?.studentName ||
+                      submission?.studentId?.name
                         .split(' ')
                         .map((n) => n[0])
                         .join('')}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-medium">{submission?.studentName}</p>
-                  <p className="text-sm text-muted-foreground">ID: {submission?.studentId}</p>
+                  <p className="font-medium">
+                    {submission?.studentName || submission?.studentId?.name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    ID: {submission?.studentName || submission?.studentId?.name}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -765,7 +820,14 @@ export default function SubmissionReviewPage() {
                   <span className="text-4xl font-bold">{finalScore}</span>
                   <span className="text-xl">/100</span>
                 </div>
-
+                <div className="flex justify-center">
+                  <Button
+                    variant={submission?.aiError ? 'destructive' : 'outline'}
+                    onClick={() => reAICheck(submission?._id || '')}
+                  >
+                    Recheck with AI
+                  </Button>
+                </div>
                 <Separator />
 
                 <div className="space-y-6">
@@ -843,31 +905,42 @@ export default function SubmissionReviewPage() {
                 <CardHeader>
                   <CardTitle>Plagiarism Check</CardTitle>
                   <CardDescription>
-                    Originality Score: {submissionDefault?.plagiarismResults?.score}%
+                    Originality Score:{' '}
+                    {submission?.integrityCheck?.plagiarism?.originalityScore || 0}%
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <Progress value={submissionDefault.plagiarismResults.score} className="h-2" />
+                    <Progress
+                      value={submission?.integrityCheck?.plagiarism?.originalityScore || 0}
+                      className="h-2"
+                    />
 
                     <Separator />
 
                     <h3 className="font-medium">Matched Content</h3>
-                    {submissionDefault.plagiarismResults.matches.length === 0 ? (
+                    {!submission?.integrityCheck?.plagiarism?.matchedContent?.sentence ? (
                       <p className="text-muted-foreground">No plagiarism detected</p>
                     ) : (
                       <div className="space-y-4">
-                        {submissionDefault.plagiarismResults.matches.map((match, index) => (
-                          <div key={index} className="p-3 border rounded-md space-y-2">
-                            <p className="italic text-sm">"{match.text}"</p>
-                            <div className="flex justify-between text-sm">
-                              <span className="text-muted-foreground">Source: {match.source}</span>
-                              <Badge variant="outline">
-                                {Math.round(match.similarity * 100)}% Match
-                              </Badge>
-                            </div>
+                        <div className="p-3 border rounded-md space-y-2">
+                          <p className="italic text-sm">
+                            "{submission?.integrityCheck?.plagiarism?.matchedContent?.sentence}"
+                          </p>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">
+                              Source:{' '}
+                              {submission?.integrityCheck?.plagiarism?.matchedContent?.source}
+                            </span>
+                            <Badge variant="outline">
+                              {Math.round(
+                                submission?.integrityCheck?.plagiarism?.matchedContent
+                                  ?.matchScore || 0
+                              )}
+                              % Match
+                            </Badge>
                           </div>
-                        ))}
+                        </div>
                       </div>
                     )}
                   </div>
