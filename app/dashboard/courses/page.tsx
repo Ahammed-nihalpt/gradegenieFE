@@ -33,30 +33,36 @@ export default function CoursesPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses?.map((course) => (
-          <Card key={course._id}>
-            <CardHeader>
-              <CardTitle>{course.name}</CardTitle>
-              <CardDescription>{course.subject}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">{course.description}</p>
-              <div className="flex justify-between text-sm">
-                <div>
-                  <span className="font-medium">{course.students}</span> Students
+        {courses.length > 0 ? (
+          courses?.map((course) => (
+            <Card key={course._id}>
+              <CardHeader>
+                <CardTitle>{course.name}</CardTitle>
+                <CardDescription>{course.subject}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">{course.description}</p>
+                <div className="flex justify-between text-sm">
+                  <div>
+                    <span className="font-medium">{course.students}</span> Students
+                  </div>
+                  <div>
+                    <span className="font-medium">{course.assignmentCount}</span> Assignments
+                  </div>
                 </div>
-                <div>
-                  <span className="font-medium">{course.assignmentCount}</span> Assignments
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button variant="outline" asChild className="w-full">
-                <Link href={`/dashboard/courses/${course._id}`}>View Details</Link>
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <Button variant="outline" asChild className="w-full">
+                  <Link href={`/dashboard/courses/${course._id}`}>View Details</Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          ))
+        ) : (
+          <div className="col-span-full text-center text-muted-foreground">
+            No assignments found.
+          </div>
+        )}
       </div>
     </div>
   );
