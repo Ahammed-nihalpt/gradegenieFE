@@ -23,21 +23,29 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
 
-    const res = await signIn('credentials', {
-      redirect: false,
-      email,
-      password,
-    });
+    try {
+      const res = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+      });
 
-    if (res?.error) {
-      setError('Invalid credentials');
-    } else {
-      router.push('/dashboard/assignments'); // or wherever you want to redirect after login
+      if (res?.error) {
+        setError('Invalid credentials');
+      } else {
+        router.push('/dashboard/assignments');
+      }
+    } catch (error) {
+      setError('Something went wrong, please try again.');
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -167,8 +175,30 @@ export default function LoginPage() {
               <Input id="password" type="password" onChange={(e) => setPassword(e.target.value)} />
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button className="w-full" size="lg" onClick={handleLogin}>
-              Log in
+            <Button className="w-full" size="lg" onClick={handleLogin} disabled={loading}>
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <svg
+                    className="h-4 w-4 animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                  </svg>
+                  Logging in...
+                </div>
+              ) : (
+                'Log in'
+              )}
             </Button>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 border-t pt-4">
