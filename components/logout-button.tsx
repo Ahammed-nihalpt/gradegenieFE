@@ -11,7 +11,6 @@ export default function LogoutButton() {
   const handleLogout = async () => {
     setLoading(true);
     try {
-      console.log('🚀 ~ handleLogout ~ setLoading:', 'setLoading');
       await signOut({ redirect: false });
       router.push('/login');
     } catch (error) {

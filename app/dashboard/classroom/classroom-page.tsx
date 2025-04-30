@@ -30,7 +30,6 @@ export default function ClassroomPage() {
     const fetchSubmissions = async () => {
       try {
         const response = await api.get(`/submission/total/by/month/${session?.user.id}`);
-        console.log('🚀 ~ fetchSubmissions ~ response:', response.data.total);
         setSubmissionsThisMonth(response.data.total);
       } catch (error) {
         console.error('Error fetching submissions this month:', error);

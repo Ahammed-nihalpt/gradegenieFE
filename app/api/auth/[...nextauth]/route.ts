@@ -23,8 +23,6 @@ export const handler = NextAuth({
           });
 
           if (response.status === 200) {
-            console.log('🚀 ~ authorize ~ response.data:', response.data);
-
             const { token, ...user } = response.data;
             return { ...user, token }; // Include accessToken in the returned user object
           }

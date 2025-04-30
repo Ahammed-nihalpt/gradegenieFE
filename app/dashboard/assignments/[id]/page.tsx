@@ -50,7 +50,6 @@ export default function AssignmentDetailPage() {
 
   const handleUploadComplete = async (files: File[], images: string[]) => {
     const formData = new FormData();
-    console.log('🚀 ~ handleUploadComplete ~ formData:', 'formData');
 
     if (files.length > 0) {
       files.forEach((file) => {

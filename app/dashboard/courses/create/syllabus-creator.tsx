@@ -48,7 +48,6 @@ export function SyllabusCreator({
   const [isGenerating, setIsGenerating] = useState(false);
   const [activeTab, setActiveTab] = useState('generate');
   const [syllabusData, setSyllabusData] = useState<any>(null);
-  console.log('🚀 ~ syllabusData:', syllabusData);
   const [prompt, setPrompt] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
 
