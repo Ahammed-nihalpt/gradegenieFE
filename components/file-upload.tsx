@@ -16,7 +16,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import { Camera, File, FileText, Plus, Upload, X } from 'lucide-react';
 
 interface FileUploadProps {
@@ -25,6 +25,7 @@ interface FileUploadProps {
   title?: string;
   description?: string;
 }
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MBx
 
 export function FileUpload({
   onUploadComplete,
@@ -44,17 +45,31 @@ export function FileUpload({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const filesArray = Array.from(e.target.files);
-      const pdfFiles = filesArray.filter((file) => file.type === 'application/pdf');
 
-      if (pdfFiles.length < filesArray.length) {
+      const validFiles: File[] = [];
+      const invalidFiles: string[] = [];
+
+      filesArray.forEach((file) => {
+        if (file.type !== 'application/pdf') {
+          invalidFiles.push(`${file.name} (Invalid type)`);
+        } else if (file.size > MAX_FILE_SIZE) {
+          invalidFiles.push(
+            `${file.name} (Too large: ${(file.size / (1024 * 1024)).toFixed(2)}MB)`
+          );
+        } else {
+          validFiles.push(file);
+        }
+      });
+
+      if (invalidFiles.length > 0) {
         toast({
           title: 'Invalid file(s) detected',
-          description: 'Only PDF files are allowed. Other files were excluded.',
+          description: `Some files were excluded:\n${invalidFiles.join(', ')}`,
           variant: 'destructive',
         });
       }
 
-      setSelectedFiles(pdfFiles);
+      setSelectedFiles(validFiles);
     }
   };
 
@@ -84,11 +99,6 @@ export function FileUpload({
           clearInterval(interval);
           setIsUploading(false);
           setOpen(false);
-
-          toast({
-            title: 'Upload complete',
-            description: 'Your files have been uploaded successfully',
-          });
 
           // Reset the form
           setSelectedFiles([]);
