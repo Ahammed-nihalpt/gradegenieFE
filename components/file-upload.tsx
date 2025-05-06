@@ -43,7 +43,7 @@ export function FileUpload({
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
+    if (e.target.files) {
       const filesArray = Array.from(e.target.files);
 
       const validFiles: File[] = [];
@@ -69,7 +69,7 @@ export function FileUpload({
         });
       }
 
-      setSelectedFiles(validFiles);
+      setSelectedFiles((prev) => [...prev, ...validFiles]);
     }
   };
 

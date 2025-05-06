@@ -4,11 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Download, Eye, Share2, Edit } from 'lucide-react';
-import Link from 'next/link';
+import { Download, Eye, Edit } from 'lucide-react';
 import { FileUpload } from '@/components/file-upload';
 import { useParams, useRouter } from 'next/navigation';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -29,11 +28,11 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
 import api from '@/lib/axios';
-import { fetchAssignmentById } from '@/lib/assignmentApi';
 import { useAssignmentById } from '@/hooks/use-assignment';
 import { ISubmission } from '@/types/submission';
 import { useStudentByUserId } from '@/hooks/use-student';
 import { useSession } from 'next-auth/react';
+import axios, { isAxiosError } from 'axios';
 
 export default function AssignmentDetailPage() {
   const router = useRouter();
@@ -74,9 +73,14 @@ export default function AssignmentDetailPage() {
       });
       refetch(); // Trigger refetch after data upload
     } catch (error) {
+      const errorMessage =
+        (isAxiosError(error) && error.response?.data?.message) || // custom error message from backend
+        (error as any)?.message || // generic error message
+        'There was an error uploading your files.';
+
       toast({
         title: 'Upload Failed',
-        description: 'There was an error uploading your files.',
+        description: errorMessage,
         variant: 'destructive',
       });
     }
@@ -93,9 +97,11 @@ export default function AssignmentDetailPage() {
       activeTab === 'select' && selectedStudent
         ? {
             studentId: selectedStudent,
+            status: 'Pending',
           }
         : {
             studentName: manualStudentName,
+            status: 'Pending',
           };
     try {
       await api.put(`/submission/edit/${selectedSubmission?._id}`, body);
@@ -153,6 +159,23 @@ export default function AssignmentDetailPage() {
         variant: 'destructive',
       });
     }
+  };
+
+  const handleReviewClick = async (submission: ISubmission) => {
+    const status = submission?.status?.toLowerCase();
+
+    // If status is 'new', call the API to update it
+    if (status === 'new') {
+      try {
+        await api.put(`/submission/edit/${submission?._id}`, { status: 'Pending' });
+      } catch (error) {
+        console.error('Failed to update status:', error);
+        // Optional: show a toast here
+      }
+    }
+
+    // Navigate to the review page
+    router.push(`/dashboard/assignments/${id as string}/submissions/${submission._id}`);
   };
 
   return (
@@ -234,27 +257,33 @@ export default function AssignmentDetailPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  {submission?.status?.toLocaleLowerCase() === 'graded' ? (
-                    <Badge className="bg-green-500">
-                      {submission?.score || submission?.aiCheckerResults.score}/100
-                    </Badge>
-                  ) : (
-                    <Badge variant="outline">Pending</Badge>
-                  )}
+                  {(() => {
+                    const status = submission?.status?.toLocaleLowerCase();
+                    if (status === 'graded') {
+                      const score = submission?.score ?? submission?.aiCheckerResults?.score;
+                      return <Badge className="bg-green-500">{score}/100</Badge>;
+                    }
+
+                    if (status === 'new') {
+                      return <Badge className="bg-blue-500">New</Badge>;
+                    }
+
+                    return <Badge variant="outline">Pending</Badge>;
+                  })()}
+
                   <div className="flex gap-2">
                     <Button variant="outline" size="icon" asChild title="Download">
                       <span role="button" onClick={() => handleDownload(submission._id)}>
                         <Download className="h-4 w-4" />
                       </span>
                     </Button>
-                    <Button variant="outline" size="icon" asChild title="Review">
-                      <Link
-                        href={`/dashboard/assignments/${
-                          id as string
-                        }/submissions/${submission._id}`}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Link>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      title="Review"
+                      onClick={() => handleReviewClick(submission)}
+                    >
+                      <Eye className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
