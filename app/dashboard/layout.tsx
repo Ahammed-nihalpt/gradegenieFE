@@ -17,7 +17,6 @@ import {
 import { BookOpen, FileText, LogOut, Menu, Users, Link2, MessageSquare } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
-import { FreeTrialBanner } from '@/components/free-trial-banner';
 import { Logo } from '@/components/logo';
 import LogoutButton from '@/components/logout-button';
 
@@ -130,7 +129,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <FreeTrialBanner daysRemaining={3} hoursRemaining={0} creditsRemaining={3} />
       <header className="sticky top-0 z-50 w-full border-b bg-background">
         <div className="container flex h-14 items-center">
           <div className="mr-4 flex items-center">
