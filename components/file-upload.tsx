@@ -37,6 +37,7 @@ export function FileUpload({
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('file');
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatusMessage, setUploadStatusMessage] = useState('Uploading...');
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -88,26 +89,50 @@ export function FileUpload({
     }
 
     setIsUploading(true);
-    setUploadProgress(0);
-    if (onUploadComplete) {
-      onUploadComplete(selectedFiles, []);
-    }
-    // Simulate upload progress
-    const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setIsUploading(false);
-          setOpen(false);
+    setUploadStatusMessage('Uploading files...');
+    setUploadProgress(10); // initial progress
 
-          // Reset the form
-          setSelectedFiles([]);
+    try {
+      // Simulate file upload progress
+      const simulateProgress = () => {
+        setUploadProgress((prev) => {
+          if (prev >= 90) return prev; // pause near end until real complete
+          return prev + 10;
+        });
+      };
 
-          return 0;
-        }
-        return prev + 5;
+      const interval = setInterval(simulateProgress, 500);
+
+      // Simulate initial file uploading
+      setTimeout(() => {
+        setUploadStatusMessage('AI is grading your assignment...');
+      }, 2000);
+
+      // Wait for actual API processing
+      if (onUploadComplete) {
+        await onUploadComplete(selectedFiles, []);
+      }
+
+      clearInterval(interval);
+      setUploadProgress(100);
+      setUploadStatusMessage('Upload and grading complete');
+
+      setTimeout(() => {
+        setIsUploading(false);
+        setOpen(false);
+        setUploadProgress(0);
+        setSelectedFiles([]);
+        setUploadStatusMessage('Uploading...');
+      }, 1000);
+    } catch (error) {
+      setIsUploading(false);
+      setUploadProgress(0);
+      toast({
+        title: 'Upload Failed',
+        description: 'Something went wrong during upload.',
+        variant: 'destructive',
       });
-    }, 300);
+    }
   };
 
   const triggerFileInput = () => {
@@ -200,7 +225,7 @@ export function FileUpload({
         {isUploading && (
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span>Uploading...</span>
+              <span>{uploadStatusMessage}</span>
               <span>{uploadProgress}%</span>
             </div>
             <Progress value={uploadProgress} />
